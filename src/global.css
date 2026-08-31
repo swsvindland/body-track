@@ -6,3 +6,90 @@
 /* End-user path: heroui-native lives in the project's node_modules, one
    level up from this src/global.css file. */
 @source '../node_modules/heroui-native/lib';
+
+/* Cyberpunk palette. Prefer HeroUI semantic tokens in feature code. */
+@theme {
+  --radius: 0.375rem;
+  --field-radius: 0.5rem;
+  --field-border-width: 1px;
+}
+
+@layer theme {
+  :root {
+    @variant light {
+      --background: hsl(202, 100%, 98%);
+      --foreground: hsl(215, 55%, 13%);
+      --surface: hsl(0, 0%, 100%);
+      --surface-foreground: var(--foreground);
+      --surface-secondary: hsl(198, 72%, 96%);
+      --surface-secondary-foreground: var(--foreground);
+      --surface-tertiary: hsl(198, 55%, 92%);
+      --surface-tertiary-foreground: var(--foreground);
+      --overlay: hsl(0, 0%, 100%);
+      --overlay-foreground: var(--foreground);
+      --backdrop: hsl(215, 70%, 8%, 0.3);
+      --muted: hsl(211, 22%, 43%);
+      --default: hsl(198, 58%, 92%);
+      --default-foreground: hsl(215, 55%, 17%);
+      --accent: hsl(190, 100%, 39%);
+      --accent-foreground: hsl(0, 0%, 100%);
+      --field-background: hsl(0, 0%, 100%);
+      --field-foreground: var(--foreground);
+      --field-placeholder: var(--muted);
+      --field-border: hsl(194, 56%, 78%);
+      --success: hsl(164, 78%, 36%);
+      --success-foreground: hsl(0, 0%, 100%);
+      --warning: hsl(38, 96%, 52%);
+      --warning-foreground: hsl(215, 55%, 13%);
+      --danger: hsl(334, 82%, 51%);
+      --danger-foreground: hsl(0, 0%, 100%);
+      --segment: hsl(0, 0%, 100%);
+      --segment-foreground: var(--foreground);
+      --border: hsl(195, 52%, 84%);
+      --separator: hsl(195, 32%, 72%);
+      --focus: hsl(187, 100%, 42%);
+      --link: hsl(194, 100%, 31%);
+      --surface-shadow: 0 8px 24px 0 rgba(4, 53, 75, 0.06), 0 1px 3px 0 rgba(4, 53, 75, 0.08);
+      --overlay-shadow: 0 18px 48px 0 rgba(4, 31, 51, 0.14), 0 0 0 1px rgba(0, 166, 204, 0.08);
+      --field-shadow: 0 1px 3px 0 rgba(4, 53, 75, 0.06);
+    }
+
+    @variant dark {
+      --background: hsl(215, 54%, 6%);
+      --foreground: hsl(192, 42%, 94%);
+      --surface: hsl(214, 47%, 10%);
+      --surface-foreground: var(--foreground);
+      --surface-secondary: hsl(213, 42%, 14%);
+      --surface-secondary-foreground: var(--foreground);
+      --surface-tertiary: hsl(211, 38%, 18%);
+      --surface-tertiary-foreground: var(--foreground);
+      --overlay: hsl(214, 45%, 11%);
+      --overlay-foreground: var(--foreground);
+      --backdrop: hsl(218, 75%, 2%, 0.72);
+      --muted: hsl(202, 20%, 66%);
+      --default: hsl(211, 38%, 17%);
+      --default-foreground: var(--foreground);
+      --accent: hsl(187, 100%, 48%);
+      --accent-foreground: hsl(215, 70%, 7%);
+      --field-background: hsl(214, 45%, 12%);
+      --field-foreground: var(--foreground);
+      --field-placeholder: var(--muted);
+      --field-border: hsl(193, 54%, 28%);
+      --success: hsl(159, 82%, 48%);
+      --success-foreground: hsl(215, 70%, 7%);
+      --warning: hsl(43, 100%, 61%);
+      --warning-foreground: hsl(215, 70%, 7%);
+      --danger: hsl(329, 100%, 62%);
+      --danger-foreground: hsl(215, 70%, 7%);
+      --segment: hsl(211, 38%, 19%);
+      --segment-foreground: var(--foreground);
+      --border: hsl(193, 46%, 23%);
+      --separator: hsl(195, 38%, 31%);
+      --focus: var(--accent);
+      --link: hsl(187, 100%, 62%);
+      --surface-shadow: 0 0 0 1px rgba(0, 229, 255, 0.07), 0 10px 32px 0 rgba(0, 0, 0, 0.24);
+      --overlay-shadow: 0 0 0 1px rgba(0, 229, 255, 0.14), 0 24px 56px 0 rgba(0, 0, 0, 0.45);
+      --field-shadow: 0 0 0 1px rgba(0, 229, 255, 0.05);
+    }
+  }
+}

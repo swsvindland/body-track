@@ -107,7 +107,7 @@ export default function HomeTab(): JSX.Element {
     return (
       <View className="flex-1 bg-background items-center justify-center">
         <ActivityIndicator size="large" color={themeForeground} />
-        <Typography.Paragraph className="mt-3 text-muted-foreground">
+        <Typography.Paragraph className="mt-3 text-muted">
           Loading SQLite Database...
         </Typography.Paragraph>
       </View>
@@ -126,27 +126,27 @@ export default function HomeTab(): JSX.Element {
               <Typography.Paragraph className="text-2xl font-bold text-foreground">
                 SQLite Counter
               </Typography.Paragraph>
-              <Typography.Paragraph className="text-sm text-muted-foreground text-center mt-1">
+              <Typography.Paragraph className="text-sm text-muted text-center mt-1">
                 Persisted locally using Expo SQLite & Drizzle ORM
               </Typography.Paragraph>
             </View>
 
-            <Card className="items-center py-6 px-4 gap-4 bg-card border border-border rounded-2xl shadow-sm">
-              <Typography.Paragraph className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
+            <Card className="items-center py-6 px-4 gap-4">
+              <Typography.Paragraph className="text-xs tracking-wider text-muted font-semibold">
                 Current Value
               </Typography.Paragraph>
               <Text className="text-6xl font-extrabold text-foreground">{count}</Text>
 
               <View className="flex-row items-center justify-center gap-3 w-full mt-2">
                 <Button
-                  className="flex-1 bg-muted"
+                  className="flex-1"
                   variant="secondary"
                   isDisabled={saving}
                   onPress={handleDecrement}
                 >
                   -1
                 </Button>
-                <Button className="flex-1 bg-primary" isDisabled={saving} onPress={handleIncrement}>
+                <Button className="flex-1" isDisabled={saving} onPress={handleIncrement}>
                   +1
                 </Button>
               </View>
@@ -185,27 +185,25 @@ export default function HomeTab(): JSX.Element {
         }
         ListEmptyComponent={
           <View className="py-8 items-center justify-center border border-dashed border-border rounded-xl">
-            <Typography.Paragraph className="text-muted-foreground text-sm">
+            <Typography.Paragraph className="text-muted text-sm">
               No entries stored yet. Tap +1 or -1 to record into SQLite.
             </Typography.Paragraph>
           </View>
         }
         renderItem={({ item, index }) => (
-          <View className="flex-row items-center justify-between p-3.5 mb-2 bg-card border border-border rounded-xl">
+          <View className="flex-row items-center justify-between p-3.5 mb-2 bg-surface rounded-xl shadow-surface">
             <View className="flex-row items-center gap-3">
-              <View className="w-8 h-8 rounded-full bg-muted items-center justify-center">
+              <View className="w-8 h-8 rounded-full bg-surface-secondary items-center justify-center">
                 <Text className="text-xs font-semibold text-foreground">#{item.id}</Text>
               </View>
               <View>
                 <Text className="text-sm font-semibold text-foreground">Count: {item.count}</Text>
-                <Text className="text-xs text-muted-foreground mt-0.5">
-                  {formatDate(item.date)}
-                </Text>
+                <Text className="text-xs text-muted mt-0.5">{formatDate(item.date)}</Text>
               </View>
             </View>
             {index === 0 && (
-              <View className="px-2 py-0.5 bg-primary/10 rounded-full">
-                <Text className="text-xs font-medium text-primary">Latest</Text>
+              <View className="px-2 py-0.5 bg-accent-soft rounded-full">
+                <Text className="text-xs font-medium text-accent-soft-foreground">Latest</Text>
               </View>
             )}
           </View>
