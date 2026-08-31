@@ -32,15 +32,36 @@ export default function TabsLayout(): JSX.Element {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
-          tabBarIcon: ({ color }) => <TabIcon name="home-outline" color={color} />,
+          title: "Weight",
+          tabBarIcon: ({ color }) => <TabIcon name="scale-outline" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="body"
         options={{
-          title: "Explore",
-          tabBarIcon: ({ color }) => <TabIcon name="compass-outline" color={color} />,
+          title: "Body",
+          tabBarIcon: ({ color }) => <TabIcon name="body-outline" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="photos"
+        options={{
+          title: "Photos",
+          tabBarIcon: ({ color }) => <TabIcon name="images-outline" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="height"
+        options={{
+          title: "Height",
+          tabBarIcon: ({ color }) => <TabIcon name="resize-outline" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "Settings",
+          tabBarIcon: ({ color }) => <TabIcon name="settings-outline" color={color} />,
         }}
       />
     </Tabs>
