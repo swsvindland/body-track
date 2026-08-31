@@ -1,52 +1,216 @@
+import { desc } from "drizzle-orm";
 import { Button, Card, Typography, useThemeColor } from "heroui-native";
-import type { JSX } from "react";
-import { View } from "react-native";
-import Svg, { Path } from "react-native-svg";
-
-function HeroUILogo({ tintColor }: { tintColor: string }): JSX.Element {
-  return (
-    <Svg width={90} height={30} viewBox="0 0 140 44" fill="none">
-      <Path
-        d="M0.677734 11.3847V24.0405C0.677734 24.6387 0.985209 25.1946 1.49107 25.5109L10.1195 30.9067C11.2693 31.6257 12.7586 30.796 12.7586 29.4363V18.7981C12.7586 18.186 13.0803 17.6194 13.605 17.3074L18.8683 14.1785V41.4437C18.8683 42.7988 20.3486 43.6293 21.4988 42.9195L30.4044 37.4229C30.9152 37.1076 31.2264 36.549 31.2264 35.9471V9.76484C31.2264 8.41634 29.759 7.58483 28.6085 8.28139L18.8683 14.1785V2.55643C18.8683 1.21158 17.408 0.379537 16.2574 1.06878L1.51927 9.89703C0.997365 10.2097 0.677734 10.7747 0.677734 11.3847Z"
-        fill={tintColor}
-      />
-      <Path
-        d="M63.8763 24.0707C63.8763 20.4817 62.4078 18.8253 59.4709 18.8253C56.1076 18.8253 53.7391 21.0799 53.7391 26.1412V37.7363H47.6756V5.52769H53.7391V17.3069C55.2075 14.9142 57.6234 13.7179 60.9394 13.7179C66.5764 13.7179 69.8924 17.1688 69.8924 22.9664V37.7363H63.8763V24.0707Z"
-        fill={tintColor}
-      />
-      <Path
-        d="M84.8996 38.4725C77.3677 38.4725 72.5832 33.5952 72.5832 26.0952C72.5832 18.6872 77.3203 13.7179 84.8996 13.7179C93.0947 13.7179 97.5475 19.5154 96.3158 27.6596H78.6467C78.9783 31.5247 81.252 33.7333 84.8996 33.7333C87.8839 33.7333 89.684 32.2149 90.1577 30.6964H96.1737C95.2263 35.2057 91.0577 38.4725 84.8996 38.4725ZM78.7888 23.6566H90.4419C90.3945 20.4817 88.3102 18.3191 84.7574 18.3191C81.5836 18.3191 79.3572 20.1596 78.7888 23.6566Z"
-        fill={tintColor}
-      />
-      <Path
-        d="M99.6225 20.3437C99.6225 16.5246 101.754 14.4541 105.828 14.4541H113.597V19.4234H105.686V37.7363H99.6225V20.3437Z"
-        fill={tintColor}
-      />
-      <Path
-        d="M126.863 38.4725C119.189 38.4725 114.31 33.5492 114.31 26.0952C114.31 18.6412 119.189 13.7179 126.863 13.7179C134.442 13.7179 139.322 18.6412 139.322 26.0952C139.322 33.5492 134.442 38.4725 126.863 38.4725ZM126.863 33.4572C130.653 33.4572 133.163 30.5584 133.163 26.0952C133.163 21.632 130.653 18.6872 126.863 18.6872C123.026 18.6872 120.515 21.632 120.515 26.0952C120.515 30.5584 123.026 33.4572 126.863 33.4572Z"
-        fill={tintColor}
-      />
-    </Svg>
-  );
-}
+import { useEffect, useState, type JSX } from "react";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { db, counterLogs, type CounterLog } from "@/db";
 
 export default function HomeTab(): JSX.Element {
-  const themeColorForeground = useThemeColor("foreground");
+  const [count, setCount] = useState<number>(0);
+  const [history, setHistory] = useState<CounterLog[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [saving, setSaving] = useState<boolean>(false);
+  const themeForeground = useThemeColor("foreground");
+
+  const refreshData = async () => {
+    try {
+      const records = await db.select().from(counterLogs).orderBy(desc(counterLogs.id)).limit(20);
+
+      setHistory(records);
+      if (records.length > 0) {
+        setCount(records[0].count);
+      } else {
+        setCount(0);
+      }
+    } catch (err) {
+      console.error("Failed to refresh counter data from sqlite:", err);
+    }
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    db.select()
+      .from(counterLogs)
+      .orderBy(desc(counterLogs.id))
+      .limit(20)
+      .then((records) => {
+        if (!isMounted) return;
+        setHistory(records);
+        if (records.length > 0) {
+          setCount(records[0].count);
+        } else {
+          setCount(0);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (!isMounted) return;
+        console.error("Failed to load counter data from sqlite:", err);
+        setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const updateCount = async (newCount: number) => {
+    setSaving(true);
+    try {
+      const now = new Date();
+      await db.insert(counterLogs).values({
+        count: newCount,
+        date: now.toISOString(),
+      });
+      await refreshData();
+    } catch (err) {
+      console.error("Failed to save counter to sqlite:", err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleIncrement = () => updateCount(count + 1);
+  const handleDecrement = () => updateCount(count - 1);
+  const handleReset = () => updateCount(0);
+
+  const handleClearHistory = async () => {
+    setSaving(true);
+    try {
+      await db.delete(counterLogs);
+      setCount(0);
+      setHistory([]);
+    } catch (err) {
+      console.error("Failed to clear counter logs:", err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const formatDate = (isoString: string) => {
+    try {
+      const d = new Date(isoString);
+      return d.toLocaleString(undefined, {
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
+    } catch {
+      return isoString;
+    }
+  };
+
+  if (loading) {
+    return (
+      <View className="flex-1 bg-background items-center justify-center">
+        <ActivityIndicator size="large" color={themeForeground} />
+        <Typography.Paragraph className="mt-3 text-muted-foreground">
+          Loading SQLite Database...
+        </Typography.Paragraph>
+      </View>
+    );
+  }
 
   return (
-    <View className="flex-1 bg-background justify-center px-6">
-      <Card className="items-center gap-8">
-        <HeroUILogo tintColor={themeColorForeground} />
-        <Typography.Paragraph className="text-center">
-          A modern starter for React Native, preconfigured with HeroUI Native, Uniwind, and Expo
-          Router. Edit{" "}
-          <Typography.Paragraph className="font-semibold">
-            app/(tabs)/index.tsx
-          </Typography.Paragraph>{" "}
-          and watch it reload.
-        </Typography.Paragraph>
-        <Button className="w-full">Get started</Button>
-      </Card>
-    </View>
+    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
+      <FlatList
+        data={history}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={{ padding: 20, paddingBottom: 40 }}
+        ListHeaderComponent={
+          <View className="gap-5 mb-5">
+            <View className="items-center mt-2">
+              <Typography.Paragraph className="text-2xl font-bold text-foreground">
+                SQLite Counter
+              </Typography.Paragraph>
+              <Typography.Paragraph className="text-sm text-muted-foreground text-center mt-1">
+                Persisted locally using Expo SQLite & Drizzle ORM
+              </Typography.Paragraph>
+            </View>
+
+            <Card className="items-center py-6 px-4 gap-4 bg-card border border-border rounded-2xl shadow-sm">
+              <Typography.Paragraph className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
+                Current Value
+              </Typography.Paragraph>
+              <Text className="text-6xl font-extrabold text-foreground">{count}</Text>
+
+              <View className="flex-row items-center justify-center gap-3 w-full mt-2">
+                <Button
+                  className="flex-1 bg-muted"
+                  variant="secondary"
+                  isDisabled={saving}
+                  onPress={handleDecrement}
+                >
+                  -1
+                </Button>
+                <Button className="flex-1 bg-primary" isDisabled={saving} onPress={handleIncrement}>
+                  +1
+                </Button>
+              </View>
+
+              <View className="flex-row items-center justify-center gap-3 w-full">
+                <Button
+                  className="flex-1"
+                  variant="outline"
+                  size="sm"
+                  isDisabled={saving}
+                  onPress={handleReset}
+                >
+                  Reset (0)
+                </Button>
+                {history.length > 0 && (
+                  <Button
+                    className="flex-1"
+                    variant="ghost"
+                    size="sm"
+                    isDisabled={saving}
+                    onPress={handleClearHistory}
+                  >
+                    Clear History
+                  </Button>
+                )}
+              </View>
+            </Card>
+
+            <View className="flex-row items-center justify-between pt-2">
+              <Typography.Paragraph className="font-semibold text-foreground text-base">
+                Database Entries ({history.length})
+              </Typography.Paragraph>
+              {saving && <ActivityIndicator size="small" color={themeForeground} />}
+            </View>
+          </View>
+        }
+        ListEmptyComponent={
+          <View className="py-8 items-center justify-center border border-dashed border-border rounded-xl">
+            <Typography.Paragraph className="text-muted-foreground text-sm">
+              No entries stored yet. Tap +1 or -1 to record into SQLite.
+            </Typography.Paragraph>
+          </View>
+        }
+        renderItem={({ item, index }) => (
+          <View className="flex-row items-center justify-between p-3.5 mb-2 bg-card border border-border rounded-xl">
+            <View className="flex-row items-center gap-3">
+              <View className="w-8 h-8 rounded-full bg-muted items-center justify-center">
+                <Text className="text-xs font-semibold text-foreground">#{item.id}</Text>
+              </View>
+              <View>
+                <Text className="text-sm font-semibold text-foreground">Count: {item.count}</Text>
+                <Text className="text-xs text-muted-foreground mt-0.5">
+                  {formatDate(item.date)}
+                </Text>
+              </View>
+            </View>
+            {index === 0 && (
+              <View className="px-2 py-0.5 bg-primary/10 rounded-full">
+                <Text className="text-xs font-medium text-primary">Latest</Text>
+              </View>
+            )}
+          </View>
+        )}
+      />
+    </SafeAreaView>
   );
 }
