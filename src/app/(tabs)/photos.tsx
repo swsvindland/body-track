@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Alert, Image, Pressable, Text, View } from "react-native";
-import { Button, Card } from "heroui-native";
+import { Alert, Image, Pressable, View } from "react-native";
+import { SystemButton, SystemPanel, SystemText as Text } from "@/components/system";
 import * as ImagePicker from "expo-image-picker";
 import { Directory, File, Paths } from "expo-file-system";
 import { eq } from "drizzle-orm";
@@ -122,9 +122,9 @@ export default function Photos() {
     <>
       <Screen title={t("photos")} subtitle={`${t("cadence")}: ${t("weekly")} – ${t("monthly")}`}>
         <Text className="text-muted">{t("localPhotos")}</Text>
-        <Button onPress={() => launch(null)}>
+        <SystemButton onPress={() => launch(null)}>
           {t("add")} · {t("photos")}
-        </Button>
+        </SystemButton>
         <Choices
           values={["all", "front", "side", "back"] as const}
           value={filter}
@@ -133,19 +133,24 @@ export default function Photos() {
             setLimit(24);
           }}
         />
-        <Button
+        <SystemButton
           variant="secondary"
           isDisabled={comparison.length !== 2}
           onPress={() => setComparing(true)}
         >
           {t("compare")} ({selected.length}/2)
-        </Button>
+        </SystemButton>
         {!visible.length && <Text className="py-8 text-center text-muted">{t("photoEmpty")}</Text>}
         <View className="flex-row flex-wrap gap-3">
           {visible.slice(0, limit).map((photo) => (
-            <Card key={photo.id} style={{ width: "47%" }}>
-              <Card.Body className="gap-2">
+            <SystemPanel
+              key={photo.id}
+              className="min-w-0 flex-1 p-4"
+              style={{ flexBasis: "45%", maxWidth: "49%" }}
+            >
+              <SystemPanel.Body className="gap-2">
                 <Pressable
+                  className="rounded-md border border-transparent focus:border-focus"
                   accessibilityRole="checkbox"
                   accessibilityState={{ checked: selected.includes(photo.id) }}
                   accessibilityLabel={`${t("compare")} · ${t(photo.pose)} · ${date(photo.measuredAt)}`}
@@ -153,28 +158,31 @@ export default function Photos() {
                 >
                   <Image
                     source={{ uri: photoFile(photo).uri }}
-                    style={{ width: "100%", aspectRatio: 0.7, borderRadius: 12 }}
+                    className="rounded-md"
+                    style={{ width: "100%", aspectRatio: 0.7 }}
                     resizeMode="cover"
                     accessibilityLabel={t(photo.pose)}
                   />
-                  <Text className="mt-2 text-sm text-accent">
+                  <Text className="mt-2 text-sm text-link">
                     {selected.includes(photo.id) ? "✓ " : ""}
                     {t("compare")}
                   </Text>
                 </Pressable>
                 <Text className="font-medium text-foreground">{t(photo.pose)}</Text>
-                <Text className="text-sm text-muted">{date(photo.measuredAt)}</Text>
-                <Button variant="ghost" onPress={() => launch(photo)}>
+                <Text className="font-mono text-xs font-mono text-xs text-muted">
+                  {date(photo.measuredAt)}
+                </Text>
+                <SystemButton variant="ghost" onPress={() => launch(photo)}>
                   {t("edit")}
-                </Button>
-              </Card.Body>
-            </Card>
+                </SystemButton>
+              </SystemPanel.Body>
+            </SystemPanel>
           ))}
         </View>
         {visible.length > limit && (
-          <Button variant="ghost" onPress={() => setLimit(limit + 24)}>
+          <SystemButton variant="ghost" onPress={() => setLimit(limit + 24)}>
             {t("photos")} +24
-          </Button>
+          </SystemButton>
         )}
       </Screen>
       <Editor
@@ -195,21 +203,21 @@ export default function Photos() {
         )}
         <ErrorText message={error} />
         {!editing && (
-          <Button onPress={() => save("camera")} isDisabled={busy}>
+          <SystemButton onPress={() => save("camera")} isDisabled={busy}>
             {t("takePhoto")}
-          </Button>
+          </SystemButton>
         )}
-        <Button
+        <SystemButton
           onPress={() => save()}
           variant={editing ? "primary" : "secondary"}
           isDisabled={busy}
         >
           {t(editing ? "save" : "choosePhoto")}
-        </Button>
+        </SystemButton>
         {editing && (
-          <Button variant="danger-soft" onPress={remove}>
+          <SystemButton variant="danger-soft" onPress={remove}>
             {t("delete")}
-          </Button>
+          </SystemButton>
         )}
       </Editor>
       <Editor title={t("compare")} open={comparing} close={() => setComparing(false)}>
@@ -222,7 +230,9 @@ export default function Photos() {
                 resizeMode="contain"
                 accessibilityLabel={`${t(photo.pose)} ${date(photo.measuredAt)}`}
               />
-              <Text className="mt-2 text-center text-muted">{date(photo.measuredAt)}</Text>
+              <Text className="mt-2 text-center font-mono text-xs text-muted">
+                {date(photo.measuredAt)}
+              </Text>
             </View>
           ))}
         </View>

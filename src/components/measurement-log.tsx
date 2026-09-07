@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Alert, Text, View } from "react-native";
-import { Button, Card } from "heroui-native";
+import { Alert, View } from "react-native";
+import { SystemButton, SystemPanel, SystemText as Text } from "@/components/system";
 import { eq } from "drizzle-orm";
 import { db, healthLinks, measurements, weightEntries } from "@/db";
 import { useStore } from "@/lib/store";
@@ -150,48 +150,48 @@ export function MeasurementLog({ kind }: { kind: Kind }) {
         {kind === "weight" && <Dashboard />}
         {kind === "body" && <Text className="text-muted">{t("bodyHelp")}</Text>}
         {kind === "height" && rows[0] && (
-          <Card>
-            <Card.Body>
-              <Card.Description>
+          <SystemPanel>
+            <SystemPanel.Body>
+              <SystemPanel.Description>
                 {t("latest")} · {date(rows[0].measuredAt)}
-              </Card.Description>
-              <Text className="mt-2 text-4xl font-bold tabular-nums text-foreground">
+              </SystemPanel.Description>
+              <Text className="mt-2 text-4xl font-mono tabular-nums text-foreground">
                 {number(display("height", rows[0].values.height))} {unit}
               </Text>
-            </Card.Body>
-          </Card>
+            </SystemPanel.Body>
+          </SystemPanel>
         )}
-        <Button onPress={() => launch(null)}>
+        <SystemButton onPress={() => launch(null)}>
           {t("add")} · {t(kind)}
-        </Button>
+        </SystemButton>
         <Text accessibilityRole="header" className="text-xl font-semibold text-foreground">
           {t("history")} · {number(rows.length, 0)}
         </Text>
         {!rows.length && <Text className="py-8 text-center text-muted">{t("empty")}</Text>}
         {rows.slice(0, limit).map((row) => (
-          <Card key={row.id}>
-            <Card.Body className="gap-3">
-              <Text className="text-muted">{date(row.measuredAt)}</Text>
+          <SystemPanel key={row.id}>
+            <SystemPanel.Body className="gap-3">
+              <Text className="font-mono text-xs text-muted">{date(row.measuredAt)}</Text>
               <View className="flex-row flex-wrap gap-x-5 gap-y-2">
                 {Object.entries(row.values).map(([key, value]) => (
                   <View key={key}>
                     <Text className="text-sm text-muted">{t(key)}</Text>
-                    <Text className="text-lg font-semibold tabular-nums text-foreground">
+                    <Text className="text-lg font-mono tabular-nums text-foreground">
                       {number(display(key, value))} {key === "bodyFat" ? "%" : unit}
                     </Text>
                   </View>
                 ))}
               </View>
-              <Button variant="ghost" onPress={() => launch(row)}>
+              <SystemButton variant="ghost" onPress={() => launch(row)}>
                 {t("edit")}
-              </Button>
-            </Card.Body>
-          </Card>
+              </SystemButton>
+            </SystemPanel.Body>
+          </SystemPanel>
         ))}
         {rows.length > limit && (
-          <Button variant="ghost" onPress={() => setLimit(limit + 30)}>
+          <SystemButton variant="ghost" onPress={() => setLimit(limit + 30)}>
             {t("history")} +30
-          </Button>
+          </SystemButton>
         )}
       </Screen>
       <Editor
@@ -214,14 +214,14 @@ export function MeasurementLog({ kind }: { kind: Kind }) {
         ))}
         <ErrorText message={error} />
         {!imported && (
-          <Button isDisabled={busy} onPress={save}>
+          <SystemButton isDisabled={busy} onPress={save}>
             {t("save")}
-          </Button>
+          </SystemButton>
         )}
         {editing && (
-          <Button variant="danger-soft" isDisabled={busy} onPress={remove}>
+          <SystemButton variant="danger-soft" isDisabled={busy} onPress={remove}>
             {t("delete")}
-          </Button>
+          </SystemButton>
         )}
       </Editor>
     </>

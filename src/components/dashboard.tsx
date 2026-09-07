@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Text, View } from "react-native";
-import { Card, useThemeColor } from "heroui-native";
-import Svg, { Circle, Path } from "react-native-svg";
+import { View } from "react-native";
+import { useThemeColor } from "heroui-native";
+import { SystemLabel, SystemValue, SystemPanel, SystemText as Text } from "@/components/system";
+import Svg, { Circle, Line, Path } from "react-native-svg";
 import { useStore } from "@/lib/store";
 import { bodyFat, composition, fromKg, weightTrend, weightUnit } from "@/lib/metrics";
 
@@ -17,6 +18,7 @@ export function Dashboard() {
   const [width, setWidth] = useState(0);
   const accent = String(useThemeColor("accent"));
   const muted = String(useThemeColor("muted"));
+  const border = String(useThemeColor("separator"));
   const visible = trend.filter(
     (p) => Date.parse(p.day) >= Date.parse(latest?.day ?? "2000-01-01") - 90 * 86400000
   );
@@ -31,13 +33,13 @@ export function Dashboard() {
   const y = (value: number) => 12 + ((max - value) / (max - min)) * 140;
   return (
     <View className="gap-4">
-      <Card>
-        <Card.Body className="gap-3">
-          <Card.Description>{t("trend")}</Card.Description>
-          <Text className="text-4xl font-bold tabular-nums text-foreground">
+      <SystemPanel>
+        <SystemPanel.Body className="gap-3">
+          <SystemLabel>{t("trend")}</SystemLabel>
+          <SystemValue>
             {latest ? number(fromKg(latest.trend, units)) : "—"}{" "}
-            <Text className="text-xl text-muted">{weightUnit(units)}</Text>
-          </Text>
+            <Text className="font-mono text-lg text-muted">{weightUnit(units)}</Text>
+          </SystemValue>
           <Text className="text-sm text-muted">
             {latest
               ? `${t("asOf")} ${date(latest.day)} · ${t("latest")}: ${number(fromKg(weights[0].weightKg, units))} ${weightUnit(units)}`
@@ -49,7 +51,24 @@ export function Dashboard() {
               style={{ height: 170 }}
             >
               {width > 0 && latest && (
-                <Svg width={width} height={170} accessibilityLabel={t("trend")}>
+                <Svg
+                  width={width}
+                  height={170}
+                  accessible
+                  accessibilityRole="image"
+                  accessibilityLabel={`${t("trend")}: ${number(fromKg(latest.trend, units))} ${weightUnit(units)}. ${t("asOf")} ${date(latest.day)}`}
+                >
+                  {[12, 82, 152].map((position) => (
+                    <Line
+                      key={position}
+                      x1={0}
+                      x2={width}
+                      y1={position}
+                      y2={position}
+                      stroke={border}
+                      strokeWidth={1}
+                    />
+                  ))}
                   {visible.map((point) => (
                     <Circle
                       key={point.day}
@@ -65,7 +84,7 @@ export function Dashboard() {
                       .map((p, i) => `${i ? "L" : "M"} ${x(p.day)} ${y(p.trend)}`)
                       .join(" ")}
                     stroke={accent}
-                    strokeWidth={3}
+                    strokeWidth={2}
                     fill="none"
                   />
                   <Circle cx={x(latest.day)} cy={y(latest.trend)} r={4} fill={accent} />
@@ -75,35 +94,39 @@ export function Dashboard() {
           )}
           {latest && (
             <View className="flex-row justify-between">
-              <Text className="text-xs text-muted">{date(visible[0].day)}</Text>
-              <Text className="text-xs text-muted">{date(latest.day)}</Text>
+              <Text className="font-mono text-xs text-muted">{date(visible[0].day)}</Text>
+              <Text className="font-mono text-xs text-muted">{date(latest.day)}</Text>
             </View>
           )}
+          <View className="flex-row flex-wrap gap-4 border-t border-separator pt-3">
+            <Text className="text-xs text-muted">● {t("weight")}</Text>
+            <Text className="text-xs text-link">— {t("trend")}</Text>
+          </View>
           <Text className="text-sm text-muted">{t("trendHelp")}</Text>
-        </Card.Body>
-      </Card>
+        </SystemPanel.Body>
+      </SystemPanel>
       <View className="flex-row flex-wrap gap-3">
         {[
           { key: "bmi", value: bmi },
           { key: "bodyFat", value: fat },
           { key: "ffmi", value: ffmi },
         ].map((metric) => (
-          <Card key={metric.key} style={{ flexGrow: 1, flexBasis: 100 }}>
-            <Card.Body className="gap-2">
-              <Card.Description>{t(metric.key)}</Card.Description>
-              <Text className="text-2xl font-semibold tabular-nums text-foreground">
+          <SystemPanel key={metric.key} style={{ flexGrow: 1, flexBasis: 160 }}>
+            <SystemPanel.Body className="gap-2">
+              <SystemLabel>{t(metric.key)}</SystemLabel>
+              <Text className="text-2xl font-mono tabular-nums text-foreground">
                 {metric.value === null ? "—" : number(metric.value)}
                 {metric.key === "bodyFat" && metric.value !== null ? "%" : ""}
               </Text>
-              <Text className="text-xs text-muted">
+              <Text className="font-mono text-xs text-muted">
                 {metric.value === null
                   ? `${t("add")} · ${t(metric.key === "bodyFat" ? "measurements" : !height ? "height" : !latest ? "weight" : "measurements")}`
                   : metric.key === "bmi"
                     ? `${t("height")} · ${date(heightEntry!.measuredAt)}`
                     : `${t(bodyEntry?.values.bodyFat ? "bodyFat" : "estimated")} · ${date(bodyEntry!.measuredAt)}`}
               </Text>
-            </Card.Body>
-          </Card>
+            </SystemPanel.Body>
+          </SystemPanel>
         ))}
       </View>
     </View>

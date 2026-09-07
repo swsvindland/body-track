@@ -2,18 +2,16 @@ import { useStore } from "@/lib/store";
 import { NativeTabs } from "expo-router/unstable-native-tabs";
 import { useThemeColor } from "heroui-native";
 import type { JSX } from "react";
-import { Platform } from "react-native";
 
 export default function TabsLayout(): JSX.Element {
   const { t } = useStore();
   const background = useThemeColor("background");
-  const accent = useThemeColor("accent");
+  const accent = useThemeColor("link");
 
   return (
     <NativeTabs
       tintColor={accent}
-      // Preserve the system glass appearance on iOS.
-      backgroundColor={Platform.OS === "android" ? background : undefined}
+      backgroundColor={background}
       labelVisibilityMode="labeled"
       backBehavior="initialRoute"
     >

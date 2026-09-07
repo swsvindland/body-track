@@ -1,12 +1,20 @@
 import { createContext, useContext, useId, useState, type ReactNode } from "react";
-import { KeyboardAvoidingView, Modal, Platform, ScrollView, Text, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  ScrollView,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import { SafeAreaView as NativeSafeAreaView } from "react-native-safe-area-context";
 import { withUniwind } from "uniwind";
-import { Button, Input, Label, TextField } from "heroui-native";
+import { Input, Label, TextField } from "heroui-native";
 import { PortalHost } from "heroui-native/portal";
 import { Calendar, DateField } from "heroui-native-pro";
 import { parseDate } from "@internationalized/date";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SystemButton, SystemLabel, SystemText as Text } from "./system";
 import { localDay } from "@/lib/metrics";
 import { useStore } from "@/lib/store";
 
@@ -25,22 +33,24 @@ export function Screen({
   subtitle?: string;
   children: ReactNode;
 }) {
+  const { width } = useWindowDimensions();
   return (
     <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
-          padding: 20,
-          paddingTop: 28,
+          padding: width < 600 ? 16 : width < 1024 ? 24 : 32,
+          paddingTop: 24,
           paddingBottom: 40,
-          gap: 20,
+          gap: 24,
           width: "100%",
-          maxWidth: 720,
+          maxWidth: 1440,
           alignSelf: "center",
         }}
       >
-        <View>
-          <Text accessibilityRole="header" className="text-3xl font-bold text-foreground">
+        <View className="gap-2 border-b border-border pb-6">
+          <SystemLabel>BODY TRACK / {title}</SystemLabel>
+          <Text accessibilityRole="header" className="text-4xl font-semibold text-foreground">
             {title}
           </Text>
           {subtitle && <Text className="mt-2 text-muted">{subtitle}</Text>}
@@ -70,7 +80,8 @@ export function Field({
       <Label>{label}</Label>
       <Input
         accessibilityLabel={label}
-        variant="secondary"
+        variant="primary"
+        className={numeric ? "font-mono focus:border-focus" : "font-sans focus:border-focus"}
         value={value}
         onChangeText={onChange}
         keyboardType={numeric ? "decimal-pad" : "default"}
@@ -159,14 +170,20 @@ export function Choices<T extends string>({
   return (
     <View className="flex-row flex-wrap gap-2">
       {values.map((option) => (
-        <Button
+        <SystemButton
           key={option}
-          variant={value === option ? "secondary" : "ghost"}
+          variant="ghost"
+          className={
+            value === option
+              ? "rounded-none border-b-2 border-link bg-surface-secondary"
+              : "rounded-none border-b-2 border-transparent"
+          }
           accessibilityState={{ selected: value === option }}
           onPress={() => onChange(option)}
         >
+          {value === option ? "✓ " : ""}
           {label ? label(option) : t(option)}
-        </Button>
+        </SystemButton>
       ))}
     </View>
   );
@@ -189,7 +206,7 @@ export function Editor({
   return (
     <Modal
       visible={open}
-      animationType="slide"
+      animationType="none"
       presentationStyle="pageSheet"
       onRequestClose={() => !busy && close()}
     >
@@ -204,20 +221,21 @@ export function Editor({
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={{
                   padding: 24,
-                  gap: 20,
+                  gap: 24,
                   paddingBottom: 40,
                   maxWidth: 640,
                   width: "100%",
                   alignSelf: "center",
                 }}
               >
-                <Text accessibilityRole="header" className="text-2xl font-bold text-foreground">
+                <SystemLabel>BODY TRACK / {title}</SystemLabel>
+                <Text accessibilityRole="header" className="text-2xl font-semibold text-foreground">
                   {title}
                 </Text>
                 {children}
-                <Button variant="ghost" isDisabled={busy} onPress={close}>
+                <SystemButton variant="ghost" isDisabled={busy} onPress={close}>
                   {t("cancel")}
-                </Button>
+                </SystemButton>
               </ScrollView>
             </KeyboardAvoidingView>
           </SafeAreaView>
@@ -230,7 +248,10 @@ export function Editor({
 }
 export function ErrorText({ message }: { message: string }) {
   return message ? (
-    <Text accessibilityRole="alert" className="text-danger">
+    <Text
+      accessibilityRole="alert"
+      className="border-l-2 border-danger bg-surface py-3 pl-4 text-danger"
+    >
       {message}
     </Text>
   ) : null;

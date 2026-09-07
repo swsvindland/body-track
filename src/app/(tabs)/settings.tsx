@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Platform, Text } from "react-native";
-import { Button, Card } from "heroui-native";
+import { Platform } from "react-native";
+import { SystemButton, SystemPanel, SystemText as Text } from "@/components/system";
 import { Choices, ErrorText, Screen } from "@/components/ui";
 import { useStore } from "@/lib/store";
 import { languages, type Language } from "@/lib/translations";
@@ -40,9 +40,9 @@ export default function Settings() {
   }
   return (
     <Screen title={t("settings")}>
-      <Card>
-        <Card.Body className="gap-3">
-          <Card.Title>{t("units")}</Card.Title>
+      <SystemPanel>
+        <SystemPanel.Body className="gap-3">
+          <SystemPanel.Title>{t("units")}</SystemPanel.Title>
           <Choices
             values={["metric", "imperial", "stone"] as const}
             value={units}
@@ -51,33 +51,35 @@ export default function Settings() {
               `${t(value)} · ${value === "metric" ? "kg / cm" : value === "imperial" ? "lb / in" : "st / in"}`
             }
           />
-        </Card.Body>
-      </Card>
-      <Card>
-        <Card.Body className="gap-3">
-          <Card.Title>{t("language")}</Card.Title>
+        </SystemPanel.Body>
+      </SystemPanel>
+      <SystemPanel>
+        <SystemPanel.Body className="gap-3">
+          <SystemPanel.Title>{t("language")}</SystemPanel.Title>
           <Choices
             values={Object.keys(languages) as Language[]}
             value={language}
             onChange={(value) => preference("language", value)}
             label={(value) => languages[value]}
           />
-        </Card.Body>
-      </Card>
-      <Card>
-        <Card.Body className="gap-3">
-          <Card.Title>{t("formula")}</Card.Title>
+        </SystemPanel.Body>
+      </SystemPanel>
+      <SystemPanel>
+        <SystemPanel.Body className="gap-3">
+          <SystemPanel.Title>{t("formula")}</SystemPanel.Title>
           <Choices
             values={["none", "male", "female"] as const}
             value={formula}
             onChange={(value) => preference("formula", value)}
           />
           <Text className="text-sm text-muted">{t("bodyHelp")}</Text>
-        </Card.Body>
-      </Card>
-      <Card>
-        <Card.Body className="gap-3">
-          <Card.Title>{Platform.OS === "ios" ? "Apple Health" : "Health Connect"}</Card.Title>
+        </SystemPanel.Body>
+      </SystemPanel>
+      <SystemPanel>
+        <SystemPanel.Body className="gap-3">
+          <SystemPanel.Title>
+            {Platform.OS === "ios" ? "Apple Health" : "Health Connect"}
+          </SystemPanel.Title>
           <Text className="text-muted">{t("healthPrivacy")}</Text>
           <Text className="text-sm text-muted">{t("syncHelp")}</Text>
           {lastSync && (
@@ -85,16 +87,19 @@ export default function Settings() {
               {t("lastSync")}: {date(lastSync)}
             </Text>
           )}
-          <Button isDisabled={busy} onPress={sync}>
+          <SystemButton isDisabled={busy} onPress={sync}>
             {t(busy ? "syncing" : "sync")}
-          </Button>
+          </SystemButton>
           {message && (
-            <Text accessibilityLiveRegion="polite" className="text-accent">
+            <Text
+              accessibilityLiveRegion="polite"
+              className="border-l-2 border-success pl-3 text-success"
+            >
               {t(message)}
             </Text>
           )}
-        </Card.Body>
-      </Card>
+        </SystemPanel.Body>
+      </SystemPanel>
       <ErrorText message={error ? t(error) : ""} />
     </Screen>
   );

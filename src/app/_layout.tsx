@@ -1,3 +1,4 @@
+import { useFonts } from "expo-font";
 import type { JSX } from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -12,21 +13,23 @@ import { db } from "@/db";
 import "../global.css";
 
 export default function RootLayout(): JSX.Element {
+  const [fontsLoaded, fontError] = useFonts({
+    Inter: require("../../assets/fonts/Inter.ttf"),
+    IBMPlexMono: require("../../assets/fonts/IBMPlexMono-Regular.ttf"),
+  });
   const { success, error } = useMigrations(db, migrations);
 
   if (error) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
-        <Text style={{ color: "#ef4444", fontSize: 16, textAlign: "center" }}>
-          Migration error: {error.message}
-        </Text>
+      <View className="flex-1 items-center justify-center bg-background p-6">
+        <Text className="text-center text-base text-danger">Migration error: {error.message}</Text>
       </View>
     );
   }
 
-  if (!success) {
+  if (!success || (!fontsLoaded && !fontError)) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View className="flex-1 items-center justify-center bg-background">
         <ActivityIndicator size="large" />
       </View>
     );
@@ -34,7 +37,7 @@ export default function RootLayout(): JSX.Element {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <HeroUINativeProvider>
+      <HeroUINativeProvider config={{ animation: "disable-all" }}>
         <StoreProvider>
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(tabs)" />
