@@ -6,7 +6,7 @@
 **Web stack:** HeroUI + Tailwind CSS  
 **Native stack:** React Native + Expo  
 **Reference aesthetic:** Psycho-Pass-inspired institutional interfaces  
-**Core principle:** *The interface should feel sterile before it feels beautiful.*
+**Core principle:** _The interface should feel sterile before it feels beautiful._
 
 ---
 
@@ -17,6 +17,7 @@
 The UI should feel engineered for an institution rather than designed for marketing.
 
 Prefer:
+
 - white
 - cool gray
 - blue
@@ -25,6 +26,7 @@ Prefer:
 - structured information
 
 Avoid:
+
 - decorative gradients
 - excessive shadows
 - excessive rounding
@@ -46,6 +48,7 @@ Data is beautiful because it is organized. Tables, values, timestamps, system st
 ### Slightly Unsettling
 
 There should be a subtle sense that the interface is always:
+
 - observing
 - measuring
 - evaluating
@@ -58,19 +61,19 @@ But never in a cheesy sci-fi way.
 
 ## 02 — Brand Vocabulary
 
-| Concept | Meaning |
-|---|---|
-| System | The application/platform |
-| Subject | A tracked entity/user/object |
-| Analysis | Computation or processing |
-| Scan | Data collection |
-| Coefficient | Numeric evaluation |
-| Status | Current system state |
-| Record | Historical data |
-| Event | Something that occurred |
-| Alert | Something requiring attention |
-| Protocol | A predefined workflow |
-| Authorization | Permission/state |
+| Concept       | Meaning                       |
+| ------------- | ----------------------------- |
+| System        | The application/platform      |
+| Subject       | A tracked entity/user/object  |
+| Analysis      | Computation or processing     |
+| Scan          | Data collection               |
+| Coefficient   | Numeric evaluation            |
+| Status        | Current system state          |
+| Record        | Historical data               |
+| Event         | Something that occurred       |
+| Alert         | Something requiring attention |
+| Protocol      | A predefined workflow         |
+| Authorization | Permission/state              |
 
 Use this vocabulary in UI copy where appropriate to reinforce the system identity.
 
@@ -82,61 +85,61 @@ Use this vocabulary in UI copy where appropriate to reinforce the system identit
 
 ```ts
 export const colors = {
-  white: '#FFFFFF',
-  black: '#000000',
+  white: "#FFFFFF",
+  black: "#000000",
 
   ink: {
-    950: '#071017',
-    900: '#0D171E',
-    800: '#15212B',
-    700: '#24313B',
-    600: '#3E4D57',
-    500: '#64727D',
-    400: '#87939B',
-    300: '#AAB5BC',
-    200: '#C8D1D6',
-    100: '#E0E6E9',
-    50: '#F3F6F7',
+    950: "#071017",
+    900: "#0D171E",
+    800: "#15212B",
+    700: "#24313B",
+    600: "#3E4D57",
+    500: "#64727D",
+    400: "#87939B",
+    300: "#AAB5BC",
+    200: "#C8D1D6",
+    100: "#E0E6E9",
+    50: "#F3F6F7",
   },
 
   system: {
-    950: '#002A35',
-    900: '#003B4A',
-    800: '#00566B',
-    700: '#006F8A',
-    600: '#008EAE',
-    500: '#12AFCF',
-    400: '#42C5E0',
-    300: '#82D9EC',
-    200: '#B9EAF7',
-    100: '#DDF5FC',
-    50: '#EFFBFF',
+    950: "#002A35",
+    900: "#003B4A",
+    800: "#00566B",
+    700: "#006F8A",
+    600: "#008EAE",
+    500: "#12AFCF",
+    400: "#42C5E0",
+    300: "#82D9EC",
+    200: "#B9EAF7",
+    100: "#DDF5FC",
+    50: "#EFFBFF",
   },
 
   success: {
-    700: '#087C70',
-    600: '#0D9B8C',
-    500: '#16B8A6',
-    100: '#DDF7F3',
-    50: '#EFFCF9',
+    700: "#087C70",
+    600: "#0D9B8C",
+    500: "#16B8A6",
+    100: "#DDF7F3",
+    50: "#EFFCF9",
   },
 
   warning: {
-    700: '#986D15',
-    600: '#B88622',
-    500: '#D9A441',
-    100: '#FBF1D8',
-    50: '#FFF9EB',
+    700: "#986D15",
+    600: "#B88622",
+    500: "#D9A441",
+    100: "#FBF1D8",
+    50: "#FFF9EB",
   },
 
   danger: {
-    700: '#9F3039',
-    600: '#BD3C47',
-    500: '#D84B55',
-    100: '#F9E2E4',
-    50: '#FEF4F5',
+    700: "#9F3039",
+    600: "#BD3C47",
+    500: "#D84B55",
+    100: "#F9E2E4",
+    50: "#FEF4F5",
   },
-} as const
+} as const;
 ```
 
 ### Semantic Colors
@@ -145,33 +148,33 @@ Never use primitive colors directly inside application components. Use semantic 
 
 ```ts
 export const semanticColors = {
-  background: '#FFFFFF',
-  backgroundSubtle: '#F7F9FA',
-  backgroundCool: '#F1F6F9',
+  background: "#FFFFFF",
+  backgroundSubtle: "#F7F9FA",
+  backgroundCool: "#F1F6F9",
 
-  foreground: '#15212B',
-  foregroundSecondary: '#24313B',
-  foregroundMuted: '#64727D',
-  foregroundDisabled: '#AAB5BC',
+  foreground: "#15212B",
+  foregroundSecondary: "#24313B",
+  foregroundMuted: "#64727D",
+  foregroundDisabled: "#AAB5BC",
 
-  border: '#D9E1E6',
-  borderSubtle: '#E9EEF1',
-  borderStrong: '#AAB5BC',
+  border: "#D9E1E6",
+  borderSubtle: "#E9EEF1",
+  borderStrong: "#AAB5BC",
 
-  primary: '#12AFCF',
-  primaryHover: '#008EAE',
-  primaryActive: '#006F8A',
-  primarySoft: '#EFFBFF',
+  primary: "#12AFCF",
+  primaryHover: "#008EAE",
+  primaryActive: "#006F8A",
+  primarySoft: "#EFFBFF",
 
-  success: '#16B8A6',
-  successSoft: '#EFFCF9',
+  success: "#16B8A6",
+  successSoft: "#EFFCF9",
 
-  warning: '#D9A441',
-  warningSoft: '#FFF9EB',
+  warning: "#D9A441",
+  warningSoft: "#FFF9EB",
 
-  danger: '#D84B55',
-  dangerSoft: '#FEF4F5',
-}
+  danger: "#D84B55",
+  dangerSoft: "#FEF4F5",
+};
 ```
 
 ### Dark Mode
@@ -180,23 +183,23 @@ SIBYL is fundamentally a light interface. Dark mode should feel like **Night Ope
 
 ```ts
 export const darkSemanticColors = {
-  background: '#071017',
-  backgroundSubtle: '#0D171E',
-  backgroundCool: '#102029',
+  background: "#071017",
+  backgroundSubtle: "#0D171E",
+  backgroundCool: "#102029",
 
-  foreground: '#F3F6F7',
-  foregroundSecondary: '#D9E1E6',
-  foregroundMuted: '#87939B',
+  foreground: "#F3F6F7",
+  foregroundSecondary: "#D9E1E6",
+  foregroundMuted: "#87939B",
 
-  border: '#263640',
-  borderSubtle: '#1B2931',
-  borderStrong: '#40515B',
+  border: "#263640",
+  borderSubtle: "#1B2931",
+  borderStrong: "#40515B",
 
-  primary: '#42C5E0',
-  primaryHover: '#82D9EC',
-  primaryActive: '#B9EAF7',
-  primarySoft: '#003B4A',
-}
+  primary: "#42C5E0",
+  primaryHover: "#82D9EC",
+  primaryActive: "#B9EAF7",
+  primarySoft: "#003B4A",
+};
 ```
 
 Dark mode should remain relatively rare.
@@ -208,12 +211,15 @@ Dark mode should remain relatively rare.
 ### Font Stack
 
 Primary:
+
 - Inter
 
 Technical:
+
 - IBM Plex Mono
 
 Fallback:
+
 - `ui-monospace`
 - `SFMono-Regular`
 - Menlo
@@ -226,18 +232,18 @@ Fallback:
 ```ts
 export const typography = {
   display: {
-    fontFamily: 'Inter',
+    fontFamily: "Inter",
     fontSize: 56,
     lineHeight: 1.05,
     fontWeight: 600,
-    letterSpacing: '-0.03em',
+    letterSpacing: "-0.03em",
   },
 
   h1: {
     fontSize: 36,
     lineHeight: 1.1,
     fontWeight: 600,
-    letterSpacing: '-0.02em',
+    letterSpacing: "-0.02em",
   },
 
   h2: {
@@ -274,29 +280,30 @@ export const typography = {
     fontSize: 12,
     lineHeight: 1.4,
     fontWeight: 600,
-    letterSpacing: '0.04em',
+    letterSpacing: "0.04em",
   },
 
   technical: {
-    fontFamily: 'IBM Plex Mono',
+    fontFamily: "IBM Plex Mono",
     fontSize: 12,
     lineHeight: 1.4,
     fontWeight: 400,
   },
 
   technicalSmall: {
-    fontFamily: 'IBM Plex Mono',
+    fontFamily: "IBM Plex Mono",
     fontSize: 10,
     lineHeight: 1.3,
     fontWeight: 400,
-    letterSpacing: '0.04em',
+    letterSpacing: "0.04em",
   },
-}
+};
 ```
 
 ### Typography Rules
 
 Use technical typography for:
+
 - IDs
 - timestamps
 - measurements
@@ -344,10 +351,11 @@ export const spacing = {
   20: 80,
   24: 96,
   32: 128,
-}
+};
 ```
 
 Default component padding:
+
 - small: 12px
 - medium: 16px
 - large: 24px
@@ -366,7 +374,7 @@ export const radius = {
   lg: 6,
   xl: 8,
   full: 9999,
-}
+};
 ```
 
 Default radius: **4px**
@@ -380,25 +388,25 @@ Avoid excessive `rounded-full`.
 Default:
 
 ```css
-border: 1px solid #D9E1E6;
+border: 1px solid #d9e1e6;
 ```
 
 Subtle:
 
 ```css
-border: 1px solid #E9EEF1;
+border: 1px solid #e9eef1;
 ```
 
 Strong:
 
 ```css
-border: 1px solid #AAB5BC;
+border: 1px solid #aab5bc;
 ```
 
 Focus:
 
 ```css
-border: 1px solid #12AFCF;
+border: 1px solid #12afcf;
 ```
 
 ---
@@ -415,17 +423,14 @@ Available:
 
 ```ts
 export const shadows = {
-  none: 'none',
+  none: "none",
 
-  subtle:
-    '0 1px 3px rgba(20, 40, 50, 0.06)',
+  subtle: "0 1px 3px rgba(20, 40, 50, 0.06)",
 
-  medium:
-    '0 6px 20px rgba(20, 40, 50, 0.08)',
+  medium: "0 6px 20px rgba(20, 40, 50, 0.08)",
 
-  overlay:
-    '0 16px 48px rgba(20, 40, 50, 0.14)',
-}
+  overlay: "0 16px 48px rgba(20, 40, 50, 0.14)",
+};
 ```
 
 Use shadows sparingly.
@@ -469,14 +474,17 @@ Tablet:
 ### Grid
 
 Desktop:
+
 - 12 columns
 - 24px gutters
 
 Tablet:
+
 - 8 columns
 - 20px gutters
 
 Mobile:
+
 - 4 columns
 - 16px gutters
 
@@ -496,6 +504,7 @@ Mobile:
 ```
 
 Visual rules:
+
 - white background
 - 1px border
 - 4px radius
@@ -550,12 +559,11 @@ Eyebrows are uppercase and technical.
 ## 12 — SystemLabel
 
 ```tsx
-<SystemLabel>
-  LAST ANALYSIS
-</SystemLabel>
+<SystemLabel>LAST ANALYSIS</SystemLabel>
 ```
 
 Style:
+
 - 10–12px
 - uppercase
 - IBM Plex Mono
@@ -569,18 +577,18 @@ Style:
 Used for important numerical information.
 
 ```tsx
-<SystemValue>
-  142.7
-</SystemValue>
+<SystemValue>142.7</SystemValue>
 ```
 
 Default:
+
 - 48px
 - IBM Plex Mono
 - medium weight
 - ink
 
 Large:
+
 - 72px
 
 ---
@@ -595,13 +603,7 @@ Supported statuses:
 
 ```ts
 type SystemStatus =
-  | 'online'
-  | 'stable'
-  | 'monitor'
-  | 'elevated'
-  | 'critical'
-  | 'offline'
-  | 'unknown'
+  "online" | "stable" | "monitor" | "elevated" | "critical" | "offline" | "unknown";
 ```
 
 Visual:
@@ -621,28 +623,23 @@ Three variants.
 ### Primary
 
 ```tsx
-<SystemButton variant="primary">
-  Execute Analysis
-</SystemButton>
+<SystemButton variant="primary">Execute Analysis</SystemButton>
 ```
 
 ### Secondary
 
 ```tsx
-<SystemButton variant="secondary">
-  View Record
-</SystemButton>
+<SystemButton variant="secondary">View Record</SystemButton>
 ```
 
 ### Ghost
 
 ```tsx
-<SystemButton variant="ghost">
-  View Details →
-</SystemButton>
+<SystemButton variant="ghost">View Details →</SystemButton>
 ```
 
 Rules:
+
 - 4px radius
 - 40–44px height
 - 12–14px typography
@@ -655,10 +652,7 @@ Rules:
 ## 16 — SystemInput
 
 ```tsx
-<SystemInput
-  label="SUBJECT IDENTIFIER"
-  placeholder="PSY-04-8821"
-/>
+<SystemInput label="SUBJECT IDENTIFIER" placeholder="PSY-04-8821" />
 ```
 
 Structure:
@@ -672,6 +666,7 @@ SUBJECT IDENTIFIER
 ```
 
 Focus:
+
 - blue border
 - subtle blue outer ring
 
@@ -682,11 +677,7 @@ Focus:
 ```tsx
 <SystemSelect
   label="ANALYSIS TYPE"
-  options={[
-    'Psycho-Scan',
-    'Coefficient Analysis',
-    'Historical Record',
-  ]}
+  options={["Psycho-Scan", "Coefficient Analysis", "Historical Record"]}
 />
 ```
 
@@ -729,6 +720,7 @@ Avoid oversized modern mobile-style switches.
 ## 20 — SystemAlert
 
 Variants:
+
 - info
 - success
 - warning
@@ -745,6 +737,7 @@ Example:
 ```
 
 Use semantic color primarily in:
+
 - indicator
 - eyebrow
 - icon
@@ -781,14 +774,7 @@ No giant rounded containers.
 Tables are a major SIBYL component.
 
 ```tsx
-<SystemTable
-  columns={[
-    'ID',
-    'STATUS',
-    'COEFFICIENT',
-    'LAST SCAN',
-  ]}
-/>
+<SystemTable columns={["ID", "STATUS", "COEFFICIENT", "LAST SCAN"]} />
 ```
 
 Visual:
@@ -833,6 +819,7 @@ COMPLETE
 ## 24 — SystemChart
 
 Charts should use:
+
 - white background
 - subtle grid
 - blue primary line
@@ -871,18 +858,22 @@ Maximum recommended simultaneous semantic colors: **3–4**.
 Recommended library: **Lucide**
 
 Icon philosophy:
+
 - thin
 - technical
 - simple
 - consistent
 
 Default:
+
 - 16px
 
 Large:
+
 - 20px / 24px
 
 Avoid:
+
 - filled cartoon icons
 - excessive icon decoration
 - emoji
@@ -903,7 +894,7 @@ export const motion = {
   normal: 200,
   slow: 300,
   system: 400,
-}
+};
 ```
 
 ### Easing
@@ -913,6 +904,7 @@ cubic-bezier(0.2, 0.8, 0.2, 1)
 ```
 
 Avoid:
+
 - bounce
 - elastic
 - overshoot
@@ -927,6 +919,7 @@ Avoid:
 A thin blue line traverses a panel.
 
 Duration:
+
 - 600–1000ms
 
 Use sparingly.
@@ -956,7 +949,7 @@ Use sparingly.
 Accessibility is mandatory.
 
 ```css
-outline: 2px solid #12AFCF;
+outline: 2px solid #12afcf;
 outline-offset: 2px;
 ```
 
@@ -969,6 +962,7 @@ Do not rely exclusively on color.
 Target: **WCAG 2.2 AA**
 
 Requirements:
+
 - minimum 4.5:1 normal text contrast
 - 3:1 large text
 - visible focus
@@ -1015,6 +1009,7 @@ Collapse secondary panels.
 ### Mobile
 
 Prioritize:
+
 1. status
 2. primary metric
 3. primary action
@@ -1196,6 +1191,7 @@ ui-native/
 ```
 
 Use React Native primitives underneath:
+
 - View
 - Text
 - Pressable
@@ -1215,6 +1211,7 @@ The design language remains identical, but implementation differs.
 ### Web
 
 Optimize for:
+
 - hover
 - keyboard
 - mouse
@@ -1225,6 +1222,7 @@ Optimize for:
 ### Mobile
 
 Optimize for:
+
 - press
 - swipe
 - safe areas
@@ -1273,6 +1271,7 @@ The visual control can appear smaller as long as the interactive hit area is suf
 ```
 
 Active state:
+
 - blue vertical bar
 - blue text
 
@@ -1382,6 +1381,7 @@ Subject record updated.
 ```
 
 Auto-dismiss:
+
 - 3–5 seconds
 
 ---
@@ -1489,6 +1489,7 @@ SIBYL
 ```
 
 Typography:
+
 - Inter SemiBold
 
 Optional technical suffix:
@@ -1587,10 +1588,7 @@ Good:
 Bad:
 
 ```tsx
-<SystemBadge
-  background="#f9e2e4"
-  color="#d84b55"
-/>
+<SystemBadge background="#f9e2e4" color="#d84b55" />
 ```
 
 Good:
@@ -1602,9 +1600,7 @@ Good:
 Bad:
 
 ```tsx
-<SystemPanel
-  borderColor="#D84B55"
-/>
+<SystemPanel borderColor="#D84B55" />
 ```
 
 Application code should speak in **system concepts**, not colors.
@@ -1680,7 +1676,7 @@ export const buttonTokens = {
     border: colors.ink[200],
     foreground: colors.ink[800],
   },
-}
+};
 ```
 
 ---
@@ -1718,6 +1714,7 @@ PATTERNS
 ```
 
 Every component should document:
+
 - anatomy
 - variants
 - states
@@ -1777,43 +1774,43 @@ The visual identity is the combination of:
 
 **White canvas**
 
-+
+-
 
 **Cool gray structure**
 
-+
+-
 
 **Thin borders**
 
-+
+-
 
 **Azure/cyan operational blue**
 
-+
+-
 
 **Monospace technical metadata**
 
-+
+-
 
 **Tiny uppercase labels**
 
-+
+-
 
 **Precise tables**
 
-+
+-
 
 **Sparse iconography**
 
-+
+-
 
 **Small radius**
 
-+
+-
 
 **Minimal shadows**
 
-+
+-
 
 **Mechanical animation**
 
