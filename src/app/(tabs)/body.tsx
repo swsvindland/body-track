@@ -1,4 +1,5 @@
-import { MeasurementLog } from "@/components/measurement-log";
+import { BodyLog } from "@/components/measurements/body-log";
+
 export default function Body() {
-  return <MeasurementLog kind="body" />;
+  return <BodyLog />;
 }

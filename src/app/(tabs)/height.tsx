@@ -1,4 +1,5 @@
-import { MeasurementLog } from "@/components/measurement-log";
+import { HeightLog } from "@/components/measurements/height-log";
+
 export default function Height() {
-  return <MeasurementLog kind="height" />;
+  return <HeightLog />;
 }

@@ -1,4 +1,5 @@
-import { MeasurementLog } from "@/components/measurement-log";
+import { WeightLog } from "@/components/measurements/weight-log";
+
 export default function Home() {
-  return <MeasurementLog kind="weight" />;
+  return <WeightLog />;
 }
