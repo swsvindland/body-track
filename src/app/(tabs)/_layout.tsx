@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useStore } from "@/lib/store";
 import { Tabs } from "expo-router";
 import { useThemeColor } from "heroui-native";
 import type { ComponentProps, JSX } from "react";
@@ -11,6 +12,7 @@ function TabIcon({ name, color }: { name: IoniconName; color: ColorValue }): JSX
 }
 
 export default function TabsLayout(): JSX.Element {
+  const { t } = useStore();
   const background = useThemeColor("background");
   const muted = useThemeColor("muted");
   const accent = useThemeColor("accent");
@@ -32,35 +34,35 @@ export default function TabsLayout(): JSX.Element {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Weight",
+          title: t("home"),
           tabBarIcon: ({ color }) => <TabIcon name="scale-outline" color={color} />,
         }}
       />
       <Tabs.Screen
         name="body"
         options={{
-          title: "Body",
+          title: t("body"),
           tabBarIcon: ({ color }) => <TabIcon name="body-outline" color={color} />,
         }}
       />
       <Tabs.Screen
         name="photos"
         options={{
-          title: "Photos",
+          title: t("photos"),
           tabBarIcon: ({ color }) => <TabIcon name="images-outline" color={color} />,
         }}
       />
       <Tabs.Screen
         name="height"
         options={{
-          title: "Height",
+          title: t("height"),
           tabBarIcon: ({ color }) => <TabIcon name="resize-outline" color={color} />,
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
-          title: "Settings",
+          title: t("settings"),
           tabBarIcon: ({ color }) => <TabIcon name="settings-outline" color={color} />,
         }}
       />

@@ -1,46 +1,67 @@
-# Welcome to your HeroUI Native app 👋
+# Body Track
 
-This is an [Expo](https://expo.dev) project preconfigured with
-[HeroUI Native](https://heroui.com/docs/native), [Uniwind](https://docs.uniwind.dev)
-(Tailwind CSS for React Native), and [Expo Router](https://docs.expo.dev/router/introduction)
-with a bottom-tab layout.
+Local-first weight, height, body measurements and progress photos for iOS and Android, built with Expo SDK 57, HeroUI Native and SQLite.
 
-## Get started
+## Run
 
-1. Install dependencies
+Use Node 24 (`nvm use`) and pnpm 11.26 (`corepack enable`).
 
-   ```bash
-   npm install
-   ```
+```sh
+pnpm install
+pnpm start
+```
 
-2. Start the app
+Expo Go supports the recording screens and photo flow. Health sync needs a native build:
 
-   ```bash
-   npx expo start
-   ```
+```sh
+pnpm ios
+pnpm android
+```
 
-In the output, you'll find options to open the app in a
+These commands generate native projects as needed. iOS requires Xcode and CocoaPods; Android requires the Android SDK and a compatible JDK. The default development identifier is `com.bodytrack.app`; use your registered identifier and signing team before distributing the app.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Features
 
-You can start developing by editing the files inside the **src/app** directory. The tabs themselves live under `src/app/(tabs)/`. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- Dated weight and height history with add, edit, delete and backdating.
+- Dashboard with daily-mean weight trend, BMI, estimated body fat and FFMI. Trend uses an exponential average with a seven-day half-life and calendar-day spacing. Repeated weigh-ins on one day contribute one daily average. Missing days do not create synthetic entries.
+- Body sessions with 16 optional circumference sites, including left/right limbs, plus a manually measured body-fat percentage.
+- US Navy circumference estimates when the user selects a male or female equation. Male inputs: neck and abdomen at the navel; female inputs: neck, natural waist and hips. Height is required. Manual body fat takes precedence. Invalid or missing inputs display no estimate.
+- Private front/side/back photo gallery, editable dates/poses, deletion and two-photo comparison for matching poses. Selected images are copied into the app's document directory; only relative filenames are stored so iOS container changes do not break photos.
+- Metric, imperial and decimal-stone units. Canonical values stay in kg/cm; changing display units does not rewrite history.
+- English, Spanish, French, German, Italian, Portuguese, Dutch, Swedish, Japanese, Korean and Simplified Chinese. Language controls the interface and number/date formatting; units are independent.
 
-## What's preconfigured
+## Health sync behavior
 
-- **HeroUI Native** (`heroui-native`) wrapped in `HeroUINativeProvider` and `GestureHandlerRootView` in `src/app/_layout.tsx`
-- **Uniwind** + **Tailwind CSS** wired through `metro.config.js` and `src/global.css`
-- All HeroUI Native mandatory peer dependencies: `react-native-reanimated`, `react-native-gesture-handler`, `react-native-worklets`, `react-native-safe-area-context`, `react-native-svg`, `react-native-screens`
-- `@gorhom/bottom-sheet` for bottom-sheet UIs
-- `@expo/vector-icons` (Ionicons) for tab bar icons
-- TypeScript with `strict: true` and `@/*` path alias to `./src/*`
-- React Compiler enabled
+Sync is explicitly started from Settings. The app requests weight/height read and write access only. No background sync or server is involved. Photos, circumference sessions and calculated estimates are not exported.
 
-## Learn more
+- Exports use stable client identifiers and versions. Repeating sync does not duplicate app records; corrections update them, and deleting an app-origin record queues deletion from the health provider on the next successful sync.
+- Imports use provider record IDs and transactional mappings. Imported records are managed by their original source and cannot be edited here; deleting an imported record hides it locally without deleting the original. A remembered mapping prevents it from reappearing.
+- Imports are snapshots, not a mirror of remote deletions. Updates to available provider records are imported, but records removed from the provider are not automatically deleted from Body Track.
+- Apple Health returns only readable samples. iOS intentionally does not reveal whether read permission was denied; successful write authorization does not prove read access. This limitation is also explained in Settings.
+- Health Connect currently imports the most recent 29 days, within its default historical access window, and paginates all results. It requires all four requested permissions before proceeding. Older local records can still be exported.
+- A failed sync preserves completed mappings and only updates the last-success timestamp once the whole pass finishes. Retrying continues without replaying completed exports.
+- Health Connect's system permission rationale opens the app's translated health-privacy screen through a config plugin.
 
-- [HeroUI Native components](https://heroui.com/docs/native) — full component reference
-- [Expo documentation](https://docs.expo.dev/) — Expo fundamentals and guides
-- [Uniwind documentation](https://docs.uniwind.dev) — Tailwind for React Native
-- [Expo Router](https://docs.expo.dev/router/introduction) — file-based routing
+The pinned `react-native-health-connect@4.1.3` dependency includes a pnpm patch replacing its removed legacy Expo Gradle script with the SDK 57 Expo module plugin. HealthKit 14.1 has an incorrect TypeScript intersection for common sample metadata; a documented, narrow adapter cast accommodates its valid native sync metadata.
+
+## Verification
+
+```sh
+pnpm typecheck
+pnpm lint
+pnpm test
+pnpm exec expo export --platform ios
+pnpm exec expo export --platform android
+```
+
+Tests exercise real SQLite through the production Drizzle Expo driver with the native SQLite boundary substituted by Node SQLite. They cover existing-data migrations, calendar validation, unit conversion, smoothing, body composition, dictionary completeness and sync idempotency/retry/deletion behavior. Health provider APIs are fakes in those tests; they do not prove native permissions or entitlement behavior.
+
+## Verified in this implementation
+
+Type checking, lint and all eight tests pass. Metro production exports succeed for iOS and Android. The overview and body screen were inspected in an iPhone simulator with Expo Go. The full Android arm64 debug APK compiles successfully, including Health Connect and the native privacy-rationale handler. Native iOS compilation and real-device health permission/sync behavior remain unverified.
+
+## Before release
+
+See [the implementation plan](IMPLEMENTATION_PLAN.md). Complete native device QA for health permissions, updates/deletions, provider availability, photo selection and persistence, large text and translated layouts. Review translations with native speakers. BMI and circumference formulas are adult estimates; FFMI is unadjusted and derived from trend weight and the latest recorded body-fat inputs. Source dates are shown because height and circumference records can be older than weight.
+
+This app has no cloud backup. Device backups follow the operating system's settings; removing the app may remove its local records and photos. Add your store privacy disclosures, registered signing identifiers and Health Connect access declarations before publishing. There is no subscription or payment implementation in this scope.

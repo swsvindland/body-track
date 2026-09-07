@@ -1,21 +1,29 @@
 {
   "expo": {
-    "name": "body-track",
+    "name": "Body Track",
     "slug": "body-track",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "heroui-native-app",
+    "scheme": "bodytrack",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bodytrack.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.health.READ_WEIGHT",
+        "android.permission.health.WRITE_WEIGHT",
+        "android.permission.health.READ_HEIGHT",
+        "android.permission.health.WRITE_HEIGHT"
+      ],
+      "package": "com.bodytrack.app"
     },
     "plugins": [
       "expo-router",
@@ -28,7 +36,34 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-status-bar"
+      "expo-status-bar",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Choose progress photos to save privately in Body Track.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
+      ],
+      "expo-localization",
+      [
+        "@kingstinct/react-native-healthkit",
+        {
+          "background": false,
+          "NSHealthShareUsageDescription": "Import your weight and height into Body Track when you choose to sync.",
+          "NSHealthUpdateUsageDescription": "Save your Body Track weight and height records to Apple Health when you choose to sync."
+        }
+      ],
+      "react-native-health-connect",
+      "./plugins/with-health-rationale",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 26
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
