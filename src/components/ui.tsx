@@ -1,8 +1,13 @@
 import type { ReactNode } from "react";
 import { KeyboardAvoidingView, Modal, Platform, ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView as NativeSafeAreaView } from "react-native-safe-area-context";
+import { withUniwind } from "uniwind";
 import { Button, Input, Label, TextField } from "heroui-native";
 import { useStore } from "@/lib/store";
+
+// Third-party native views need a Uniwind adapter for className styles.
+// Without flex-1, the modal's safe-area container collapses and hides the form.
+const SafeAreaView = withUniwind(NativeSafeAreaView);
 
 export function Screen({
   title,
