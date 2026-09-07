@@ -38,6 +38,8 @@
   "side": "Profil",
   "back": "Dos",
   "choosePhoto": "Choisir une photo",
+  "takePhoto": "Prendre une photo",
+  "cameraPermissionDenied": "L’accès à la caméra est nécessaire pour prendre une photo. Activez-le dans les réglages de votre appareil.",
   "compare": "Comparer",
   "all": "Toutes",
   "neck": "Cou",

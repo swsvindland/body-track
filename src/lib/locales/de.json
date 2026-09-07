@@ -38,6 +38,8 @@
   "side": "Seite",
   "back": "Hinten",
   "choosePhoto": "Foto wählen",
+  "takePhoto": "Foto aufnehmen",
+  "cameraPermissionDenied": "Zum Aufnehmen eines Fotos ist Kamerazugriff erforderlich. Aktiviere ihn in den Geräteeinstellungen.",
   "compare": "Vergleichen",
   "all": "Alle",
   "neck": "Hals",

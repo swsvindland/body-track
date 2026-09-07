@@ -38,6 +38,8 @@
   "side": "측면",
   "back": "후면",
   "choosePhoto": "사진 선택",
+  "takePhoto": "사진 촬영",
+  "cameraPermissionDenied": "사진을 촬영하려면 카메라 접근 권한이 필요합니다. 기기 설정에서 허용해 주세요.",
   "compare": "비교",
   "all": "전체",
   "neck": "목",

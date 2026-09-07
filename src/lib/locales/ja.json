@@ -38,6 +38,8 @@
   "side": "側面",
   "back": "背面",
   "choosePhoto": "写真を選択",
+  "takePhoto": "写真を撮る",
+  "cameraPermissionDenied": "写真を撮るにはカメラへのアクセスが必要です。端末の設定で許可してください。",
   "compare": "比較",
   "all": "すべて",
   "neck": "首",

@@ -38,6 +38,8 @@
   "side": "Side",
   "back": "Back",
   "choosePhoto": "Choose photo",
+  "takePhoto": "Take photo",
+  "cameraPermissionDenied": "Camera access is required to take a photo. Enable it in your device settings.",
   "compare": "Compare",
   "all": "All",
   "neck": "Neck",

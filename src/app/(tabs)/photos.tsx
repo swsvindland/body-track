@@ -33,7 +33,7 @@ export default function Photos() {
     setError("");
     setOpen(true);
   }
-  async function save() {
+  async function save(source: "camera" | "library" = "library") {
     if (busy) return;
     if (!validDay(day)) {
       setError(t("invalidDate"));
@@ -46,11 +46,22 @@ export default function Photos() {
       if (editing) {
         db.update(photos).set({ pose, measuredAt: day }).where(eq(photos.id, editing.id)).run();
       } else {
-        const result = await ImagePicker.launchImageLibraryAsync({
+        if (source === "camera") {
+          const permission = await ImagePicker.requestCameraPermissionsAsync();
+          if (!permission.granted) {
+            setError(t("cameraPermissionDenied"));
+            return;
+          }
+        }
+        const options: ImagePicker.ImagePickerOptions = {
           mediaTypes: ["images"],
           quality: 0.85,
           exif: false,
-        });
+        };
+        const result =
+          source === "camera"
+            ? await ImagePicker.launchCameraAsync(options)
+            : await ImagePicker.launchImageLibraryAsync(options);
         if (result.canceled) return;
         const asset = result.assets[0];
         const directory = new Directory(Paths.document, "progress-photos");
@@ -183,7 +194,16 @@ export default function Photos() {
           />
         )}
         <ErrorText message={error} />
-        <Button onPress={save} isDisabled={busy}>
+        {!editing && (
+          <Button onPress={() => save("camera")} isDisabled={busy}>
+            {t("takePhoto")}
+          </Button>
+        )}
+        <Button
+          onPress={() => save()}
+          variant={editing ? "primary" : "secondary"}
+          isDisabled={busy}
+        >
           {t(editing ? "save" : "choosePhoto")}
         </Button>
         {editing && (

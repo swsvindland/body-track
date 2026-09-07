@@ -38,6 +38,8 @@
   "side": "Zijkant",
   "back": "Achterkant",
   "choosePhoto": "Foto kiezen",
+  "takePhoto": "Foto maken",
+  "cameraPermissionDenied": "Cameratoegang is nodig om een foto te maken. Schakel deze in via de instellingen van je apparaat.",
   "compare": "Vergelijken",
   "all": "Alle",
   "neck": "Nek",

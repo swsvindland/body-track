@@ -41,7 +41,7 @@
         "expo-image-picker",
         {
           "photosPermission": "Choose progress photos to save privately in Body Track.",
-          "cameraPermission": false,
+          "cameraPermission": "Take progress photos to save privately in Body Track.",
           "microphonePermission": false
         }
       ],

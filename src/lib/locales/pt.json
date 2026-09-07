@@ -38,6 +38,8 @@
   "side": "Lado",
   "back": "Costas",
   "choosePhoto": "Escolher foto",
+  "takePhoto": "Tirar foto",
+  "cameraPermissionDenied": "É necessário permitir o acesso à câmera para tirar uma foto. Ative-o nas configurações do dispositivo.",
   "compare": "Comparar",
   "all": "Todas",
   "neck": "Pescoço",

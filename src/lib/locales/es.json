@@ -38,6 +38,8 @@
   "side": "Perfil",
   "back": "Espalda",
   "choosePhoto": "Elegir foto",
+  "takePhoto": "Tomar foto",
+  "cameraPermissionDenied": "Se necesita acceso a la cámara para tomar una foto. Actívalo en los ajustes del dispositivo.",
   "compare": "Comparar",
   "all": "Todas",
   "neck": "Cuello",

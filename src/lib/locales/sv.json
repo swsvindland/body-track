@@ -38,6 +38,8 @@
   "side": "Från sidan",
   "back": "Bakifrån",
   "choosePhoto": "Välj foto",
+  "takePhoto": "Ta foto",
+  "cameraPermissionDenied": "Kameraåtkomst krävs för att ta ett foto. Aktivera den i enhetens inställningar.",
   "compare": "Jämför",
   "all": "Alla",
   "neck": "Hals",

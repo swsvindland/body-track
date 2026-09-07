@@ -38,6 +38,8 @@
   "side": "Lato",
   "back": "Retro",
   "choosePhoto": "Scegli foto",
+  "takePhoto": "Scatta foto",
+  "cameraPermissionDenied": "Per scattare una foto è necessario consentire l’accesso alla fotocamera. Abilitalo nelle impostazioni del dispositivo.",
   "compare": "Confronta",
   "all": "Tutte",
   "neck": "Collo",

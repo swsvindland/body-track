@@ -38,6 +38,8 @@
   "side": "侧面",
   "back": "背面",
   "choosePhoto": "选择照片",
+  "takePhoto": "拍照",
+  "cameraPermissionDenied": "拍照需要相机访问权限。请在设备设置中启用。",
   "compare": "对比",
   "all": "全部",
   "neck": "颈围",
