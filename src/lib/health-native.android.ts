@@ -7,11 +7,23 @@ export async function getHealthAdapter(): Promise<HealthAdapter> {
   )
     throw new Error("healthUnavailable");
   return {
-    async authorize() {
+    async authorize(interactive = true) {
       const permissions = ["Weight", "Height"].flatMap((recordType) =>
         ["read", "write"].map((accessType) => ({ recordType, accessType }))
       ) as { recordType: "Weight" | "Height"; accessType: "read" | "write" }[];
-      const granted = await hc.requestPermission(permissions);
+      const granted = interactive
+        ? await hc.requestPermission(permissions)
+        : await hc.getGrantedPermissions();
+      if (interactive) {
+        // Older Health Connect versions do not support background access.
+        try {
+          await hc.requestPermission([
+            { accessType: "read", recordType: "BackgroundAccessPermission" },
+          ]);
+        } catch {
+          /* Foreground sync is still available. */
+        }
+      }
       if (
         permissions.some(
           (p) =>

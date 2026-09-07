@@ -1,4 +1,5 @@
 import { useFonts } from "expo-font";
+import { useUniwind } from "uniwind";
 import type { JSX } from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -11,6 +12,11 @@ import { StoreProvider } from "@/lib/store";
 import { db } from "@/db";
 
 import "../global.css";
+
+function ThemedStatusBar() {
+  const { theme } = useUniwind();
+  return <StatusBar style={theme === "dark" ? "light" : "dark"} />;
+}
 
 export default function RootLayout(): JSX.Element {
   const [fontsLoaded, fontError] = useFonts({
@@ -43,7 +49,7 @@ export default function RootLayout(): JSX.Element {
             <Stack.Screen name="(tabs)" />
           </Stack>
         </StoreProvider>
-        <StatusBar style="auto" />
+        <ThemedStatusBar />
       </HeroUINativeProvider>
     </GestureHandlerRootView>
   );

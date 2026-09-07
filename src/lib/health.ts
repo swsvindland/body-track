@@ -6,7 +6,7 @@ import type { HealthAdapter, HealthKind, HealthRecord } from "./health-types";
 import { validDay, dayOf } from "./metrics";
 
 let running = false;
-export async function syncHealth(adapter?: HealthAdapter) {
+export async function syncHealth(adapter?: HealthAdapter, interactive = true) {
   if (running) throw new Error("syncing");
   if (!adapter && Constants.appOwnership === "expo") throw new Error("healthUnavailable");
   running = true;
@@ -17,7 +17,7 @@ export async function syncHealth(adapter?: HealthAdapter) {
     } catch {
       throw new Error("healthUnavailable");
     }
-    await provider.authorize();
+    await provider.authorize(interactive);
     let installation = db
       .select()
       .from(preferences)

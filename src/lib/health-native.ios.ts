@@ -10,8 +10,8 @@ export async function getHealthAdapter(): Promise<HealthAdapter> {
   const types = [identifier("weight"), identifier("height")];
   if (!hk.isHealthDataAvailable()) throw new Error("healthUnavailable");
   return {
-    async authorize() {
-      await hk.requestAuthorization({ toRead: types, toShare: types });
+    async authorize(interactive = true) {
+      if (interactive) await hk.requestAuthorization({ toRead: types, toShare: types });
       if (
         types.some(
           (type) => hk.authorizationStatusFor(type) !== hk.AuthorizationStatus.sharingAuthorized

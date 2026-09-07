@@ -1,13 +1,26 @@
 import { useState } from "react";
-import { Platform } from "react-native";
-import { SystemButton, SystemPanel, SystemText as Text } from "@/components/system";
-import { Choices, ErrorText, Screen } from "@/components/ui";
+import { RadioGroup, Switch } from "heroui-native";
+import { Platform, View } from "react-native";
+import { SystemPanel, SystemText as Text } from "@/components/system";
+import { SettingsSelect, ErrorText, Screen } from "@/components/ui";
 import { useStore } from "@/lib/store";
 import { languages, type Language } from "@/lib/translations";
-import { syncHealth } from "@/lib/health";
+import { enableHealthSync, disableHealthSync } from "@/lib/health-schedule";
 
 export function SettingsScreen() {
-  const { units, formula, language, lastSync, setPreference, refresh, t, date } = useStore();
+  const {
+    units,
+    formula,
+    language,
+    theme,
+    healthSyncEnabled,
+    healthSyncError,
+    lastSync,
+    setPreference,
+    refresh,
+    t,
+    date,
+  } = useStore();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -19,14 +32,18 @@ export function SettingsScreen() {
       setError("error");
     }
   }
-  async function sync() {
+  async function toggleSync(enabled: boolean) {
     if (busy) return;
     setBusy(true);
     setError("");
     setMessage("");
     try {
-      await syncHealth();
-      setMessage("syncDone");
+      if (enabled) {
+        await enableHealthSync();
+        setMessage("syncDone");
+      } else {
+        await disableHealthSync();
+      }
     } catch (error) {
       setError(
         error instanceof Error && ["healthUnavailable", "syncing"].includes(error.message)
@@ -42,8 +59,21 @@ export function SettingsScreen() {
     <Screen title={t("settings")}>
       <SystemPanel>
         <SystemPanel.Body className="gap-3">
+          <SystemPanel.Title>{t("theme")}</SystemPanel.Title>
+          <SettingsSelect
+            title={t("theme")}
+            values={["dark", "light", "system"] as const}
+            value={theme}
+            onChange={(value) => preference("theme", value)}
+            label={t}
+          />
+        </SystemPanel.Body>
+      </SystemPanel>
+      <SystemPanel>
+        <SystemPanel.Body className="gap-3">
           <SystemPanel.Title>{t("units")}</SystemPanel.Title>
-          <Choices
+          <SettingsSelect
+            title={t("units")}
             values={["metric", "imperial", "stone"] as const}
             value={units}
             onChange={(value) => preference("units", value)}
@@ -56,7 +86,8 @@ export function SettingsScreen() {
       <SystemPanel>
         <SystemPanel.Body className="gap-3">
           <SystemPanel.Title>{t("language")}</SystemPanel.Title>
-          <Choices
+          <SettingsSelect
+            title={t("language")}
             values={Object.keys(languages) as Language[]}
             value={language}
             onChange={(value) => preference("language", value)}
@@ -67,11 +98,14 @@ export function SettingsScreen() {
       <SystemPanel>
         <SystemPanel.Body className="gap-3">
           <SystemPanel.Title>{t("formula")}</SystemPanel.Title>
-          <Choices
-            values={["none", "male", "female"] as const}
+          <RadioGroup
+            accessibilityLabel={t("formula")}
             value={formula}
-            onChange={(value) => preference("formula", value)}
-          />
+            onValueChange={(value) => preference("formula", value)}
+          >
+            <RadioGroup.Item value="male">{t("male")}</RadioGroup.Item>
+            <RadioGroup.Item value="female">{t("female")}</RadioGroup.Item>
+          </RadioGroup>
           <Text className="text-sm text-muted">{t("bodyHelp")}</Text>
         </SystemPanel.Body>
       </SystemPanel>
@@ -87,9 +121,16 @@ export function SettingsScreen() {
               {t("lastSync")}: {date(lastSync)}
             </Text>
           )}
-          <SystemButton isDisabled={busy} onPress={sync}>
-            {t(busy ? "syncing" : "sync")}
-          </SystemButton>
+          <View className="flex-row items-center justify-between gap-4">
+            <Text className="flex-1">{t(busy ? "syncing" : "sync")}</Text>
+            <Switch
+              accessibilityLabel={t("sync")}
+              isSelected={healthSyncEnabled}
+              isDisabled={busy}
+              onSelectedChange={toggleSync}
+            />
+          </View>
+          <Text className="text-sm text-muted">{t("syncSchedule")}</Text>
           {message && (
             <Text
               accessibilityLiveRegion="polite"
@@ -100,7 +141,7 @@ export function SettingsScreen() {
           )}
         </SystemPanel.Body>
       </SystemPanel>
-      <ErrorText message={error ? t(error) : ""} />
+      <ErrorText message={error || healthSyncError ? t(error || healthSyncError) : ""} />
     </Screen>
   );
 }

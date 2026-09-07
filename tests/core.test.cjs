@@ -212,3 +212,89 @@ test("failed sync retries safely and doesn't claim success", async () => {
   assert.equal(writes, 1);
   sqlite.close();
 });
+
+test("daily health schedule respects opt-in, due time, failures and opt-out", async () => {
+  const { db, sqlite } = database();
+  let task;
+  let registered = false;
+  let calls = 0;
+  let fail = false;
+  let failRegistration = false;
+  const get = (key) =>
+    db.select().from(schema.preferences).where(eq(schema.preferences.key, key)).get()?.value;
+  const set = (key, value) =>
+    db
+      .insert(schema.preferences)
+      .values({ key, value })
+      .onConflictDoUpdate({ target: schema.preferences.key, set: { value } })
+      .run();
+  const schedule = load("src/lib/health-schedule.ts", {
+    "expo-constants": { default: { appOwnership: "standalone" } },
+    "react-native": { Platform: { OS: "ios" } },
+    "@/db": { db, ...schema },
+    "expo-task-manager": {
+      defineTask: (_name, callback) => {
+        task = callback;
+      },
+      isTaskRegisteredAsync: async () => registered,
+    },
+    "expo-background-task": {
+      BackgroundTaskStatus: { Available: 2 },
+      BackgroundTaskResult: { Success: 1, Failed: 2 },
+      getStatusAsync: async () => 2,
+      registerTaskAsync: async (_name, options) => {
+        assert.equal(options.minimumInterval, 1440);
+        if (failRegistration) throw new Error("scheduler");
+        registered = true;
+      },
+      unregisterTaskAsync: async () => {
+        registered = false;
+      },
+    },
+    "./health": {
+      syncHealth: async (_adapter, interactive) => {
+        calls++;
+        if (get("healthSyncEnabled") === "true") assert.equal(interactive, false);
+        if (fail) throw new Error("offline");
+        set("lastSync", new Date().toISOString());
+      },
+    },
+  });
+  const now = Date.now();
+  assert.equal(schedule.healthSyncDue(undefined, now), true);
+  assert.equal(schedule.healthSyncDue("invalid", now), true);
+  assert.equal(schedule.healthSyncDue(new Date(now - 86400000).toISOString(), now), true);
+  assert.equal(schedule.healthSyncDue(new Date(now - 86399999).toISOString(), now), false);
+  assert.equal(schedule.healthSyncDue(new Date(now + 1).toISOString(), now), true);
+  await task();
+  assert.equal(calls, 0);
+  fail = true;
+  await assert.rejects(schedule.enableHealthSync(), /offline/);
+  assert.notEqual(get("healthSyncEnabled"), "true");
+  fail = false;
+  await schedule.enableHealthSync();
+  assert.equal(registered, true);
+  assert.equal(get("healthSyncEnabled"), "true");
+  const afterEnable = calls;
+  await task();
+  assert.equal(calls, afterEnable);
+  const overdue = new Date(now - 86400001).toISOString();
+  set("lastSync", overdue);
+  fail = true;
+  assert.equal(await task(), 2);
+  assert.equal(get("lastSync"), overdue);
+  assert.equal(get("healthSyncError"), "syncFailed");
+  fail = false;
+  assert.equal(await task(), 1);
+  assert.equal(get("healthSyncError"), "");
+  await schedule.disableHealthSync();
+  assert.equal(registered, false);
+  set("lastSync", overdue);
+  const afterDisable = calls;
+  await task();
+  assert.equal(calls, afterDisable);
+  failRegistration = true;
+  await assert.rejects(schedule.enableHealthSync(), /scheduler/);
+  assert.equal(get("healthSyncEnabled"), "false");
+  sqlite.close();
+});

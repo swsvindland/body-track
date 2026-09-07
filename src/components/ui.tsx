@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { SafeAreaView as NativeSafeAreaView } from "react-native-safe-area-context";
 import { withUniwind } from "uniwind";
-import { Input, Label, TextField } from "heroui-native";
+import { Input, Label, Select, TextField } from "heroui-native";
 import { PortalHost } from "heroui-native/portal";
 import { Calendar, DateField } from "heroui-native-pro";
 import { parseDate } from "@internationalized/date";
@@ -152,6 +152,47 @@ export function DateInput({
         </DateField.Suffix>
       </DateField.InputGroup>
     </DateField>
+  );
+}
+export function SettingsSelect<T extends string>({
+  title,
+  values,
+  value,
+  onChange,
+  label,
+}: {
+  title: string;
+  values: readonly T[];
+  value: T;
+  onChange: (value: T) => void;
+  label: (value: T) => string;
+}) {
+  return (
+    <Select
+      value={{ value, label: label(value) }}
+      onValueChange={(option) => {
+        const selected = values.find((item) => item === option?.value);
+        if (selected) onChange(selected);
+      }}
+    >
+      <Select.Trigger accessibilityLabel={title}>
+        <Select.Value placeholder={title} />
+        <Select.TriggerIndicator />
+      </Select.Trigger>
+      <Select.Portal>
+        <Select.Overlay />
+        <Select.Content presentation="popover" width="trigger" className="max-h-80">
+          <ScrollView keyboardShouldPersistTaps="handled">
+            {values.map((option) => (
+              <Select.Item key={option} value={option} label={label(option)}>
+                <Select.ItemLabel />
+                <Select.ItemIndicator />
+              </Select.Item>
+            ))}
+          </ScrollView>
+        </Select.Content>
+      </Select.Portal>
+    </Select>
   );
 }
 export function Choices<T extends string>({
