@@ -1,13 +1,20 @@
-import type { ReactNode } from "react";
+import { createContext, useContext, useId, useState, type ReactNode } from "react";
 import { KeyboardAvoidingView, Modal, Platform, ScrollView, Text, View } from "react-native";
 import { SafeAreaView as NativeSafeAreaView } from "react-native-safe-area-context";
 import { withUniwind } from "uniwind";
 import { Button, Input, Label, TextField } from "heroui-native";
+import { PortalHost } from "heroui-native/portal";
+import { Calendar, DateField } from "heroui-native-pro";
+import { parseDate } from "@internationalized/date";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { localDay } from "@/lib/metrics";
 import { useStore } from "@/lib/store";
 
 // Third-party native views need a Uniwind adapter for className styles.
 // Without flex-1, the modal's safe-area container collapses and hides the form.
 const SafeAreaView = withUniwind(NativeSafeAreaView);
+
+const EditorPortalContext = createContext<string | undefined>(undefined);
 
 export function Screen({
   title,
@@ -73,6 +80,70 @@ export function Field({
     </TextField>
   );
 }
+export function DateInput({
+  label,
+  value,
+  onChange,
+  disabled = false,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  disabled?: boolean;
+}) {
+  const { language } = useStore();
+  const hostName = useContext(EditorPortalContext);
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <DateField
+      value={{ value, label: value.split("-").reverse().join("/") }}
+      onValueChange={(option) => onChange(option?.value ?? "")}
+      isDisabled={disabled}
+      isRequired
+      isOpen={isOpen}
+      onOpenChange={setIsOpen}
+      locale={language === "zh" ? "zh-CN" : language}
+    >
+      <Label>{label}</Label>
+      <DateField.InputGroup>
+        <DateField.Input
+          accessibilityLabel={label}
+          editable={false}
+          onPressIn={() => !disabled && setIsOpen(true)}
+        />
+        <DateField.Suffix>
+          <DateField.Select presentation="dialog">
+            <DateField.Trigger accessibilityLabel={label}>
+              <DateField.TriggerIndicator />
+            </DateField.Trigger>
+            <DateField.Portal hostName={hostName} disableFullWindowOverlay>
+              <DateField.Overlay />
+              <DateField.Content presentation="dialog">
+                <DateField.Calendar
+                  accessibilityLabel={label}
+                  minValue={parseDate("1900-01-01")}
+                  maxValue={parseDate(localDay())}
+                >
+                  <Calendar.Header>
+                    <Calendar.Heading />
+                    <Calendar.NavButton slot="previous" />
+                    <Calendar.NavButton slot="next" />
+                  </Calendar.Header>
+                  <Calendar.Grid>
+                    <Calendar.GridHeader>
+                      {(day) => <Calendar.HeaderCell day={day} />}
+                    </Calendar.GridHeader>
+                    <Calendar.GridBody>{(date) => <Calendar.Cell date={date} />}</Calendar.GridBody>
+                  </Calendar.Grid>
+                </DateField.Calendar>
+              </DateField.Content>
+            </DateField.Portal>
+          </DateField.Select>
+        </DateField.Suffix>
+      </DateField.InputGroup>
+    </DateField>
+  );
+}
 export function Choices<T extends string>({
   values,
   value,
@@ -114,6 +185,7 @@ export function Editor({
   busy?: boolean;
 }) {
   const { t } = useStore();
+  const portalHost = useId();
   return (
     <Modal
       visible={open}
@@ -121,32 +193,38 @@ export function Editor({
       presentationStyle="pageSheet"
       onRequestClose={() => !busy && close()}
     >
-      <SafeAreaView className="flex-1 bg-background">
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
-        >
-          <ScrollView
-            keyboardShouldPersistTaps="handled"
-            contentContainerStyle={{
-              padding: 24,
-              gap: 20,
-              paddingBottom: 40,
-              maxWidth: 640,
-              width: "100%",
-              alignSelf: "center",
-            }}
-          >
-            <Text accessibilityRole="header" className="text-2xl font-bold text-foreground">
-              {title}
-            </Text>
-            {children}
-            <Button variant="ghost" isDisabled={busy} onPress={close}>
-              {t("cancel")}
-            </Button>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <EditorPortalContext.Provider value={portalHost}>
+          <SafeAreaView className="flex-1 bg-background">
+            <KeyboardAvoidingView
+              style={{ flex: 1 }}
+              behavior={Platform.OS === "ios" ? "padding" : undefined}
+            >
+              <ScrollView
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={{
+                  padding: 24,
+                  gap: 20,
+                  paddingBottom: 40,
+                  maxWidth: 640,
+                  width: "100%",
+                  alignSelf: "center",
+                }}
+              >
+                <Text accessibilityRole="header" className="text-2xl font-bold text-foreground">
+                  {title}
+                </Text>
+                {children}
+                <Button variant="ghost" isDisabled={busy} onPress={close}>
+                  {t("cancel")}
+                </Button>
+              </ScrollView>
+            </KeyboardAvoidingView>
+          </SafeAreaView>
+          {/* Keep calendar overlays above the native editor modal on both platforms. */}
+          <PortalHost name={portalHost} />
+        </EditorPortalContext.Provider>
+      </GestureHandlerRootView>
     </Modal>
   );
 }

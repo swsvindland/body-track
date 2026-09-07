@@ -17,7 +17,7 @@ import {
   validDay,
   weightUnit,
 } from "@/lib/metrics";
-import { Editor, ErrorText, Field, Screen } from "./ui";
+import { DateInput, Editor, ErrorText, Field, Screen } from "./ui";
 import { Dashboard } from "./dashboard";
 
 type Kind = "weight" | "height" | "body";
@@ -201,12 +201,7 @@ export function MeasurementLog({ kind }: { kind: Kind }) {
         busy={busy}
       >
         {imported && <Text className="text-muted">{t("syncHelp")}</Text>}
-        <Field
-          label={`${t("date")} (${t("dateHint")})`}
-          value={day}
-          onChange={setDay}
-          disabled={imported}
-        />
+        <DateInput label={t("date")} value={day} onChange={setDay} disabled={imported} />
         {fields.map((key) => (
           <Field
             key={key}

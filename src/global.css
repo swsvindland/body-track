@@ -6,6 +6,7 @@
 /* End-user path: heroui-native lives in the project's node_modules, one
    level up from this src/global.css file. */
 @source '../node_modules/heroui-native/lib';
+@source '../node_modules/heroui-native-pro/lib';
 
 /* Cyberpunk palette. Prefer HeroUI semantic tokens in feature code. */
 @theme {

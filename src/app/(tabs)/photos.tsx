@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 import { db, photos, type ProgressPhoto } from "@/db";
 import { useStore } from "@/lib/store";
 import { dayOf, localDay, validDay } from "@/lib/metrics";
-import { Choices, Editor, ErrorText, Field, Screen } from "@/components/ui";
+import { Choices, DateInput, Editor, ErrorText, Screen } from "@/components/ui";
 
 type Pose = ProgressPhoto["pose"];
 export default function Photos() {
@@ -172,7 +172,7 @@ export default function Photos() {
         close={() => setOpen(false)}
         busy={busy}
       >
-        <Field label={`${t("date")} (${t("dateHint")})`} value={day} onChange={setDay} />
+        <DateInput label={t("date")} value={day} onChange={setDay} disabled={busy} />
         <Choices values={["front", "side", "back"] as const} value={pose} onChange={setPose} />
         {editing && (
           <Image
