@@ -3,10 +3,10 @@ import { Uniwind } from "uniwind";
 import { AppState } from "react-native";
 import { configureHealthSchedule, syncHealthIfDue } from "./health-schedule";
 import { desc } from "drizzle-orm";
-import { getLocales } from "expo-localization";
+import { useLocales } from "expo-localization";
 import { db, measurements, photos, preferences, weightEntries } from "@/db";
 import type { Units } from "./metrics";
-import { languages, type Language, translate } from "./translations";
+import { languagePreference, resolveLanguage, type Language, translate } from "./translations";
 
 function read() {
   const prefs = Object.fromEntries(
@@ -16,11 +16,6 @@ function read() {
       .all()
       .map((p) => [p.key, p.value])
   );
-  const deviceLanguage = getLocales()[0]?.languageCode ?? "en";
-  const language =
-    (prefs.language ?? deviceLanguage) in languages
-      ? ((prefs.language ?? deviceLanguage) as Language)
-      : "en";
   return {
     weights: db
       .select()
@@ -39,11 +34,12 @@ function read() {
       "dark" | "light" | "system",
     healthSyncEnabled: prefs.healthSyncEnabled === "true",
     healthSyncError: prefs.healthSyncError ?? "",
-    language,
+    languagePreference: languagePreference(prefs.language),
     lastSync: prefs.lastSync,
   };
 }
 type Store = ReturnType<typeof read> & {
+  language: Language;
   refresh: () => void;
   setPreference: (key: string, value: string) => void;
   t: (key: string) => string;
@@ -53,6 +49,8 @@ type Store = ReturnType<typeof read> & {
 const Context = createContext<Store | null>(null);
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState(read);
+  const locales = useLocales();
+  const language = resolveLanguage(data.languagePreference, locales[0]?.languageCode);
   useEffect(() => {
     Uniwind.setTheme(data.theme);
   }, [data.theme]);
@@ -87,14 +85,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       .run();
     refresh();
   };
-  const locale = data.language === "zh" ? "zh-CN" : data.language;
+  const locale = language === "zh" ? "zh-CN" : language;
   return (
     <Context.Provider
       value={{
         ...data,
+        language,
         refresh,
         setPreference,
-        t: (key) => translate(data.language, key),
+        t: (key) => translate(language, key),
         number: (value, digits = 1) =>
           new Intl.NumberFormat(locale, {
             minimumFractionDigits: digits,

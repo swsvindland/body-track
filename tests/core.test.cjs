@@ -27,7 +27,7 @@ function load(file, dependencies = {}) {
 }
 const metrics = load("src/lib/metrics.ts");
 const schema = load("src/db/schema.ts");
-const { dictionaries } = load("src/lib/translations.ts");
+const { dictionaries, languagePreference, resolveLanguage } = load("src/lib/translations.ts");
 const close = (a, b, epsilon = 1e-8) => assert.ok(Math.abs(a - b) < epsilon, `${a} ≠ ${b}`);
 
 test("units round-trip and reject partial numeric input", () => {
@@ -83,6 +83,21 @@ test("all 11 languages contain every interface string", () => {
     for (const [key, value] of Object.entries(dictionary))
       assert.ok(typeof value === "string" && value.length, `${locale}.${key}`);
   }
+});
+test("language follows the device by default and allows a persistent override", () => {
+  assert.equal(languagePreference(undefined), "system");
+  assert.equal(languagePreference("system"), "system");
+  assert.equal(resolveLanguage(languagePreference(undefined), "es"), "es");
+  assert.equal(resolveLanguage(languagePreference("system"), "fr"), "fr");
+  assert.equal(resolveLanguage(languagePreference("en"), "es"), "en");
+  for (const language of Object.keys(dictionaries)) {
+    assert.equal(languagePreference(language), language);
+    assert.equal(resolveLanguage(languagePreference(language), "es"), language);
+  }
+  for (const unsupported of [null, undefined, "ar", "toString"]) {
+    assert.equal(resolveLanguage("system", unsupported), "en");
+  }
+  assert.equal(languagePreference("toString"), "system");
 });
 function database() {
   const sqlite = new DatabaseSync(":memory:");

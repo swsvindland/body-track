@@ -24,6 +24,22 @@ export const languages = {
   zh: "简体中文",
 };
 export type Language = keyof typeof languages;
+export type LanguagePreference = Language | "system";
+
+export function languagePreference(value: string | undefined): LanguagePreference {
+  return value && Object.hasOwn(languages, value) ? (value as Language) : "system";
+}
+
+export function resolveLanguage(
+  preference: LanguagePreference,
+  deviceLanguage: string | null | undefined
+): Language {
+  if (preference !== "system") return preference;
+  return deviceLanguage && Object.hasOwn(languages, deviceLanguage)
+    ? (deviceLanguage as Language)
+    : "en";
+}
+
 export const dictionaries = { en, es, fr, de, it, pt, nl, sv, ja, ko, zh } satisfies Record<
   Language,
   Record<keyof typeof en, string>

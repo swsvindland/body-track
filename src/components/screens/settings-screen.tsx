@@ -4,14 +4,14 @@ import { Platform, View } from "react-native";
 import { SystemPanel, SystemText as Text } from "@/components/system";
 import { SettingsSelect, ErrorText, Screen } from "@/components/ui";
 import { useStore } from "@/lib/store";
-import { languages, type Language } from "@/lib/translations";
+import { languages, type LanguagePreference } from "@/lib/translations";
 import { enableHealthSync, disableHealthSync } from "@/lib/health-schedule";
 
 export function SettingsScreen() {
   const {
     units,
     formula,
-    language,
+    languagePreference,
     theme,
     healthSyncEnabled,
     healthSyncError,
@@ -88,10 +88,10 @@ export function SettingsScreen() {
           <SystemPanel.Title>{t("language")}</SystemPanel.Title>
           <SettingsSelect
             title={t("language")}
-            values={Object.keys(languages) as Language[]}
-            value={language}
+            values={["system", ...Object.keys(languages)] as LanguagePreference[]}
+            value={languagePreference}
             onChange={(value) => preference("language", value)}
-            label={(value) => languages[value]}
+            label={(value) => (value === "system" ? t("system") : languages[value])}
           />
         </SystemPanel.Body>
       </SystemPanel>
