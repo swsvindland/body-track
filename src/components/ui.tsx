@@ -14,7 +14,7 @@ import { PortalHost } from "heroui-native/portal";
 import { Calendar, DateField } from "heroui-native-pro";
 import { parseDate } from "@internationalized/date";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { SystemButton, SystemLabel, SystemText as Text } from "./system";
+import { SystemButton, SystemText as Text } from "./system";
 import { localDay } from "@/lib/metrics";
 import { useStore } from "@/lib/store";
 
@@ -49,7 +49,6 @@ export function Screen({
         }}
       >
         <View className="gap-2 border-b border-border pb-6">
-          <SystemLabel>BODY TRACK / {title}</SystemLabel>
           <Text accessibilityRole="header" className="text-4xl font-semibold text-foreground">
             {title}
           </Text>
@@ -228,7 +227,6 @@ export function Editor({
                   alignSelf: "center",
                 }}
               >
-                <SystemLabel>BODY TRACK / {title}</SystemLabel>
                 <Text accessibilityRole="header" className="text-2xl font-semibold text-foreground">
                   {title}
                 </Text>
