@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Alert, View } from "react-native";
+import { Table } from "heroui-native-pro";
 import { SystemButton, SystemPanel, SystemText as Text } from "@/components/system";
 import { eq } from "drizzle-orm";
 import { db, healthLinks, measurements, weightEntries } from "@/db";
@@ -168,26 +169,67 @@ export function MeasurementLog({ kind }: { kind: Kind }) {
           {t("history")} · {number(rows.length, 0)}
         </Text>
         {!rows.length && <Text className="py-8 text-center text-muted">{t("empty")}</Text>}
-        {rows.slice(0, limit).map((row) => (
-          <SystemPanel key={row.id}>
-            <SystemPanel.Body className="gap-3">
-              <Text className="font-mono text-xs text-muted">{date(row.measuredAt)}</Text>
-              <View className="flex-row flex-wrap gap-x-5 gap-y-2">
-                {Object.entries(row.values).map(([key, value]) => (
-                  <View key={key}>
-                    <Text className="text-sm text-muted">{t(key)}</Text>
-                    <Text className="text-lg font-mono tabular-nums text-foreground">
-                      {number(display(key, value))} {key === "bodyFat" ? "%" : unit}
+        {kind === "body" &&
+          rows.slice(0, limit).map((row) => (
+            <Table key={row.id} variant="secondary" animation="disable-all">
+              <Table.Content>
+                <Table.Header>
+                  <Table.Column flex={2}>
+                    <Text accessibilityRole="header" className="font-mono text-sm font-semibold">
+                      {date(row.measuredAt)}
                     </Text>
-                  </View>
-                ))}
-              </View>
-              <SystemButton variant="ghost" onPress={() => launch(row)}>
-                {t("edit")}
-              </SystemButton>
-            </SystemPanel.Body>
-          </SystemPanel>
-        ))}
+                  </Table.Column>
+                  <Table.Column />
+                </Table.Header>
+                <Table.Body>
+                  {fields
+                    .filter((key) => row.values[key] !== undefined)
+                    .map((key) => (
+                      <Table.Row key={key} id={key}>
+                        <Table.Cell>
+                          <Text className="text-sm text-muted">{t(key)}</Text>
+                        </Table.Cell>
+                        <Table.Cell className="items-end">
+                          <Text className="font-mono text-sm tabular-nums">
+                            {number(display(key, row.values[key]))} {key === "bodyFat" ? "%" : unit}
+                          </Text>
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                </Table.Body>
+              </Table.Content>
+              <Table.Footer className="justify-end">
+                <SystemButton
+                  variant="ghost"
+                  accessibilityLabel={`${t("edit")} · ${date(row.measuredAt)}`}
+                  onPress={() => launch(row)}
+                >
+                  {t("edit")}
+                </SystemButton>
+              </Table.Footer>
+            </Table>
+          ))}
+        {kind !== "body" &&
+          rows.slice(0, limit).map((row) => (
+            <SystemPanel key={row.id}>
+              <SystemPanel.Body className="gap-3">
+                <Text className="font-mono text-xs text-muted">{date(row.measuredAt)}</Text>
+                <View className="flex-row flex-wrap gap-x-5 gap-y-2">
+                  {Object.entries(row.values).map(([key, value]) => (
+                    <View key={key}>
+                      <Text className="text-sm text-muted">{t(key)}</Text>
+                      <Text className="text-lg font-mono tabular-nums text-foreground">
+                        {number(display(key, value))} {key === "bodyFat" ? "%" : unit}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+                <SystemButton variant="ghost" onPress={() => launch(row)}>
+                  {t("edit")}
+                </SystemButton>
+              </SystemPanel.Body>
+            </SystemPanel>
+          ))}
         {rows.length > limit && (
           <SystemButton variant="ghost" onPress={() => setLimit(limit + 30)}>
             {t("history")} +30
