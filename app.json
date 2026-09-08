@@ -14,7 +14,7 @@
         "tinted": "./assets/images/icon-tinted.png"
       },
       "supportsTablet": true,
-      "bundleIdentifier": "dev.svindland.body",
+      "bundleIdentifier": "dev.svindland.vector.body",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -33,7 +33,7 @@
         "android.permission.health.WRITE_HEIGHT",
         "android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND"
       ],
-      "package": "dev.svindland.body"
+      "package": "dev.svindland.vector.body"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
