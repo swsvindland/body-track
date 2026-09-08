@@ -14,7 +14,10 @@
         "tinted": "./assets/images/icon-tinted.png"
       },
       "supportsTablet": true,
-      "bundleIdentifier": "com.bodytrack.app"
+      "bundleIdentifier": "dev.svindland.body",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +33,7 @@
         "android.permission.health.WRITE_HEIGHT",
         "android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND"
       ],
-      "package": "com.bodytrack.app"
+      "package": "dev.svindland.body"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
@@ -84,6 +87,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f81cc066-e20b-4ef3-ba94-273f069fc935"
+      }
     }
   }
 }
