@@ -1,6 +1,6 @@
-# Body Track
+# VECTOR BODY
 
-Local-first weight, height, body measurements and progress photos for iOS and Android, built with Expo SDK 57, HeroUI Native and SQLite.
+Part of the VECTOR app series. Local-first weight, height, body measurements and progress photos for iOS and Android, built with Expo SDK 57, HeroUI Native and SQLite.
 
 ## Run
 
@@ -44,7 +44,7 @@ Sync is explicitly started from Settings. The app requests weight/height read an
 
 - Exports use stable client identifiers and versions. Repeating sync does not duplicate app records; corrections update them, and deleting an app-origin record queues deletion from the health provider on the next successful sync.
 - Imports use provider record IDs and transactional mappings. Imported records are managed by their original source and cannot be edited here; deleting an imported record hides it locally without deleting the original. A remembered mapping prevents it from reappearing.
-- Imports are snapshots, not a mirror of remote deletions. Updates to available provider records are imported, but records removed from the provider are not automatically deleted from Body Track.
+- Imports are snapshots, not a mirror of remote deletions. Updates to available provider records are imported, but records removed from the provider are not automatically deleted from VECTOR BODY.
 - Apple Health returns only readable samples. iOS intentionally does not reveal whether read permission was denied; successful write authorization does not prove read access. This limitation is also explained in Settings.
 - Health Connect currently imports the most recent 29 days, within its default historical access window, and paginates all results. It requires all four requested permissions before proceeding. Older local records can still be exported.
 - A failed sync preserves completed mappings and only updates the last-success timestamp once the whole pass finishes. Retrying continues without replaying completed exports.

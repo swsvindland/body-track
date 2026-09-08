@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Body Track",
-    "slug": "body-track",
+    "name": "VECTOR BODY",
+    "slug": "vector-body",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -55,8 +55,8 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Choose progress photos to save privately in Body Track.",
-          "cameraPermission": "Take progress photos to save privately in Body Track.",
+          "photosPermission": "Choose progress photos to save privately in VECTOR BODY.",
+          "cameraPermission": "Take progress photos to save privately in VECTOR BODY.",
           "microphonePermission": false
         }
       ],
@@ -65,8 +65,8 @@
         "@kingstinct/react-native-healthkit",
         {
           "background": false,
-          "NSHealthShareUsageDescription": "Import your weight and height into Body Track when you choose to sync.",
-          "NSHealthUpdateUsageDescription": "Save your Body Track weight and height records to Apple Health when you choose to sync."
+          "NSHealthShareUsageDescription": "Import your weight and height into VECTOR BODY when you choose to sync.",
+          "NSHealthUpdateUsageDescription": "Save your VECTOR BODY weight and height records to Apple Health when you choose to sync."
         }
       ],
       "react-native-health-connect",
