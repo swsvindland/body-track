@@ -8,13 +8,19 @@
     "scheme": "bodytrack",
     "userInterfaceStyle": "automatic",
     "ios": {
+      "icon": {
+        "light": "./assets/images/icon.png",
+        "dark": "./assets/images/icon-dark.png",
+        "tinted": "./assets/images/icon-tinted.png"
+      },
       "supportsTablet": true,
       "bundleIdentifier": "com.bodytrack.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "monochromeImage": "./assets/images/adaptive-icon-monochrome.png",
+        "backgroundColor": "#22d3ee"
       },
       "predictiveBackGestureEnabled": false,
       "permissions": [
@@ -26,6 +32,9 @@
       ],
       "package": "com.bodytrack.app"
     },
+    "web": {
+      "favicon": "./assets/images/favicon.png"
+    },
     "plugins": [
       "expo-router",
       "expo-font",
@@ -33,8 +42,13 @@
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#22d3ee",
+          "dark": {
+            "image": "./assets/images/splash-icon-dark.png",
+            "backgroundColor": "#071017"
+          }
         }
       ],
       "expo-status-bar",

@@ -20,6 +20,14 @@ pnpm android
 
 These commands generate native projects as needed. iOS requires Xcode and CocoaPods; Android requires the Android SDK and a compatible JDK. The default development identifier is `com.bodytrack.app`; use your registered identifier and signing team before distributing the app.
 
+## App icons
+
+The editable mark is `assets/branding/ruler.svg`. Run `pnpm icons:generate` to rebuild the PNG assets and `assets/branding/preview.png`. The default icon is a black ruler on the app's cyan accent (`#22d3ee`); iOS also has dark and grayscale tinted sources. All iOS icons are opaque, square 1024px images; the OS applies the corner mask.
+
+Android uses separate transparent foreground and monochrome layers over the cyan background. The complete ruler stays inside the central 66/108 safe-zone circle for launcher masks and motion. Android 13+ launchers can recolor the monochrome layer for themed icons. The splash screen includes light and dark variants, and web uses a matching favicon.
+
+After changing assets or `app.json`, run `pnpm exec expo prebuild --no-install` to sync existing native projects, then rebuild the app. A Metro reload does not update installed launcher icons. Check the icons on iOS in default/dark/tinted appearances and on Android with circle/squircle masks and themed icons enabled.
+
 ## Features
 
 - Dated weight and height history with add, edit, delete and backdating.

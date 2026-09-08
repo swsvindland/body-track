@@ -4,6 +4,7 @@
   "private": true,
   "main": "expo-router/entry",
   "scripts": {
+    "icons:generate": "node scripts/generate-icons.mjs",
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
@@ -68,6 +69,7 @@
     "eslint": "^9.39.4",
     "eslint-config-expo": "^57.0.0",
     "prettier": "^3.8.3",
+    "sharp": "^0.35.4",
     "typescript": "~6.0.3"
   },
   "engines": {
