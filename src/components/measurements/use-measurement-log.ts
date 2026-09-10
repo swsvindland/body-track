@@ -5,6 +5,9 @@ import { db, healthLinks, measurements, weightEntries } from "@/db";
 import { useStore } from "@/lib/store";
 import {
   dayOf,
+  formatHeight,
+  heightParts,
+  parseHeight,
   fromCm,
   fromKg,
   lengthUnit,
@@ -36,6 +39,11 @@ export function useMeasurementLog(kind: Kind) {
   const unit = kind === "weight" ? weightUnit(units) : lengthUnit(units);
   const display = (key: string, value: number) =>
     key === "bodyFat" ? value : kind === "weight" ? fromKg(value, units) : fromCm(value, units);
+  const imperialHeight = kind === "height" && units !== "metric";
+  const format = (key: string, value: number) =>
+    key === "height"
+      ? formatHeight(value, units, number)
+      : `${number(display(key, value))} ${key === "bodyFat" ? "%" : unit}`;
   const imported = editing
     ? db
         .select()
@@ -51,12 +59,19 @@ export function useMeasurementLog(kind: Kind) {
     setError("");
     setDay(row ? dayOf(row.measuredAt) : localDay());
     setInputs(
-      Object.fromEntries(
-        Object.entries(row?.values ?? {}).map(([key, value]) => [
-          key,
-          String(Math.round(display(key, value) * 10000) / 10000),
-        ])
-      )
+      imperialHeight && row
+        ? Object.fromEntries(
+            Object.entries(heightParts(row.values.height)).map(([key, value]) => [
+              key,
+              String(value),
+            ])
+          )
+        : Object.fromEntries(
+            Object.entries(row?.values ?? {}).map(([key, value]) => [
+              key,
+              String(Math.round(display(key, value) * 10000) / 10000),
+            ])
+          )
     );
     setOpen(true);
   }
@@ -71,21 +86,27 @@ export function useMeasurementLog(kind: Kind) {
       const raw = inputs[key]?.trim();
       if (!raw && kind === "body") continue;
       const parsed = parseNumber(raw ?? "");
-      const value =
-        key === "bodyFat" ? parsed : kind === "weight" ? toKg(parsed, units) : toCm(parsed, units);
+      const value = imperialHeight
+        ? parseHeight(inputs.feet ?? "", inputs.inches ?? "")
+        : key === "bodyFat"
+          ? parsed
+          : kind === "weight"
+            ? toKg(parsed, units)
+            : toCm(parsed, units);
       const max = key === "bodyFat" ? 74.9 : kind === "weight" ? 500 : 300;
       if (!Number.isFinite(value) || value <= 0 || value > max) {
-        setError(
-          `${t(key)}: ${t("invalid")} (0–${number(display(key, max))} ${key === "bodyFat" ? "%" : unit})`
-        );
+        setError(`${t(key)}: ${t("invalid")} (0–${format(key, max)})`);
         return;
       }
       // Preserve canonical precision when a field wasn't changed in the editor.
       const original = editing?.values[key];
-      values[key] =
-        original !== undefined && raw === String(Math.round(display(key, original) * 10000) / 10000)
-          ? original
-          : Math.round(value * 10000) / 10000;
+      const unchanged =
+        original !== undefined &&
+        (imperialHeight
+          ? inputs.feet?.trim() === String(heightParts(original).feet) &&
+            inputs.inches?.trim() === String(heightParts(original).inches)
+          : raw === String(Math.round(display(key, original) * 10000) / 10000));
+      values[key] = unchanged ? original : Math.round(value * 10000) / 10000;
     }
     if (!Object.keys(values).length) {
       setError(t("invalid"));
@@ -143,6 +164,8 @@ export function useMeasurementLog(kind: Kind) {
     fields,
     unit,
     display,
+    format,
+    imperialHeight,
     open,
     editing,
     inputs,

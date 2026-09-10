@@ -41,6 +41,32 @@ test("units round-trip and reject partial numeric input", () => {
   for (const input of ["75kg", "1.2.3", "", "Infinity", "1e2", "-5", "1,234.5"])
     assert.ok(Number.isNaN(metrics.parseNumber(input)));
 });
+test("height uses feet and inches with precise conversion and rounding carry", () => {
+  const number = (value, digits = 1) =>
+    new Intl.NumberFormat("en-US", { maximumFractionDigits: digits }).format(value);
+  close(metrics.parseHeight("5", "11"), 180.34);
+  close(metrics.parseHeight("6", ""), 182.88);
+  close(metrics.parseHeight("5", "11,5"), 181.61);
+  close(metrics.parseHeight("0", "11"), 27.94);
+  assert.deepEqual(metrics.heightParts(180.34), { feet: 5, inches: 11 });
+  assert.deepEqual(metrics.heightParts(182.88), { feet: 6, inches: 0 });
+  for (const units of ["imperial", "stone"]) {
+    assert.equal(metrics.formatHeight(180.34, units, number), "5' 11\"");
+    assert.equal(metrics.formatHeight(181.61, units, number), "5' 11.5\"");
+    assert.equal(metrics.formatHeight(182.88, units, number), "6' 0\"");
+    assert.equal(metrics.formatHeight(182.879, units, number), "6' 0\"");
+  }
+  assert.equal(metrics.formatHeight(180.34, "metric", number), "180.3 cm");
+  for (const [feet, inches] of [
+    ["5.5", "1"],
+    ["5", "12"],
+    ["-1", "1"],
+    ["", ""],
+    ["5", "-1"],
+    ["5", "11in"],
+  ])
+    assert.ok(Number.isNaN(metrics.parseHeight(feet, inches)));
+});
 test("calendar validation and local dates avoid UTC shifts", () => {
   assert.equal(metrics.validDay("2024-02-29"), true);
   for (const day of ["2025-02-29", "2024-04-31", "2024-13-01", "2999-01-01", "2024-2-2"])

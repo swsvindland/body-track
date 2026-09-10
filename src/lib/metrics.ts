@@ -31,6 +31,27 @@ export function parseNumber(input: string): number {
   const normalized = input.trim().replace(",", ".");
   return /^\d+(\.\d+)?$/.test(normalized) ? Number(normalized) : NaN;
 }
+export function heightParts(cm: number, digits = 4) {
+  const scale = 10 ** digits;
+  const total = Math.round(fromCm(cm, "imperial") * scale);
+  return { feet: Math.floor(total / (12 * scale)), inches: (total % (12 * scale)) / scale };
+}
+export function parseHeight(feet: string, inches: string): number {
+  const ft = parseNumber(feet);
+  const inch = parseNumber(inches.trim() || "0");
+  return Number.isInteger(ft) && ft >= 0 && inch >= 0 && inch < 12
+    ? toCm(ft * 12 + inch, "imperial")
+    : NaN;
+}
+export function formatHeight(
+  cm: number,
+  units: Units,
+  number: (value: number, digits?: number) => string
+): string {
+  if (units === "metric") return `${number(cm)} cm`;
+  const { feet, inches } = heightParts(cm, 1);
+  return `${number(feet, 0)}' ${number(inches, Number.isInteger(inches) ? 0 : 1)}"`;
+}
 export function localDay(date = new Date()): string {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }

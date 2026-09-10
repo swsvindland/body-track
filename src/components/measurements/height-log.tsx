@@ -6,9 +6,9 @@ import { HeightForm } from "./height-form";
 import { MeasurementHistory } from "./measurement-history";
 
 export function HeightLog() {
-  const { t, date, number } = useStore();
+  const { t, date } = useStore();
   const log = useMeasurementLog("height");
-  const { rows, unit, display, launch } = log;
+  const { rows, format, launch } = log;
   return (
     <>
       <Screen title={t("height")} subtitle={`${t("cadence")}: ${t("monthly")} – ${t("yearly")}`}>
@@ -19,7 +19,7 @@ export function HeightLog() {
                 {t("latest")} · {date(rows[0].measuredAt)}
               </SystemPanel.Description>
               <Text className="mt-2 text-4xl font-mono tabular-nums text-foreground">
-                {number(display("height", rows[0].values.height))} {unit}
+                {format("height", rows[0].values.height)}
               </Text>
             </SystemPanel.Body>
           </SystemPanel>

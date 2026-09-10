@@ -9,7 +9,7 @@ import type { MeasurementLogState } from "./use-measurement-log";
 export function MeasurementHistory({ log }: { log: MeasurementLogState }) {
   const { t, date, number } = useStore();
   const foreground = useThemeColor("foreground");
-  const { rows, fields, unit, display, limit, setLimit, launch } = log;
+  const { rows, fields, format, limit, setLimit, launch } = log;
 
   return (
     <>
@@ -43,9 +43,7 @@ export function MeasurementHistory({ log }: { log: MeasurementLogState }) {
                   .map((key) => (
                     <View key={key} className="flex-row flex-wrap justify-between gap-x-4 gap-y-1">
                       <Timeline.Description className="text-sm">{t(key)}</Timeline.Description>
-                      <Text className="font-mono tabular-nums">
-                        {number(display(key, row.values[key]))} {key === "bodyFat" ? "%" : unit}
-                      </Text>
+                      <Text className="font-mono tabular-nums">{format(key, row.values[key])}</Text>
                     </View>
                   ))}
               </Timeline.Content>
