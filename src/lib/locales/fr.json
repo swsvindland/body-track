@@ -92,6 +92,7 @@
   "shoulderWaistRatio": "Épaules / taille",
   "metricMissing": "Ajoutez des mesures",
   "metricChooseReference": "Choisissez une formule dans les réglages pour le contexte",
+  "metricInfo": "Plus d’informations",
   "metricReference": "Référence",
   "bmiLow": "Insuffisance pondérale",
   "bmiHealthy": "Plage de poids sain",

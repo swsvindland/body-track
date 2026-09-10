@@ -92,6 +92,7 @@
   "shoulderWaistRatio": "Axlar / midja",
   "metricMissing": "Lägg till mått",
   "metricChooseReference": "Välj en formel i Inställningar för tolkning",
+  "metricInfo": "Mer information",
   "metricReference": "Referens",
   "bmiLow": "Undervikt",
   "bmiHealthy": "Hälsosamt viktintervall",

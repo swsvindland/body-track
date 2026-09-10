@@ -92,6 +92,7 @@
   "shoulderWaistRatio": "어깨 / 허리",
   "metricMissing": "측정값 추가",
   "metricChooseReference": "설정에서 공식을 선택하면 참고 기준이 표시됩니다",
+  "metricInfo": "추가 정보",
   "metricReference": "참고 범위",
   "bmiLow": "저체중",
   "bmiHealthy": "건강 체중 범위",

@@ -92,6 +92,7 @@
   "shoulderWaistRatio": "肩囲 / ウエスト",
   "metricMissing": "測定値を追加",
   "metricChooseReference": "設定で計算式を選ぶと目安を表示",
+  "metricInfo": "詳細情報",
   "metricReference": "参考範囲",
   "bmiLow": "低体重",
   "bmiHealthy": "標準体重の範囲",

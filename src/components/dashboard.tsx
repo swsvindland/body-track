@@ -1,7 +1,15 @@
 import { useState } from "react";
-import { View } from "react-native";
-import { useThemeColor } from "heroui-native";
-import { SystemLabel, SystemValue, SystemPanel, SystemText as Text } from "@/components/system";
+import { View, useWindowDimensions } from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Popover, useThemeColor } from "heroui-native";
+import {
+  SystemButton,
+  SystemLabel,
+  SystemValue,
+  SystemPanel,
+  SystemText as Text,
+} from "@/components/system";
 import Svg, { Circle, Line, Path } from "react-native-svg";
 import { useStore } from "@/lib/store";
 import {
@@ -19,6 +27,48 @@ const contextColors: Record<MetricTone, string> = {
   warning: "text-warning-soft-foreground",
   danger: "text-danger-soft-foreground",
 };
+
+function DashboardCardHeader({ title, help }: { title: string; help: string }) {
+  const { t } = useStore();
+  const muted = useThemeColor("muted");
+  const { width } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+
+  return (
+    <View className="-my-3 -mr-3 flex-row items-center gap-2">
+      <SystemLabel className="flex-1">{title}</SystemLabel>
+      <Popover animation="disable-all">
+        <Popover.Trigger asChild>
+          <SystemButton
+            isIconOnly
+            variant="ghost"
+            className="h-11 w-11 p-0"
+            accessibilityLabel={`${t("metricInfo")} · ${title}`}
+          >
+            <Feather name="help-circle" size={18} color={muted} />
+          </SystemButton>
+        </Popover.Trigger>
+        <Popover.Portal>
+          <Popover.Overlay />
+          <Popover.Content
+            presentation="popover"
+            placement="bottom"
+            align="end"
+            width={Math.min(300, width - insets.left - insets.right - 32)}
+            insets={{ top: insets.top + 8, bottom: insets.bottom + 8, left: 16, right: 16 }}
+            className="gap-2 rounded-md p-3"
+          >
+            <View className="flex-row items-center gap-2">
+              <Popover.Title className="flex-1 font-sans">{title}</Popover.Title>
+              <Popover.Close accessibilityLabel={t("close")} />
+            </View>
+            <Popover.Description className="font-sans text-sm">{help}</Popover.Description>
+          </Popover.Content>
+        </Popover.Portal>
+      </Popover>
+    </View>
+  );
+}
 
 export function Dashboard() {
   const { weights, measurements, units, formula, t, number, date } = useStore();
@@ -53,7 +103,7 @@ export function Dashboard() {
     <View className="gap-4">
       <SystemPanel>
         <SystemPanel.Body className="gap-3">
-          <SystemLabel>{t("trend")}</SystemLabel>
+          <DashboardCardHeader title={t("trend")} help={t("trendHelp")} />
           <SystemValue>
             {latest ? number(fromKg(latest.trend, units)) : "—"}{" "}
             <Text className="font-mono text-lg text-muted">{weightUnit(units)}</Text>
@@ -120,7 +170,6 @@ export function Dashboard() {
             <Text className="text-xs text-muted">● {t("weight")}</Text>
             <Text className="text-xs text-link">— {t("trend")}</Text>
           </View>
-          <Text className="text-sm text-muted">{t("trendHelp")}</Text>
         </SystemPanel.Body>
       </SystemPanel>
       <View className="flex-row flex-wrap gap-3">
@@ -136,7 +185,20 @@ export function Dashboard() {
           return (
             <SystemPanel key={metric.key} style={{ flexGrow: 1, flexBasis: 160 }}>
               <SystemPanel.Body className="gap-2">
-                <SystemLabel>{t(metric.key)}</SystemLabel>
+                <DashboardCardHeader
+                  title={t(metric.key)}
+                  help={[
+                    t(context.help),
+                    ...(metric.key === "shoulderWaistRatio"
+                      ? [`${t("ratioGoal")}: ${number(1.62, 2)}`]
+                      : []),
+                    ...(context.range
+                      ? [
+                          `${t("metricReference")}: ${context.range.map((v) => number(v)).join("–")}${metric.key === "bodyFat" ? "%" : ""}${metric.key !== "bmi" ? ` (${t(formula)})` : ""}`,
+                        ]
+                      : []),
+                  ].join(" · ")}
+                />
                 <Text className="text-2xl font-mono tabular-nums text-foreground">
                   {metric.value === null
                     ? "—"
@@ -145,15 +207,6 @@ export function Dashboard() {
                 </Text>
                 <Text className={`text-sm font-medium ${contextColors[context.tone]}`}>
                   {t(context.label)}
-                </Text>
-                <Text className="text-xs text-muted">
-                  {t(context.help)}
-                  {metric.key === "shoulderWaistRatio"
-                    ? ` · ${t("ratioGoal")}: ${number(1.62, 2)}`
-                    : ""}
-                  {context.range
-                    ? ` · ${t("metricReference")}: ${context.range.map((v) => number(v)).join("–")}${metric.key === "bodyFat" ? "%" : ""}${metric.key !== "bmi" ? ` (${t(formula)})` : ""}`
-                    : ""}
                 </Text>
                 <Text className="mt-auto pt-1 font-mono text-xs text-muted">
                   {metric.value === null

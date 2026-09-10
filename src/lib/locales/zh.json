@@ -92,6 +92,7 @@
   "shoulderWaistRatio": "肩围 / 腰围",
   "metricMissing": "添加测量数据",
   "metricChooseReference": "在设置中选择公式以显示参考信息",
+  "metricInfo": "更多信息",
   "metricReference": "参考范围",
   "bmiLow": "体重偏低",
   "bmiHealthy": "健康体重范围",

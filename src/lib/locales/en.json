@@ -92,6 +92,7 @@
   "shoulderWaistRatio": "Shoulders / waist",
   "metricMissing": "Add measurements",
   "metricChooseReference": "Choose a formula in Settings for context",
+  "metricInfo": "More information",
   "metricReference": "Reference",
   "bmiLow": "Underweight",
   "bmiHealthy": "Healthy weight range",
