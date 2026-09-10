@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { SafeAreaView as NativeSafeAreaView } from "react-native-safe-area-context";
 import { withUniwind } from "uniwind";
-import { Input, Label, Select, TextField } from "heroui-native";
+import { Input, InputGroup, Label, Select, TextField } from "heroui-native";
 import { PortalHost } from "heroui-native/portal";
 import { Calendar, DateField } from "heroui-native-pro";
 import { parseDate } from "@internationalized/date";
@@ -101,12 +101,13 @@ export function DateInput({
   onChange: (value: string) => void;
   disabled?: boolean;
 }) {
-  const { language } = useStore();
+  const { language, date } = useStore();
+  const displayDate = value ? date(value) : "";
   const hostName = useContext(EditorPortalContext);
   const [isOpen, setIsOpen] = useState(false);
   return (
     <DateField
-      value={{ value, label: value.split("-").reverse().join("/") }}
+      value={{ value, label: displayDate }}
       onValueChange={(option) => onChange(option?.value ?? "")}
       isDisabled={disabled}
       isRequired
@@ -116,8 +117,11 @@ export function DateInput({
     >
       <Label>{label}</Label>
       <DateField.InputGroup>
-        <DateField.Input
+        <InputGroup.Input
           accessibilityLabel={label}
+          value={displayDate}
+          placeholder={label}
+          isDisabled={disabled}
           editable={false}
           onPressIn={() => !disabled && setIsOpen(true)}
         />
