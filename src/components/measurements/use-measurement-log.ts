@@ -61,7 +61,7 @@ export function useMeasurementLog(kind: Kind) {
     setInputs(
       imperialHeight && row
         ? Object.fromEntries(
-            Object.entries(heightParts(row.values.height)).map(([key, value]) => [
+            Object.entries(heightParts(row.values.height, 1)).map(([key, value]) => [
               key,
               String(value),
             ])
@@ -69,7 +69,7 @@ export function useMeasurementLog(kind: Kind) {
         : Object.fromEntries(
             Object.entries(row?.values ?? {}).map(([key, value]) => [
               key,
-              String(Math.round(display(key, value) * 10000) / 10000),
+              String(Math.round(display(key, value) * 10) / 10),
             ])
           )
     );
@@ -85,27 +85,29 @@ export function useMeasurementLog(kind: Kind) {
     for (const key of fields) {
       const raw = inputs[key]?.trim();
       if (!raw && kind === "body") continue;
-      const parsed = parseNumber(raw ?? "");
-      const value = imperialHeight
-        ? parseHeight(inputs.feet ?? "", inputs.inches ?? "")
-        : key === "bodyFat"
-          ? parsed
-          : kind === "weight"
-            ? toKg(parsed, units)
-            : toCm(parsed, units);
-      const max = key === "bodyFat" ? 74.9 : kind === "weight" ? 500 : 300;
-      if (!Number.isFinite(value) || value <= 0 || value > max) {
-        setError(`${t(key)}: ${t("invalid")} (0–${format(key, max)})`);
-        return;
-      }
       // Preserve canonical precision when a field wasn't changed in the editor.
       const original = editing?.values[key];
       const unchanged =
         original !== undefined &&
         (imperialHeight
-          ? inputs.feet?.trim() === String(heightParts(original).feet) &&
-            inputs.inches?.trim() === String(heightParts(original).inches)
-          : raw === String(Math.round(display(key, original) * 10000) / 10000));
+          ? inputs.feet?.trim() === String(heightParts(original, 1).feet) &&
+            inputs.inches?.trim() === String(heightParts(original, 1).inches)
+          : raw === String(Math.round(display(key, original) * 10) / 10));
+      const parsed = parseNumber(raw ?? "");
+      const value = unchanged
+        ? original
+        : imperialHeight
+          ? parseHeight(inputs.feet ?? "", inputs.inches ?? "")
+          : key === "bodyFat"
+            ? parsed
+            : kind === "weight"
+              ? toKg(parsed, units)
+              : toCm(parsed, units);
+      const max = key === "bodyFat" ? 74.9 : kind === "weight" ? 500 : 300;
+      if (!Number.isFinite(value) || value <= 0 || value > max) {
+        setError(`${t(key)}: ${t("invalid")} (0–${format(key, max)})`);
+        return;
+      }
       values[key] = unchanged ? original : Math.round(value * 10000) / 10000;
     }
     if (!Object.keys(values).length) {
