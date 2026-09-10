@@ -31,7 +31,7 @@ After changing assets or `app.json`, run `pnpm exec expo prebuild --no-install` 
 ## Features
 
 - Dated weight and height history with add, edit, delete and backdating.
-- Dashboard with daily-mean weight trend, BMI, estimated body fat and FFMI. Trend uses an exponential average with a seven-day half-life and calendar-day spacing. Repeated weigh-ins on one day contribute one daily average. Missing days do not create synthetic entries.
+- Dashboard with daily-mean weight trend, BMI, estimated body fat, FFMI and shoulder-to-waist ratio (goal 1.62). Cards show metric-specific adult reference labels; ratio labels describe progress toward the physique goal. Trend uses an exponential average with a seven-day half-life and calendar-day spacing. Repeated weigh-ins on one day contribute one daily average. Missing days do not create synthetic entries.
 - Body sessions with 16 optional circumference sites, including left/right limbs, plus a manually measured body-fat percentage.
 - US Navy circumference estimates when the user selects a male or female equation. Male inputs: neck and abdomen at the navel; female inputs: neck, natural waist and hips. Height is required. Manual body fat takes precedence. Invalid or missing inputs display no estimate.
 - Private front/side/back photo gallery, editable dates/poses, deletion and two-photo comparison for matching poses. Selected images are copied into the app's document directory; only relative filenames are stored so iOS container changes do not break photos.
@@ -40,7 +40,7 @@ After changing assets or `app.json`, run `pnpm exec expo prebuild --no-install` 
 
 ## Health sync behavior
 
-Sync is explicitly started from Settings. The app requests weight/height read and write access only. No background sync or server is involved. Photos, circumference sessions and calculated estimates are not exported.
+Sync is enabled from Settings and runs when due, including background execution when the device allows it. Weight and height sync in both directions. Recorded body-fat percentages are exported to HealthKit and Health Connect; waist circumference is also exported to HealthKit. Other tape measurements, photos and calculated estimates stay in the app. New write permissions require opening health sync in Settings after upgrading.
 
 - Exports use stable client identifiers and versions. Repeating sync does not duplicate app records; corrections update them, and deleting an app-origin record queues deletion from the health provider on the next successful sync.
 - Imports use provider record IDs and transactional mappings. Imported records are managed by their original source and cannot be edited here; deleting an imported record hides it locally without deleting the original. A remembered mapping prevents it from reappearing.
@@ -49,6 +49,10 @@ Sync is explicitly started from Settings. The app requests weight/height read an
 - Health Connect currently imports the most recent 29 days, within its default historical access window, and paginates all results. It requires all four requested permissions before proceeding. Older local records can still be exported.
 - A failed sync preserves completed mappings and only updates the last-success timestamp once the whole pass finishes. Retrying continues without replaying completed exports.
 - Health Connect's system permission rationale opens the app's translated health-privacy screen through a config plugin.
+
+Supported body measurement types were checked against [Apple’s waist circumference documentation](https://developer.apple.com/documentation/healthkit/hkquantitytypeidentifier/waistcircumference), [Health Connect’s data types](https://developer.android.com/health-and-fitness/health-connect/data-types), and the installed native SDKs. Neither provider has matching types for the other tape sites we record. Both support lean body mass, and HealthKit also supports BMI, but those are derived values rather than additional recorded measurements. HealthKit stores body fat as a fraction (20% → 0.20); Health Connect uses percentage points (20% → 20).
+
+Dashboard categories use [adult BMI screening bands](https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html), ACE adult body-fat bands, and approximate FFMI reference ranges informed by [Schutz et al. (2002)](https://doi.org/10.1038/sj.ijo.0802037). Body-fat and FFMI references follow the selected male/female formula; no sex is assumed when the formula is disabled. These are general references, not individual targets. Shoulder-to-waist ratio uses both circumferences from the latest session containing both, and compares the displayed two-decimal value with the 1.62 physique goal.
 
 The pinned `react-native-health-connect@4.1.3` dependency includes a pnpm patch replacing its removed legacy Expo Gradle script with the SDK 57 Expo module plugin. HealthKit 14.1 has an incorrect TypeScript intersection for common sample metadata; a documented, narrow adapter cast accommodates its valid native sync metadata.
 

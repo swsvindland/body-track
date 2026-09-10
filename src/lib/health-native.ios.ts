@@ -3,15 +3,20 @@ import type { HealthAdapter, HealthKind } from "./health-types";
 export async function getHealthAdapter(): Promise<HealthAdapter> {
   // Lazy import: opening the app in Expo Go must not load an unavailable Nitro module.
   const hk = await import("@kingstinct/react-native-healthkit");
-  const identifier = (kind: HealthKind) =>
-    kind === "weight"
-      ? ("HKQuantityTypeIdentifierBodyMass" as const)
-      : ("HKQuantityTypeIdentifierHeight" as const);
-  const types = [identifier("weight"), identifier("height")];
+  const identifiers = {
+    weight: "HKQuantityTypeIdentifierBodyMass",
+    height: "HKQuantityTypeIdentifierHeight",
+    waist: "HKQuantityTypeIdentifierWaistCircumference",
+    bodyFat: "HKQuantityTypeIdentifierBodyFatPercentage",
+  } as const;
+  const identifier = (kind: HealthKind) => identifiers[kind];
+  const readTypes = [identifier("weight"), identifier("height")];
+  const types = Object.values(identifiers);
   if (!hk.isHealthDataAvailable()) throw new Error("healthUnavailable");
   return {
+    bodyWriteKinds: ["waist", "bodyFat"],
     async authorize(interactive = true) {
-      if (interactive) await hk.requestAuthorization({ toRead: types, toShare: types });
+      if (interactive) await hk.requestAuthorization({ toRead: readTypes, toShare: types });
       if (
         types.some(
           (type) => hk.authorizationStatusFor(type) !== hk.AuthorizationStatus.sharingAuthorized
@@ -51,24 +56,15 @@ export async function getHealthAdapter(): Promise<HealthAdapter> {
         HKSyncVersion: record.version,
         HKWasUserEntered: true,
       } as unknown as MetadataForQuantityIdentifier<"HKQuantityTypeIdentifierBodyMass">;
-      const result =
-        record.kind === "weight"
-          ? await hk.saveQuantitySample(
-              "HKQuantityTypeIdentifierBodyMass",
-              "kg",
-              record.value,
-              date,
-              date,
-              metadata
-            )
-          : await hk.saveQuantitySample(
-              "HKQuantityTypeIdentifierHeight",
-              "cm",
-              record.value,
-              date,
-              date,
-              metadata
-            );
+      // HealthKit percent units use fractions (0–1); the app stores percentage points.
+      const result = await hk.saveQuantitySample(
+        identifier(record.kind),
+        record.kind === "weight" ? "kg" : record.kind === "bodyFat" ? "%" : "cm",
+        record.kind === "bodyFat" ? record.value / 100 : record.value,
+        date,
+        date,
+        metadata
+      );
       if (!result) throw new Error("syncFailed");
       return result.uuid;
     },

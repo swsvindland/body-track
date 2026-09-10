@@ -54,6 +54,19 @@ export async function syncHealth(adapter?: HealthAdapter, interactive = true) {
           measuredAt: m.measuredAt,
           version: m.updatedAt,
         })),
+      ...db
+        .select()
+        .from(measurements)
+        .all()
+        .filter((m) => m.kind === "body")
+        .flatMap((m) =>
+          (provider.bodyWriteKinds ?? []).flatMap((kind) => {
+            const value = m.values[kind];
+            return Number.isFinite(value) && value > 0 && value <= (kind === "bodyFat" ? 74.9 : 300)
+              ? [{ id: m.id, kind, value, measuredAt: m.measuredAt, version: m.updatedAt }]
+              : [];
+          })
+        ),
     ];
     const fingerprint = (record: { value: number; measuredAt: string }) =>
       `${record.value}:${record.measuredAt}`;
@@ -90,6 +103,12 @@ export async function syncHealth(adapter?: HealthAdapter, interactive = true) {
     }
     const current = localRecords();
     for (const link of links.filter((l) => l.origin === "local" && l.fingerprint !== "deleted")) {
+      if (
+        link.localKind !== "weight" &&
+        link.localKind !== "height" &&
+        !provider.bodyWriteKinds?.includes(link.localKind as "waist" | "bodyFat")
+      )
+        continue;
       if (!current.some((r) => r.kind === link.localKind && r.id === link.localId)) {
         await provider.remove(link.localKind as HealthKind, link.remoteId);
         db.update(healthLinks)
@@ -100,6 +119,8 @@ export async function syncHealth(adapter?: HealthAdapter, interactive = true) {
     }
     const external = await provider.read();
     for (const record of external) {
+      // Body measurements are export-only; never turn them into height imports.
+      if (record.kind !== "weight" && record.kind !== "height") continue;
       if (record.clientId?.startsWith(prefix) || !validHealthRecord(record)) continue;
       const key = `health:${record.kind}:${record.id}`;
       const link = db.select().from(healthLinks).where(eq(healthLinks.key, key)).get();

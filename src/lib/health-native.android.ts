@@ -7,10 +7,12 @@ export async function getHealthAdapter(): Promise<HealthAdapter> {
   )
     throw new Error("healthUnavailable");
   return {
+    bodyWriteKinds: ["bodyFat"],
     async authorize(interactive = true) {
       const permissions = ["Weight", "Height"].flatMap((recordType) =>
         ["read", "write"].map((accessType) => ({ recordType, accessType }))
-      ) as { recordType: "Weight" | "Height"; accessType: "read" | "write" }[];
+      ) as { recordType: "Weight" | "Height" | "BodyFat"; accessType: "read" | "write" }[];
+      permissions.push({ recordType: "BodyFat", accessType: "write" });
       const granted = interactive
         ? await hc.requestPermission(permissions)
         : await hc.getGrantedPermissions();
@@ -68,6 +70,7 @@ export async function getHealthAdapter(): Promise<HealthAdapter> {
       return records;
     },
     async write(record) {
+      if (record.kind === "waist") throw new Error("healthUnavailable");
       const metadata = {
         clientRecordId: record.clientId,
         clientRecordVersion: record.version,
@@ -81,18 +84,30 @@ export async function getHealthAdapter(): Promise<HealthAdapter> {
               time: record.measuredAt,
               metadata,
             }
-          : {
-              recordType: "Height",
-              height: { value: record.value / 100, unit: "meters" },
-              time: record.measuredAt,
-              metadata,
-            },
+          : record.kind === "bodyFat"
+            ? {
+                recordType: "BodyFat",
+                percentage: record.value,
+                time: record.measuredAt,
+                metadata,
+              }
+            : {
+                recordType: "Height",
+                height: { value: record.value / 100, unit: "meters" },
+                time: record.measuredAt,
+                metadata,
+              },
       ]);
       if (!ids[0]) throw new Error("syncFailed");
       return ids[0];
     },
     async remove(kind, id) {
-      await hc.deleteRecordsByUuids(kind === "weight" ? "Weight" : "Height", [id], []);
+      if (kind === "waist") throw new Error("healthUnavailable");
+      await hc.deleteRecordsByUuids(
+        kind === "weight" ? "Weight" : kind === "bodyFat" ? "BodyFat" : "Height",
+        [id],
+        []
+      );
     },
   };
 }

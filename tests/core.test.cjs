@@ -339,3 +339,164 @@ test("daily health schedule respects opt-in, due time, failures and opt-out", as
   assert.equal(get("healthSyncEnabled"), "false");
   sqlite.close();
 });
+
+test("dashboard ratio uses shoulder / waist and the 1.62 goal", () => {
+  const { shoulderWaistRatio, metricContext } = load("src/lib/metric-context.ts");
+  close(shoulderWaistRatio({ shoulders: 129.6, waist: 80 }), 1.62);
+  for (const values of [
+    undefined,
+    {},
+    { waist: 80 },
+    { shoulders: 120, waist: 0 },
+    { shoulders: Infinity, waist: 80 },
+  ])
+    assert.equal(shoulderWaistRatio(values), null);
+  assert.equal(metricContext("shoulderWaistRatio", 1.5, "none").label, "ratioBelowGoal");
+  assert.equal(metricContext("shoulderWaistRatio", 1.62, "none").tone, "success");
+  assert.equal(metricContext("shoulderWaistRatio", 1.8, "none").label, "ratioAboveGoal");
+  assert.equal(metricContext("bmi", 18.5, "none").tone, "success");
+  assert.equal(metricContext("bmi", 25, "none").label, "bmiElevated");
+  assert.equal(metricContext("bmi", 30, "none").tone, "danger");
+  assert.equal(metricContext("bodyFat", 25, "male").label, "fatHigh");
+  assert.equal(metricContext("bodyFat", 25, "female").label, "fatTypical");
+  assert.equal(metricContext("bodyFat", 25, "none").tone, "neutral");
+  assert.equal(metricContext("ffmi", 21, "male").label, "ffmiHigh");
+  assert.equal(metricContext("ffmi", 16, "female").label, "ffmiTypical");
+  assert.equal(metricContext("ffmi", null, "male").label, "metricMissing");
+});
+
+test("body exports follow platform support and handle edits, removed fields and retries", async () => {
+  for (const bodyWriteKinds of [["bodyFat"], ["waist", "bodyFat"]]) {
+    const { db, sqlite } = database();
+    const health = load("src/lib/health.ts", {
+      "expo-constants": { appOwnership: "standalone" },
+      "@/db": { db, ...schema },
+      "./health-native": {},
+      "./metrics": metrics,
+    });
+    const local = db
+      .insert(schema.measurements)
+      .values({
+        kind: "body",
+        values: { waist: 80, shoulders: 130, bodyFat: 20 },
+        measuredAt: "2024-01-01T12:00:00Z",
+        updatedAt: 1,
+      })
+      .returning()
+      .get();
+    // A tape-only session must not export a calculated fat percentage.
+    db.insert(schema.measurements)
+      .values({
+        kind: "body",
+        values: { abdomen: 90, neck: 40 },
+        measuredAt: "2024-01-02T12:00:00Z",
+        updatedAt: 1,
+      })
+      .run();
+    const remote = new Map();
+    const adapter = {
+      bodyWriteKinds,
+      authorize: async () => {},
+      read: async () => [...remote.values()],
+      write: async (record) => {
+        remote.set(record.clientId, { ...record, id: record.clientId });
+        return record.clientId;
+      },
+      remove: async (_, id) => {
+        remote.delete(id);
+      },
+    };
+    assert.equal((await health.syncHealth(adapter)).exported, bodyWriteKinds.length);
+    assert.equal((await health.syncHealth(adapter)).exported, 0);
+    assert.equal(db.select().from(schema.measurements).all().length, 2);
+    db.update(schema.measurements)
+      .set({ values: { shoulders: 130, bodyFat: 21 }, updatedAt: 2 })
+      .where(eq(schema.measurements.id, local.id))
+      .run();
+    await health.syncHealth(adapter);
+    assert.equal(remote.size, 1);
+    assert.equal([...remote.values()][0].value, 21);
+    db.delete(schema.measurements).run();
+    await health.syncHealth(adapter);
+    assert.equal(remote.size, 0);
+    sqlite.close();
+  }
+});
+
+test("HealthKit exports waist in centimeters and body fat as a fraction", async () => {
+  const writes = [];
+  let permission;
+  const hk = {
+    isHealthDataAvailable: () => true,
+    requestAuthorization: async (value) => {
+      permission = value;
+    },
+    authorizationStatusFor: () => 2,
+    AuthorizationStatus: { sharingAuthorized: 2 },
+    saveQuantitySample: async (...args) => {
+      writes.push(args);
+      return { uuid: "saved" };
+    },
+  };
+  const { getHealthAdapter } = load("src/lib/health-native.ios.ts", {
+    "@kingstinct/react-native-healthkit": hk,
+  });
+  const adapter = await getHealthAdapter();
+  await adapter.authorize();
+  assert.ok(permission.toShare.includes("HKQuantityTypeIdentifierWaistCircumference"));
+  assert.equal(permission.toRead.length, 2);
+  for (const [kind, value] of [
+    ["waist", 80],
+    ["bodyFat", 20],
+  ])
+    await adapter.write({
+      kind,
+      value,
+      measuredAt: "2024-01-01T12:00:00Z",
+      clientId: kind,
+      version: 1,
+    });
+  assert.deepEqual(
+    writes.map((args) => args.slice(0, 3)),
+    [
+      ["HKQuantityTypeIdentifierWaistCircumference", "cm", 80],
+      ["HKQuantityTypeIdentifierBodyFatPercentage", "%", 0.2],
+    ]
+  );
+});
+
+test("Health Connect requests body-fat write permission and uses percentage points", async () => {
+  let permissions;
+  let saved;
+  const hc = {
+    SdkAvailabilityStatus: { SDK_AVAILABLE: 3 },
+    getSdkStatus: async () => 3,
+    initialize: async () => true,
+    requestPermission: async (value) => {
+      if (value.length > 1) permissions = value;
+      return value;
+    },
+    RecordingMethod: { RECORDING_METHOD_MANUAL_ENTRY: 3 },
+    insertRecords: async (records) => {
+      saved = records;
+      return ["saved"];
+    },
+  };
+  const { getHealthAdapter } = load("src/lib/health-native.android.ts", {
+    "react-native-health-connect": hc,
+  });
+  const adapter = await getHealthAdapter();
+  await adapter.authorize();
+  assert.ok(permissions.some((p) => p.recordType === "BodyFat" && p.accessType === "write"));
+  assert.ok(!permissions.some((p) => p.recordType === "BodyFat" && p.accessType === "read"));
+  await adapter.write({
+    kind: "bodyFat",
+    value: 20,
+    measuredAt: "2024-01-01T12:00:00Z",
+    clientId: "fat",
+    version: 1,
+  });
+  assert.equal(saved[0].recordType, "BodyFat");
+  assert.equal(saved[0].percentage, 20);
+  await assert.rejects(adapter.write({ kind: "waist", value: 80 }), /healthUnavailable/);
+});

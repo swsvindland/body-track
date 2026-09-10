@@ -4,7 +4,21 @@ import { useThemeColor } from "heroui-native";
 import { SystemLabel, SystemValue, SystemPanel, SystemText as Text } from "@/components/system";
 import Svg, { Circle, Line, Path } from "react-native-svg";
 import { useStore } from "@/lib/store";
+import {
+  metricContext,
+  shoulderWaistRatio,
+  type DashboardMetric,
+  type MetricTone,
+} from "@/lib/metric-context";
 import { bodyFat, composition, fromKg, weightTrend, weightUnit } from "@/lib/metrics";
+
+const contextColors: Record<MetricTone, string> = {
+  neutral: "text-muted",
+  info: "text-accent-soft-foreground",
+  success: "text-success-soft-foreground",
+  warning: "text-warning-soft-foreground",
+  danger: "text-danger-soft-foreground",
+};
 
 export function Dashboard() {
   const { weights, measurements, units, formula, t, number, date } = useStore();
@@ -12,6 +26,10 @@ export function Dashboard() {
   const latest = trend.at(-1);
   const heightEntry = measurements.find((m) => m.kind === "height");
   const bodyEntry = measurements.find((m) => m.kind === "body");
+  const ratioEntry = measurements.find(
+    (m) => m.kind === "body" && shoulderWaistRatio(m.values) !== null
+  );
+  const ratio = shoulderWaistRatio(ratioEntry?.values);
   const height = heightEntry?.values.height;
   const fat = bodyFat(bodyEntry?.values, height, formula);
   const { bmi, ffmi } = composition(latest?.trend, height, fat);
@@ -106,28 +124,50 @@ export function Dashboard() {
         </SystemPanel.Body>
       </SystemPanel>
       <View className="flex-row flex-wrap gap-3">
-        {[
-          { key: "bmi", value: bmi },
-          { key: "bodyFat", value: fat },
-          { key: "ffmi", value: ffmi },
-        ].map((metric) => (
-          <SystemPanel key={metric.key} style={{ flexGrow: 1, flexBasis: 160 }}>
-            <SystemPanel.Body className="gap-2">
-              <SystemLabel>{t(metric.key)}</SystemLabel>
-              <Text className="text-2xl font-mono tabular-nums text-foreground">
-                {metric.value === null ? "—" : number(metric.value)}
-                {metric.key === "bodyFat" && metric.value !== null ? "%" : ""}
-              </Text>
-              <Text className="font-mono text-xs text-muted">
-                {metric.value === null
-                  ? `${t("add")} · ${t(metric.key === "bodyFat" ? "measurements" : !height ? "height" : !latest ? "weight" : "measurements")}`
-                  : metric.key === "bmi"
-                    ? `${t("height")} · ${date(heightEntry!.measuredAt)}`
-                    : `${t(bodyEntry?.values.bodyFat ? "bodyFat" : "estimated")} · ${date(bodyEntry!.measuredAt)}`}
-              </Text>
-            </SystemPanel.Body>
-          </SystemPanel>
-        ))}
+        {(
+          [
+            { key: "bmi", value: bmi },
+            { key: "bodyFat", value: fat },
+            { key: "ffmi", value: ffmi },
+            { key: "shoulderWaistRatio", value: ratio },
+          ] satisfies { key: DashboardMetric; value: number | null }[]
+        ).map((metric) => {
+          const context = metricContext(metric.key, metric.value, formula);
+          return (
+            <SystemPanel key={metric.key} style={{ flexGrow: 1, flexBasis: 160 }}>
+              <SystemPanel.Body className="gap-2">
+                <SystemLabel>{t(metric.key)}</SystemLabel>
+                <Text className="text-2xl font-mono tabular-nums text-foreground">
+                  {metric.value === null
+                    ? "—"
+                    : number(metric.value, metric.key === "shoulderWaistRatio" ? 2 : 1)}
+                  {metric.key === "bodyFat" && metric.value !== null ? "%" : ""}
+                </Text>
+                <Text className={`text-sm font-medium ${contextColors[context.tone]}`}>
+                  {t(context.label)}
+                </Text>
+                <Text className="text-xs text-muted">
+                  {t(context.help)}
+                  {metric.key === "shoulderWaistRatio"
+                    ? ` · ${t("ratioGoal")}: ${number(1.62, 2)}`
+                    : ""}
+                  {context.range
+                    ? ` · ${t("metricReference")}: ${context.range.map((v) => number(v)).join("–")}${metric.key === "bodyFat" ? "%" : ""}${metric.key !== "bmi" ? ` (${t(formula)})` : ""}`
+                    : ""}
+                </Text>
+                <Text className="mt-auto pt-1 font-mono text-xs text-muted">
+                  {metric.value === null
+                    ? `${t("add")} · ${t(metric.key === "bodyFat" || metric.key === "shoulderWaistRatio" ? "measurements" : !height ? "height" : !latest ? "weight" : "measurements")}`
+                    : metric.key === "shoulderWaistRatio"
+                      ? `${t("shoulders")} ÷ ${t("waist")} · ${date(ratioEntry!.measuredAt)}`
+                      : metric.key === "bmi"
+                        ? `${t("height")} · ${date(heightEntry!.measuredAt)}`
+                        : `${t(bodyEntry?.values.bodyFat ? "bodyFat" : "estimated")} · ${date(bodyEntry!.measuredAt)}`}
+                </Text>
+              </SystemPanel.Body>
+            </SystemPanel>
+          );
+        })}
       </View>
     </View>
   );

@@ -31,6 +31,7 @@
         "android.permission.health.WRITE_WEIGHT",
         "android.permission.health.READ_HEIGHT",
         "android.permission.health.WRITE_HEIGHT",
+        "android.permission.health.WRITE_BODY_FAT",
         "android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND"
       ],
       "package": "dev.svindland.vector.body"
@@ -69,7 +70,7 @@
         {
           "background": false,
           "NSHealthShareUsageDescription": "Import your weight and height into VECTOR BODY when you choose to sync.",
-          "NSHealthUpdateUsageDescription": "Save your VECTOR BODY weight and height records to Apple Health when you choose to sync."
+          "NSHealthUpdateUsageDescription": "Save your VECTOR BODY weight, height, waist circumference and recorded body fat to Apple Health when you choose to sync."
         }
       ],
       "react-native-health-connect",
