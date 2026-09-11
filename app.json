@@ -13,7 +13,7 @@
         "dark": "./assets/images/icon-dark.png",
         "tinted": "./assets/images/icon-tinted.png"
       },
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "dev.svindland.vector.body",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
