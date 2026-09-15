@@ -112,5 +112,12 @@
   "bodyFatContext": "Adult body-fat guide; age and individual needs vary.",
   "ffmiContext": "Lean mass relative to height; approximate adult reference, not a target.",
   "shoulderWaistRatioContext": "Shoulder ÷ waist circumference. A physique goal, not a health cutoff.",
-  "ratioGoal": "Goal"
+  "ratioGoal": "Goal",
+  "sourcesTitle": "Sources & methods",
+  "healthDisclaimer": "For general tracking, not diagnosis or treatment. Consult a healthcare professional before making medical decisions. Adult references do not apply to children; individual needs vary.",
+  "sourceUnavailable": "Could not open the source. Please try again when online.",
+  "bmiMethod": "BMI = weight (kg) ÷ height (m)². This app uses trend weight. CDC categories apply to adults 20 and older: below 18.5, 18.5–<25, 25–<30, and 30 or above.",
+  "bodyFatMethod": "A recorded body-fat percentage takes priority. Otherwise, the Navy circumference estimate uses measurements in inches. The equations are documented in AR 600–9 (2019), Appendix B, Table B–5. The app combines the ACE fitness and average categories as “Typical”; these are general comparisons, not personal targets.",
+  "ffmiMethod": "FFMI = BMI × (1 − body fat % ÷ 100), using trend weight. Schutz et al. (2002) studied white adults aged 18–98. The app’s simplified comparison bands (male 17–20; female 14–17) are not age-specific clinical cutoffs or recommended targets.",
+  "ratioMethod": "Shoulder circumference ÷ waist circumference. The app’s 1.62 goal is a physique comparison chosen by the app, not a medically validated health target."
 }

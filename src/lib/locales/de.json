@@ -112,5 +112,12 @@
   "bodyFatContext": "Körperfett-Orientierung für Erwachsene; Alter und Bedarf variieren.",
   "ffmiContext": "Fettfreie Masse im Verhältnis zur Größe; grobe Erwachsenenreferenz, kein Ziel.",
   "shoulderWaistRatioContext": "Schulter- ÷ Taillenumfang. Ein Körperformziel, keine Gesundheitsgrenze.",
-  "ratioGoal": "Ziel"
+  "ratioGoal": "Ziel",
+  "sourcesTitle": "Quellen und Methoden",
+  "healthDisclaimer": "Zur allgemeinen Verlaufskontrolle, nicht zur Diagnose oder Behandlung. Besprich medizinische Entscheidungen mit medizinischem Fachpersonal. Erwachsenenreferenzen gelten nicht für Kinder; individuelle Bedürfnisse variieren.",
+  "sourceUnavailable": "Die Quelle konnte nicht geöffnet werden. Versuche es mit Internetverbindung erneut.",
+  "bmiMethod": "BMI = Gewicht (kg) ÷ Größe (m)². Die App nutzt das Trendgewicht. CDC-Kategorien gelten ab 20 Jahren: unter 18,5; 18,5–<25; 25–<30; ab 30.",
+  "bodyFatMethod": "Ein gespeicherter Körperfettanteil hat Vorrang. Sonst nutzt die Navy-Schätzung Maße in Zoll. Formeln: AR 600–9 (2019), Anhang B, Tabelle B–5. Die App fasst die ACE-Kategorien Fitness und Durchschnitt als „Typisch“ zusammen: allgemeine Vergleiche, keine persönlichen Ziele.",
+  "ffmiMethod": "FFMI = BMI × (1 − Körperfett % ÷ 100), mit Trendgewicht. Schutz et al. (2002) untersuchten weiße Erwachsene von 18–98 Jahren. Die vereinfachten App-Bereiche (Männer 17–20; Frauen 14–17) sind keine altersspezifischen klinischen Grenzwerte oder empfohlenen Ziele.",
+  "ratioMethod": "Schulterumfang ÷ Taillenumfang. Das Ziel 1,62 ist ein von der App gewählter Körperbauvergleich, kein medizinisch validiertes Gesundheitsziel."
 }

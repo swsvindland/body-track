@@ -40,11 +40,10 @@ export function SystemButton({
     <Button
       {...props}
       variant={variant}
-      feedbackVariant="none"
-      animation="disable-all"
       className={twMerge(
         "min-h-11 h-auto min-w-11 rounded-md px-4 py-3 shadow-none",
-        "border border-transparent focus:border-focus active:opacity-70",
+        "border border-transparent focus:border-focus",
+        variant === "outline" && "border-border",
         variant === "secondary" && "border-border bg-surface",
         className
       )}

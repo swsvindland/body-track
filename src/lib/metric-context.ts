@@ -17,7 +17,8 @@ export function shoulderWaistRatio(values: Record<string, number> | undefined): 
 }
 
 // Adult screening references, not diagnoses. Body-fat bands follow ACE categories;
-// FFMI uses the adult reference intervals reported by Schutz et al. (2002).
+// FFMI bands are simplified app comparisons, not clinical cutoffs from Schutz et al.
+// Citations and interpretation limits are available in health-sources.
 // The selected Navy formula supplies the reference sex; "none" must not imply male.
 export function metricContext(
   metric: DashboardMetric,

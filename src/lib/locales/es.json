@@ -112,5 +112,12 @@
   "bodyFatContext": "Guía de grasa corporal adulta; varía con la edad y las necesidades.",
   "ffmiContext": "Masa magra relativa a la altura; referencia adulta aproximada, no una meta.",
   "shoulderWaistRatioContext": "Circunferencia de hombros ÷ cintura. Meta física, no un límite de salud.",
-  "ratioGoal": "Objetivo"
+  "ratioGoal": "Objetivo",
+  "sourcesTitle": "Fuentes y métodos",
+  "healthDisclaimer": "Para seguimiento general, no para diagnóstico ni tratamiento. Consulta a un profesional sanitario antes de tomar decisiones médicas. Las referencias para adultos no se aplican a niños; las necesidades individuales varían.",
+  "sourceUnavailable": "No se pudo abrir la fuente. Inténtalo de nuevo con conexión.",
+  "bmiMethod": "IMC = peso (kg) ÷ altura (m)². La app usa el peso de tendencia. Las categorías de los CDC se aplican desde los 20 años: menos de 18,5; 18,5–<25; 25–<30; y 30 o más.",
+  "bodyFatMethod": "Se prioriza el porcentaje de grasa registrado. De lo contrario, la estimación Navy usa medidas en pulgadas. Ecuaciones: AR 600–9 (2019), apéndice B, tabla B–5. La app agrupa las categorías fitness y promedio de ACE como «Típico»; son comparaciones generales, no objetivos personales.",
+  "ffmiMethod": "IMLG = IMC × (1 − grasa corporal % ÷ 100), con peso de tendencia. Schutz et al. (2002) estudiaron adultos blancos de 18–98 años. Los intervalos simplificados de la app (hombres 17–20; mujeres 14–17) no son límites clínicos por edad ni objetivos recomendados.",
+  "ratioMethod": "Contorno de hombros ÷ contorno de cintura. El objetivo 1,62 es una comparación física elegida por la app, no un objetivo de salud validado médicamente."
 }

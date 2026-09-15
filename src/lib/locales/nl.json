@@ -112,5 +112,12 @@
   "bodyFatContext": "Vetpercentage als richtlijn voor volwassenen; leeftijd en behoeften variëren.",
   "ffmiContext": "Vetvrije massa ten opzichte van lengte; globale volwassenreferentie, geen doel.",
   "shoulderWaistRatioContext": "Schouder- ÷ tailleomtrek. Een lichaamsbouwdoel, geen gezondheidsgrens.",
-  "ratioGoal": "Doel"
+  "ratioGoal": "Doel",
+  "sourcesTitle": "Bronnen en methoden",
+  "healthDisclaimer": "Voor algemene registratie, niet voor diagnose of behandeling. Raadpleeg een zorgverlener vóór medische beslissingen. Referenties voor volwassenen gelden niet voor kinderen; individuele behoeften verschillen.",
+  "sourceUnavailable": "Kan de bron niet openen. Probeer het opnieuw met internet.",
+  "bmiMethod": "BMI = gewicht (kg) ÷ lengte (m)². De app gebruikt het trendgewicht. CDC-categorieën gelden vanaf 20 jaar: onder 18,5; 18,5–<25; 25–<30; 30 of hoger.",
+  "bodyFatMethod": "Een opgeslagen vetpercentage krijgt voorrang. Anders gebruikt de Navy-schatting metingen in inches. Formules: AR 600–9 (2019), bijlage B, tabel B–5. De app combineert de ACE-categorieën fitness en gemiddeld als “Typisch”: algemene vergelijkingen, geen persoonlijke doelen.",
+  "ffmiMethod": "FFMI = BMI × (1 − vetpercentage ÷ 100), met trendgewicht. Schutz et al. (2002) onderzochten witte volwassenen van 18–98 jaar. De vereenvoudigde app-bereiken (mannen 17–20; vrouwen 14–17) zijn geen leeftijdsspecifieke klinische grenzen of aanbevolen doelen.",
+  "ratioMethod": "Schouderomtrek ÷ tailleomtrek. Het doel 1,62 is een door de app gekozen lichaamsbouwvergelijking, geen medisch gevalideerd gezondheidsdoel."
 }

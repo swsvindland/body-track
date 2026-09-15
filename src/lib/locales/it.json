@@ -112,5 +112,12 @@
   "bodyFatContext": "Guida al grasso corporeo adulto; varia con età ed esigenze individuali.",
   "ffmiContext": "Massa magra rispetto all’altezza; riferimento adulto indicativo, non un obiettivo.",
   "shoulderWaistRatioContext": "Circonferenza spalle ÷ vita. Obiettivo fisico, non una soglia di salute.",
-  "ratioGoal": "Obiettivo"
+  "ratioGoal": "Obiettivo",
+  "sourcesTitle": "Fonti e metodi",
+  "healthDisclaimer": "Per il monitoraggio generale, non per diagnosi o trattamenti. Consulta un professionista sanitario prima di prendere decisioni mediche. I riferimenti per adulti non valgono per i bambini; le esigenze individuali variano.",
+  "sourceUnavailable": "Impossibile aprire la fonte. Riprova con una connessione.",
+  "bmiMethod": "IMC = peso (kg) ÷ altezza (m)². L’app usa il peso di tendenza. Le categorie CDC valgono dai 20 anni: sotto 18,5; 18,5–<25; 25–<30; 30 o più.",
+  "bodyFatMethod": "La percentuale di grasso registrata ha la precedenza. Altrimenti, la stima Navy usa misure in pollici. Equazioni: AR 600–9 (2019), appendice B, tabella B–5. L’app riunisce le categorie fitness e media ACE come «Tipico»: confronti generali, non obiettivi personali.",
+  "ffmiMethod": "FFMI = IMC × (1 − grasso corporeo % ÷ 100), con peso di tendenza. Schutz et al. (2002) hanno studiato adulti bianchi di 18–98 anni. Gli intervalli semplificati dell’app (uomini 17–20; donne 14–17) non sono soglie cliniche per età né obiettivi consigliati.",
+  "ratioMethod": "Circonferenza spalle ÷ circonferenza vita. L’obiettivo 1,62 è un confronto fisico scelto dall’app, non un obiettivo di salute validato clinicamente."
 }

@@ -19,7 +19,7 @@ export function MeasurementHistory({ log }: { log: MeasurementLogState }) {
       {!rows.length ? (
         <Text className="py-8 text-center text-muted">{t("empty")}</Text>
       ) : (
-        <Timeline size="sm" animation="disable-all">
+        <Timeline size="sm">
           {rows.slice(0, limit).map((row, index) => (
             <Timeline.Item key={row.id} status={index === 0 ? "current" : "default"}>
               <Timeline.Rail />

@@ -112,5 +112,12 @@
   "bodyFatContext": "Kroppsfettguide för vuxna; ålder och individuella behov varierar.",
   "ffmiContext": "Fettfri massa i förhållande till längd; ungefärlig vuxenreferens, inget mål.",
   "shoulderWaistRatioContext": "Axel- ÷ midjeomkrets. Ett kroppsmål, ingen hälsogräns.",
-  "ratioGoal": "Mål"
+  "ratioGoal": "Mål",
+  "sourcesTitle": "Källor och metoder",
+  "healthDisclaimer": "För allmän uppföljning, inte diagnos eller behandling. Rådfråga vårdpersonal före medicinska beslut. Vuxenreferenser gäller inte barn; individuella behov varierar.",
+  "sourceUnavailable": "Källan kunde inte öppnas. Försök igen med internetanslutning.",
+  "bmiMethod": "BMI = vikt (kg) ÷ längd (m)². Appen använder trendvikt. CDC-kategorier gäller från 20 år: under 18,5; 18,5–<25; 25–<30; 30 eller högre.",
+  "bodyFatMethod": "En registrerad fettprocent prioriteras. Annars använder Navy-uppskattningen mått i tum. Formler: AR 600–9 (2019), bilaga B, tabell B–5. Appen slår ihop ACE-kategorierna fitness och genomsnitt som ”Typisk”: allmänna jämförelser, inte personliga mål.",
+  "ffmiMethod": "FFMI = BMI × (1 − kroppsfett % ÷ 100), med trendvikt. Schutz et al. (2002) studerade vita vuxna i åldern 18–98 år. Appens förenklade intervall (män 17–20; kvinnor 14–17) är inte åldersspecifika kliniska gränser eller rekommenderade mål.",
+  "ratioMethod": "Axelomkrets ÷ midjeomkrets. Målet 1,62 är en kroppsjämförelse vald av appen, inte ett medicinskt validerat hälsomål."
 }

@@ -158,7 +158,7 @@ export function PhotosScreen() {
             {!visible.length ? (
               <Text className="py-8 text-center text-muted">{t("photoEmpty")}</Text>
             ) : (
-              <Timeline size="sm" animation="disable-all">
+              <Timeline size="sm">
                 {shownGroups.map(([photoDay, photos], index) => (
                   <Timeline.Item key={photoDay} status={index === 0 ? "current" : "default"}>
                     <Timeline.Rail />

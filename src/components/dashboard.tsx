@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { router } from "expo-router";
 import { View, useWindowDimensions } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -33,11 +34,12 @@ function DashboardCardHeader({ title, help }: { title: string; help: string }) {
   const muted = useThemeColor("muted");
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <View className="-my-3 -mr-3 flex-row items-center gap-2">
       <SystemLabel className="flex-1">{title}</SystemLabel>
-      <Popover animation="disable-all">
+      <Popover isOpen={isOpen} onOpenChange={setIsOpen}>
         <Popover.Trigger asChild>
           <SystemButton
             isIconOnly
@@ -63,6 +65,15 @@ function DashboardCardHeader({ title, help }: { title: string; help: string }) {
               <Popover.Close accessibilityLabel={t("close")} />
             </View>
             <Popover.Description className="font-sans text-sm">{help}</Popover.Description>
+            <SystemButton
+              variant="ghost"
+              onPress={() => {
+                setIsOpen(false);
+                router.push("/health-sources");
+              }}
+            >
+              {t("sourcesTitle")}
+            </SystemButton>
           </Popover.Content>
         </Popover.Portal>
       </Popover>
@@ -101,6 +112,13 @@ export function Dashboard() {
   const y = (value: number) => 12 + ((max - value) / (max - min)) * 140;
   return (
     <View className="gap-4">
+      <SystemButton
+        variant="ghost"
+        className="self-start"
+        onPress={() => router.push("/health-sources")}
+      >
+        {t("sourcesTitle")}
+      </SystemButton>
       <SystemPanel>
         <SystemPanel.Body className="gap-3">
           <DashboardCardHeader title={t("trend")} help={t("trendHelp")} />

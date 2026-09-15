@@ -28,14 +28,19 @@ export function Screen({
   title,
   subtitle,
   children,
+  nativeHeader = false,
 }: {
   title: string;
   subtitle?: string;
   children: ReactNode;
+  nativeHeader?: boolean;
 }) {
   const { width } = useWindowDimensions();
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
+    <SafeAreaView
+      className="flex-1 bg-background"
+      edges={nativeHeader ? ["bottom", "left", "right"] : ["top"]}
+    >
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
@@ -48,12 +53,14 @@ export function Screen({
           alignSelf: "center",
         }}
       >
-        <View className="gap-2 border-b border-border pb-6">
-          <Text accessibilityRole="header" className="text-4xl font-semibold text-foreground">
-            {title}
-          </Text>
-          {subtitle && <Text className="mt-2 text-muted">{subtitle}</Text>}
-        </View>
+        {!nativeHeader && (
+          <View className="gap-2 border-b border-border pb-6">
+            <Text accessibilityRole="header" className="text-4xl font-semibold text-foreground">
+              {title}
+            </Text>
+            {subtitle && <Text className="mt-2 text-muted">{subtitle}</Text>}
+          </View>
+        )}
         {children}
       </ScrollView>
     </SafeAreaView>
@@ -276,7 +283,7 @@ export function Editor({
                   {title}
                 </Text>
                 {children}
-                <SystemButton variant="ghost" isDisabled={busy} onPress={close}>
+                <SystemButton variant="outline" isDisabled={busy} onPress={close}>
                   {t("cancel")}
                 </SystemButton>
               </ScrollView>
