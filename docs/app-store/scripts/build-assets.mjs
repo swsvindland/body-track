@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import os from "node:os";
+import { Buffer } from "node:buffer";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const project = path.resolve(root, "../..");

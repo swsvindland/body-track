@@ -11,3 +11,11 @@ bun.lockb
 expo-env.d.ts
 uniwind-types.d.ts
 .DS_Store
+# Vector kit: synced from vector-design/kit and hash-checked (vector-kit check), so never reformatted here.
+src/vector/
+src/global.css
+src/app/vector-gallery.tsx
+docs/design-system.md
+scripts/vector-kit.mjs
+eslint.vector.cjs
+tests/vector.test.*

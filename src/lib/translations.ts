@@ -44,6 +44,15 @@ export const dictionaries = { en, es, fr, de, it, pt, nl, sv, ja, ko, zh } satis
   Language,
   Record<keyof typeof en, string>
 >;
-export function translate(language: Language, key: string): string {
-  return Object.hasOwn(en, key) ? dictionaries[language][key as keyof typeof en] : key;
+export type Message = keyof typeof en;
+export function isMessage(key: string): key is Message {
+  return Object.hasOwn(en, key);
+}
+export function translate(language: Language, key: Message): string {
+  return dictionaries[language][key];
+}
+export function interpolate(text: string, values: Record<string, string | number>) {
+  return text.replace(/\{(\w+)\}/g, (match, name: string) =>
+    Object.hasOwn(values, name) ? String(values[name]) : match
+  );
 }
