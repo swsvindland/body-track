@@ -7,6 +7,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "bodytrack",
     "userInterfaceStyle": "automatic",
+    "primaryColor": "#007088",
     "ios": {
       "icon": {
         "light": "./assets/images/icon.png",
@@ -64,7 +65,24 @@
           "microphonePermission": false
         }
       ],
-      "expo-localization",
+      [
+        "expo-localization",
+        {
+          "supportedLocales": [
+            "en",
+            "es",
+            "fr",
+            "de",
+            "it",
+            "pt",
+            "nl",
+            "sv",
+            "ja",
+            "ko",
+            "zh-Hans"
+          ]
+        }
+      ],
       [
         "@kingstinct/react-native-healthkit",
         {

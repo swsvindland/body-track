@@ -1,60 +1,124 @@
-import { Feather } from "@expo/vector-icons";
-import { useThemeColor } from "heroui-native";
-import { Timeline } from "heroui-native-pro";
-import { View } from "react-native";
-import { SystemButton, SystemText as Text } from "@/components/system";
+import { View, type AccessibilityActionEvent } from "react-native";
+import {
+  ActionMenu,
+  Button,
+  ErrorText,
+  Heading,
+  ListRow,
+  Panel,
+  RecordRow,
+  SwipeRow,
+  SystemState,
+  Value,
+  useKitFormat,
+  type MenuAction,
+} from "@/vector";
 import { useStore } from "@/lib/store";
+import { Readout } from "./readout";
 import type { MeasurementLogState } from "./use-measurement-log";
 
+type Row = MeasurementLogState["rows"][number];
+
 export function MeasurementHistory({ log }: { log: MeasurementLogState }) {
-  const { t, date, number } = useStore();
-  const foreground = useThemeColor("foreground");
-  const { rows, fields, format, limit, setLimit, launch } = log;
+  const { t, date } = useStore();
+  const format = useKitFormat();
+  const { rows, fields, reading, limit, setLimit, launch, removeRow, listError, isImported } = log;
+  const shown = rows.slice(0, limit);
+  /** Edit and delete, for a row's or a panel's menu; a record imported from Health can only be deleted. */
+  const actions = (row: Row): { actions: MenuAction[] }[] => {
+    const edit: MenuAction = {
+      key: "edit",
+      label: t("edit"),
+      icon: "edit",
+      onPress: () => launch(row),
+    };
+    const remove: MenuAction = {
+      key: "delete",
+      label: t("delete"),
+      icon: "delete",
+      destructive: true,
+      onPress: () => removeRow(row),
+    };
+    return [{ actions: isImported(row) ? [remove] : [edit, remove] }];
+  };
+  const onAction = (row: Row) => (event: AccessibilityActionEvent) =>
+    event.nativeEvent.actionName === "delete" ? removeRow(row) : launch(row);
 
   return (
     <>
-      <Text accessibilityRole="header" className="text-xl font-semibold text-foreground">
-        {t("history")} · {number(rows.length, 0)}
-      </Text>
+      <View className="flex-row items-baseline justify-between gap-3">
+        <Heading level={3}>{t("history")}</Heading>
+        <Value value={format.number(rows.length)} size="xs" tone="muted" />
+      </View>
+      <ErrorText message={listError} />
       {!rows.length ? (
-        <Text className="py-8 text-center text-muted">{t("empty")}</Text>
-      ) : (
-        <Timeline size="sm">
-          {rows.slice(0, limit).map((row, index) => (
-            <Timeline.Item key={row.id} status={index === 0 ? "current" : "default"}>
-              <Timeline.Rail />
-              <Timeline.Content className="gap-3">
-                <View className="flex-row items-center justify-between gap-3">
-                  <Timeline.Title className="flex-1 font-mono text-sm">
-                    {date(row.measuredAt)}
-                  </Timeline.Title>
-                  <SystemButton
-                    isIconOnly
-                    variant="ghost"
-                    className="h-11 w-11 p-0"
-                    accessibilityLabel={`${t("edit")} · ${date(row.measuredAt)}`}
-                    onPress={() => launch(row)}
-                  >
-                    <Feather name="edit-2" size={18} color={foreground} />
-                  </SystemButton>
-                </View>
-                {fields
-                  .filter((key) => row.values[key] !== undefined)
-                  .map((key) => (
-                    <View key={key} className="flex-row flex-wrap justify-between gap-x-4 gap-y-1">
-                      <Timeline.Description className="text-sm">{t(key)}</Timeline.Description>
-                      <Text className="font-mono tabular-nums">{format(key, row.values[key])}</Text>
-                    </View>
-                  ))}
-              </Timeline.Content>
-            </Timeline.Item>
+        <SystemState kind="empty" message={t("empty")} />
+      ) : fields.length === 1 ? (
+        // One value per record (weight, height): the row opens the editor (read-only for a record imported
+        // from Health, which has no edit action), a swipe toward start deletes, and its menu holds both.
+        <Panel inset="none">
+          {shown.map((row) => (
+            <SwipeRow
+              key={row.id}
+              trailingAction={{
+                label: t("delete"),
+                icon: "delete",
+                destructive: true,
+                // The row stays open while the confirm is up; keeping the record, or a failed delete,
+                // springs it back.
+                onAction: (close) => removeRow(row, close),
+              }}
+            >
+              <RecordRow
+                time={date(row.measuredAt)}
+                title={t(fields[0])}
+                value={<Readout measure={reading(fields[0], row.values[fields[0]])} />}
+                onPress={() => launch(row)}
+                accessibilityHint={t(isImported(row) ? "importedEntryHint" : "editEntryHint")}
+                control={
+                  <ActionMenu
+                    accessibilityLabel={t("entryActions", { date: date(row.measuredAt) })}
+                    sections={actions(row)}
+                  />
+                }
+                accessibilityActions={[
+                  ...(isImported(row) ? [] : [{ name: "edit", label: t("edit") }]),
+                  { name: "delete", label: t("delete") },
+                ]}
+                onAccessibilityAction={onAction(row)}
+              />
+            </SwipeRow>
           ))}
-        </Timeline>
+        </Panel>
+      ) : (
+        // Several sites per record: one panel each, headed by its date, with edit and delete in its menu.
+        shown.map((row) => (
+          <Panel key={row.id} inset="none">
+            <Panel.Header
+              eyebrow={date(row.measuredAt)}
+              action={
+                <ActionMenu
+                  accessibilityLabel={t("entryActions", { date: date(row.measuredAt) })}
+                  sections={actions(row)}
+                />
+              }
+            />
+            {fields
+              .filter((key) => row.values[key] !== undefined)
+              .map((key) => (
+                <ListRow
+                  key={key}
+                  title={t(key)}
+                  value={<Readout measure={reading(key, row.values[key])} tone="muted" />}
+                />
+              ))}
+          </Panel>
+        ))
       )}
       {rows.length > limit && (
-        <SystemButton variant="ghost" onPress={() => setLimit(limit + 30)}>
-          {t("history")} +30
-        </SystemButton>
+        <Button variant="ghost" onPress={() => setLimit(limit + 30)}>
+          {t("showMore")}
+        </Button>
       )}
     </>
   );

@@ -1,4 +1,5 @@
 import type { Formula } from "./metrics";
+import type { Message } from "./translations";
 
 export type DashboardMetric = "bmi" | "bodyFat" | "ffmi" | "shoulderWaistRatio";
 export type MetricTone = "neutral" | "info" | "success" | "warning" | "danger";
@@ -25,12 +26,12 @@ export function metricContext(
   value: number | null,
   formula: Formula
 ): {
-  label: string;
+  label: Message;
   tone: MetricTone;
-  help: string;
+  help: Message;
   range?: [number, number];
 } {
-  const help = `${metric}Context`;
+  const help = `${metric}Context` as const;
   if (value === null || !Number.isFinite(value))
     return { label: "metricMissing", tone: "neutral", help };
   if (metric === "shoulderWaistRatio")

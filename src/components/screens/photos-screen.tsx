@@ -1,7 +1,16 @@
 import { useState } from "react";
 import { Alert, Image, Pressable, View, useWindowDimensions } from "react-native";
-import { SystemButton, SystemText as Text } from "@/components/system";
-import { Tabs } from "heroui-native";
+import {
+  Button,
+  Choices,
+  DateInput,
+  Editor,
+  ErrorText,
+  Label,
+  Screen,
+  SystemState,
+  Text,
+} from "@/vector";
 import { Timeline } from "heroui-native-pro";
 import * as ImagePicker from "expo-image-picker";
 import { Directory, File, Paths } from "expo-file-system";
@@ -9,7 +18,6 @@ import { eq } from "drizzle-orm";
 import { db, photos, type ProgressPhoto } from "@/db";
 import { useStore } from "@/lib/store";
 import { dayOf, localDay, validDay } from "@/lib/metrics";
-import { Choices, DateInput, Editor, ErrorText, Screen } from "@/components/ui";
 
 type Pose = ProgressPhoto["pose"];
 const filters = ["all", "front", "side", "back"] as const;
@@ -25,6 +33,8 @@ export function PhotosScreen() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [limit, setLimit] = useState(24);
+  // Only an edit has anything to lose: a new photo is saved the moment it is taken or chosen.
+  const dirty = open && !!editing && (day !== dayOf(editing.measuredAt) || pose !== editing.pose);
   const visible = records.filter((p) => filter === "all" || p.pose === filter);
   const days = new Map<string, ProgressPhoto[]>();
   for (const photo of visible) {
@@ -127,91 +137,84 @@ export function PhotosScreen() {
   }
   return (
     <>
-      <Screen title={t("photos")} subtitle={`${t("cadence")}: ${t("weekly")} – ${t("monthly")}`}>
-        <Text className="text-muted">{t("localPhotos")}</Text>
-        <SystemButton onPress={() => launch(null)}>
-          {t("add")} · {t("photos")}
-        </SystemButton>
-        <Tabs
+      <Screen title={t("photos")} subtitle={t("cadenceWeeklyMonthly")}>
+        <Text tone="muted">{t("localPhotos")}</Text>
+        <Button onPress={() => launch(null)}>{t("addPhoto")}</Button>
+        <Choices
+          values={filters}
           value={filter}
-          onValueChange={(value) => {
-            const next = filters.find((option) => option === value);
-            if (next) {
-              setFilter(next);
-              setLimit(24);
-            }
+          onChange={(next) => {
+            setFilter(next);
+            setLimit(24);
           }}
-          variant="secondary"
-          className="gap-6"
-        >
-          <Tabs.List className="self-start max-w-full">
-            <Tabs.ScrollView>
-              <Tabs.Indicator />
-              {filters.map((value) => (
-                <Tabs.Trigger key={value} value={value}>
-                  <Tabs.Label>{t(value)}</Tabs.Label>
-                </Tabs.Trigger>
+          label={t}
+          accessibilityLabel={t("pose")}
+        />
+        <View className="gap-6">
+          {!visible.length ? (
+            <SystemState kind="empty" message={t("photoEmpty")} />
+          ) : (
+            <Timeline size="sm">
+              {shownGroups.map(([photoDay, photos], index) => (
+                <Timeline.Item key={photoDay} status={index === 0 ? "current" : "default"}>
+                  <Timeline.Rail />
+                  <Timeline.Content className="min-w-0 gap-3">
+                    <Label accessibilityRole="header">{date(photoDay)}</Label>
+                    <View className="-mx-1 max-w-[744px] flex-row flex-wrap gap-y-3">
+                      {photos.map((photo) => (
+                        <View key={photo.id} className="w-1/3 px-1">
+                          <Pressable
+                            className="min-w-0 gap-2 rounded-control focus:outline-2 focus:outline-offset-2 focus:outline-tint"
+                            accessibilityRole="button"
+                            accessibilityLabel={t("photoOn", {
+                              pose: t(photo.pose),
+                              date: date(photo.measuredAt),
+                            })}
+                            onPress={() => setPreview(photo)}
+                          >
+                            {/* A 1pt keyline: white photos on the white canvas still read as tiles. */}
+                            <Image
+                              source={{ uri: photoFile(photo).uri }}
+                              className="rounded-control border border-border"
+                              style={{ width: "100%", aspectRatio: 0.7 }}
+                              resizeMode="cover"
+                              accessibilityLabel={t(photo.pose)}
+                            />
+                            <Text variant="bodyStrong">{t(photo.pose)}</Text>
+                          </Pressable>
+                        </View>
+                      ))}
+                    </View>
+                  </Timeline.Content>
+                </Timeline.Item>
               ))}
-            </Tabs.ScrollView>
-          </Tabs.List>
-          <Tabs.Content value={filter} className="gap-6">
-            {!visible.length ? (
-              <Text className="py-8 text-center text-muted">{t("photoEmpty")}</Text>
-            ) : (
-              <Timeline size="sm">
-                {shownGroups.map(([photoDay, photos], index) => (
-                  <Timeline.Item key={photoDay} status={index === 0 ? "current" : "default"}>
-                    <Timeline.Rail />
-                    <Timeline.Content className="min-w-0 gap-3">
-                      <Timeline.Title className="font-mono text-sm">
-                        {date(photoDay)}
-                      </Timeline.Title>
-                      <View className="-mx-1 flex-row flex-wrap gap-y-3" style={{ maxWidth: 744 }}>
-                        {photos.map((photo) => (
-                          <View key={photo.id} className="px-1" style={{ width: "33.333333%" }}>
-                            <Pressable
-                              className="min-w-0 gap-2 rounded-lg border border-transparent focus:border-focus"
-                              accessibilityRole="button"
-                              accessibilityLabel={`${t("photos")} · ${t(photo.pose)} · ${date(photo.measuredAt)}`}
-                              onPress={() => setPreview(photo)}
-                            >
-                              <Image
-                                source={{ uri: photoFile(photo).uri }}
-                                className="rounded-lg"
-                                style={{ width: "100%", aspectRatio: 0.7 }}
-                                resizeMode="cover"
-                                accessibilityLabel={t(photo.pose)}
-                              />
-                              <Text className="font-medium text-foreground">{t(photo.pose)}</Text>
-                            </Pressable>
-                          </View>
-                        ))}
-                      </View>
-                    </Timeline.Content>
-                  </Timeline.Item>
-                ))}
-              </Timeline>
-            )}
-            {visible.length > shownCount && (
-              <SystemButton variant="ghost" onPress={() => setLimit(shownCount + 24)}>
-                {t("photos")} +24
-              </SystemButton>
-            )}
-          </Tabs.Content>
-        </Tabs>
+            </Timeline>
+          )}
+          {visible.length > shownCount && (
+            <Button variant="ghost" onPress={() => setLimit(shownCount + 24)}>
+              {t("showMore")}
+            </Button>
+          )}
+        </View>
       </Screen>
       <Editor
-        title={
-          preview
-            ? `${t(preview.pose)} · ${date(preview.measuredAt)}`
-            : `${t(editing ? "edit" : "add")} · ${t("photos")}`
-        }
+        title={preview ? t(preview.pose) : t(editing ? "editPhoto" : "addPhoto")}
+        eyebrow={preview ? date(preview.measuredAt) : undefined}
         open={open || preview !== null}
         close={() => {
           setOpen(false);
           setPreview(null);
         }}
         busy={busy}
+        dirty={dirty}
+        primary={
+          preview
+            ? undefined
+            : editing
+              ? { label: t("save"), onPress: () => void save() }
+              : { label: t("takePhoto"), onPress: () => void save("camera") }
+        }
+        destructive={!preview && editing ? { label: t("delete"), onPress: remove } : undefined}
       >
         {preview ? (
           <>
@@ -219,9 +222,12 @@ export function PhotosScreen() {
               source={{ uri: photoFile(preview).uri }}
               style={{ width: "100%", height: height * 0.65 }}
               resizeMode="contain"
-              accessibilityLabel={`${t(preview.pose)} · ${date(preview.measuredAt)}`}
+              accessibilityLabel={t("photoOn", {
+                pose: t(preview.pose),
+                date: date(preview.measuredAt),
+              })}
             />
-            <SystemButton
+            <Button
               variant="secondary"
               onPress={() => {
                 const photo = preview;
@@ -230,12 +236,18 @@ export function PhotosScreen() {
               }}
             >
               {t("edit")}
-            </SystemButton>
+            </Button>
           </>
         ) : (
           <>
             <DateInput label={t("date")} value={day} onChange={setDay} disabled={busy} />
-            <Choices values={["front", "side", "back"] as const} value={pose} onChange={setPose} />
+            <Choices
+              values={["front", "side", "back"] as const}
+              value={pose}
+              onChange={setPose}
+              label={t}
+              accessibilityLabel={t("pose")}
+            />
             {editing && (
               <Image
                 source={{ uri: photoFile(editing).uri }}
@@ -246,21 +258,9 @@ export function PhotosScreen() {
             )}
             <ErrorText message={error} />
             {!editing && (
-              <SystemButton onPress={() => save("camera")} isDisabled={busy}>
-                {t("takePhoto")}
-              </SystemButton>
-            )}
-            <SystemButton
-              onPress={() => save()}
-              variant={editing ? "primary" : "secondary"}
-              isDisabled={busy}
-            >
-              {t(editing ? "save" : "choosePhoto")}
-            </SystemButton>
-            {editing && (
-              <SystemButton variant="danger-soft" onPress={remove}>
-                {t("delete")}
-              </SystemButton>
+              <Button variant="secondary" onPress={() => void save()} disabled={busy}>
+                {t("choosePhoto")}
+              </Button>
             )}
           </>
         )}

@@ -1,5 +1,4 @@
-import { SystemButton, SystemText as Text } from "@/components/system";
-import { Screen } from "@/components/ui";
+import { Button, Screen, Text } from "@/vector";
 import { useStore } from "@/lib/store";
 import { useMeasurementLog } from "./use-measurement-log";
 import { BodyForm } from "./body-form";
@@ -11,11 +10,9 @@ export function BodyLog() {
   const { launch } = log;
   return (
     <>
-      <Screen title={t("body")} subtitle={`${t("cadence")}: ${t("weekly")} – ${t("monthly")}`}>
-        <Text className="text-muted">{t("bodyHelp")}</Text>
-        <SystemButton onPress={() => launch(null)}>
-          {t("add")} · {t("body")}
-        </SystemButton>
+      <Screen title={t("body")} subtitle={t("cadenceWeeklyMonthly")}>
+        <Text tone="muted">{t("bodyHelp")}</Text>
+        <Button onPress={() => launch(null)}>{t("addMeasurements")}</Button>
         <MeasurementHistory log={log} />
       </Screen>
       <BodyForm log={log} />

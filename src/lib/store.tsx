@@ -2,11 +2,20 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import { Uniwind } from "uniwind";
 import { AppState } from "react-native";
 import { configureHealthSchedule, syncHealthIfDue } from "./health-schedule";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { useLocales } from "expo-localization";
-import { db, measurements, photos, preferences, weightEntries } from "@/db";
+import { db, healthLinks, measurements, photos, preferences, weightEntries } from "@/db";
+import { createFormat, localeTag } from "@/vector";
 import type { Units } from "./metrics";
-import { languagePreference, resolveLanguage, type Language, translate } from "./translations";
+import {
+  interpolate,
+  isMessage,
+  languagePreference,
+  resolveLanguage,
+  translate,
+  type Language,
+  type Message,
+} from "./translations";
 
 function read() {
   const prefs = Object.fromEntries(
@@ -16,6 +25,9 @@ function read() {
       .all()
       .map((p) => [p.key, p.value])
   );
+  // health-schedule stores the failure as a translation key.
+  const storedError = prefs.healthSyncError ?? "";
+  const healthSyncError: Message | "" = isMessage(storedError) ? storedError : "";
   return {
     weights: db
       .select()
@@ -28,12 +40,21 @@ function read() {
       .orderBy(desc(measurements.measuredAt), desc(measurements.id))
       .all(),
     photos: db.select().from(photos).orderBy(desc(photos.measuredAt), desc(photos.id)).all(),
+    /** Records imported from Apple Health or Health Connect, as "weight:12": managed there, never edited here. */
+    healthImports: new Set(
+      db
+        .select({ kind: healthLinks.localKind, id: healthLinks.localId })
+        .from(healthLinks)
+        .where(eq(healthLinks.origin, "health"))
+        .all()
+        .map((link) => `${link.kind}:${link.id}`)
+    ),
     units: (prefs.units ?? "metric") as Units,
     formula: (prefs.formula === "female" ? "female" : "male") as "male" | "female",
     theme: (prefs.theme === "dark" || prefs.theme === "light" ? prefs.theme : "system") as
       "dark" | "light" | "system",
     healthSyncEnabled: prefs.healthSyncEnabled === "true",
-    healthSyncError: prefs.healthSyncError ?? "",
+    healthSyncError,
     languagePreference: languagePreference(prefs.language),
     lastSync: prefs.lastSync,
   };
@@ -42,8 +63,7 @@ type Store = ReturnType<typeof read> & {
   language: Language;
   refresh: () => void;
   setPreference: (key: string, value: string) => void;
-  t: (key: string) => string;
-  number: (value: number, digits?: number) => string;
+  t: (key: Message, values?: Record<string, string | number>) => string;
   date: (value: string) => string;
 };
 const Context = createContext<Store | null>(null);
@@ -85,7 +105,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       .run();
     refresh();
   };
-  const locale = language === "zh" ? "zh-CN" : language;
+  // The kit's tag and formatter (VectorProvider builds the same one), so these dates match DateInput and the charts.
+  const format = createFormat(localeTag(language, locales));
   return (
     <Context.Provider
       value={{
@@ -93,18 +114,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         language,
         refresh,
         setPreference,
-        t: (key) => translate(language, key),
-        number: (value, digits = 1) =>
-          new Intl.NumberFormat(locale, {
-            minimumFractionDigits: digits,
-            maximumFractionDigits: digits,
-          }).format(value),
-        date: (value) =>
-          new Date(value.length === 10 ? `${value}T12:00:00` : value).toLocaleDateString(locale, {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          }),
+        t: (key, values) =>
+          values ? interpolate(translate(language, key), values) : translate(language, key),
+        date: (value) => format.date(new Date(value.length === 10 ? `${value}T12:00:00` : value)),
       }}
     >
       {children}

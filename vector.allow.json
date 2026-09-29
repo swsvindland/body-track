@@ -1,0 +1,14 @@
+{
+  "kit": "1.2.1",
+  "rules": {
+    "alert": {
+      "src/components/measurements/use-measurement-log.ts": 1,
+      "src/components/screens/photos-screen.tsx": 1
+    }
+  },
+  "eslintFiles": [],
+  "reasons": {
+    "src/components/measurements/use-measurement-log.ts#alert": "Delete confirm stays until undo lands (MIGRATION L4: the store needs a restore path); deleting a record has no undo today.",
+    "src/components/screens/photos-screen.tsx#alert": "Delete confirm stays until undo lands (MIGRATION L4: photo row + file need a restore path)."
+  }
+}

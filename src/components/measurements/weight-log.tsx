@@ -1,5 +1,4 @@
-import { SystemButton } from "@/components/system";
-import { Screen } from "@/components/ui";
+import { Button, Screen } from "@/vector";
 import { useStore } from "@/lib/store";
 import { Dashboard } from "@/components/dashboard";
 import { useMeasurementLog } from "./use-measurement-log";
@@ -12,12 +11,10 @@ export function WeightLog() {
   const { launch } = log;
   return (
     <>
-      <Screen title={t("home")} subtitle={`${t("cadence")}: ${t("daily")}`}>
+      <Screen title={t("today")} subtitle={t("cadenceDaily")}>
         <Dashboard />
 
-        <SystemButton onPress={() => launch(null)}>
-          {t("add")} · {t("weight")}
-        </SystemButton>
+        <Button onPress={() => launch(null)}>{t("addWeight")}</Button>
         <MeasurementHistory log={log} />
       </Screen>
       <WeightForm log={log} />
