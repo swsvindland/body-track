@@ -43,3 +43,12 @@ yarn-error.*
 # Generated native folders
 /ios
 /android
+
+# Local Expo modules: Gradle/Xcode output
+modules/*/android/build/
+modules/*/ios/build/
+
+# App build artifacts (local and EAS builds)
+*.ipa
+*.apk
+*.aab
