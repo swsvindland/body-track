@@ -1,0 +1,15 @@
+Pendum Body is a paid-download Health & Fitness app with no sign-in, subscription or in-app purchases. No review account is needed; all core screens are accessible after installing the app. Health sync and photo permissions are optional.
+
+1. Open Overview and add a weight entry. Add height from the Height tab, then return to Overview.
+2. Open Body and add a session. Sixteen circumference sites are optional. A recorded body-fat percentage takes precedence over an estimate. Male estimates require neck, abdomen and height; female estimates require neck, waist, hips and height. Select the equation in Settings.
+3. Open Photos, add a photo with a date and pose, then open it to edit. Select two photos of the same pose to compare.
+4. Try units, language and theme in Settings.
+5. Enable health sync and grant the permissions you want to test. Denying health or photo access does not block manual weight/measurement logging.
+
+On iOS, weight and height sync both ways, and recorded body-fat percentages and waist circumference are exported to Apple Health.
+
+
+
+BMI, estimated body fat and FFMI are adult reference tools, not diagnostic results. The app is not a medical device. Background execution depends on the operating system.
+
+Store screenshots use fictional demonstration records. Any sample progress photos are illustrative and do not promise a transformation.

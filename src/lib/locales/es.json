@@ -99,7 +99,7 @@
   "healthConnect": "Health Connect",
   "trendHelp": "Promedio diario suavizado con una semivida de 7 días. Las primeras tendencias son provisionales.",
   "bodyHelp": "Se usa para estimar la grasa corporal. Estimaciones para adultos. Masculina: cuello y abdomen al ombligo. Femenina: cuello, cintura natural y caderas. No aprietes la cinta.",
-  "localPhotos": "Las fotos se guardan en privado en este dispositivo. Desinstalar la app puede borrarlas.",
+  "localPhotos": "Las fotos se guardan en privado en este dispositivo y se incluyen cuando exportas tus datos.",
   "dateHint": "AAAA-MM-DD",
   "measurements": "Medidas",
   "asOfDate": "A fecha de {date}",
@@ -146,5 +146,12 @@
   "bmiMethod": "IMC = peso (kg) ÷ altura (m)². La app usa el peso de tendencia. Las categorías de los CDC se aplican desde los 20 años: menos de 18,5; 18,5–<25; 25–<30; y 30 o más.",
   "bodyFatMethod": "Se prioriza el porcentaje de grasa registrado. De lo contrario, la estimación Navy usa medidas en pulgadas. Ecuaciones: AR 600–9 (2019), apéndice B, tabla B–5. La app agrupa las categorías fitness y promedio de ACE como «Típico»; son comparaciones generales, no objetivos personales.",
   "ffmiMethod": "IMLG = IMC × (1 − grasa corporal % ÷ 100), con peso de tendencia. Schutz et al. (2002) estudiaron adultos blancos de 18–98 años. Los intervalos simplificados de la app (hombres 17–20; mujeres 14–17) no son límites clínicos por edad ni objetivos recomendados.",
-  "ratioMethod": "Contorno de hombros ÷ contorno de cintura. El objetivo 1,62 es una comparación física elegida por la app, no un objetivo de salud validado médicamente."
+  "ratioMethod": "Contorno de hombros ÷ contorno de cintura. El objetivo 1,62 es una comparación física elegida por la app, no un objetivo de salud validado médicamente.",
+  "vaultWeightCountOne": "{n} peso",
+  "vaultWeightCount": "{n} pesos",
+  "vaultMeasurementCountOne": "{n} medida",
+  "vaultMeasurementCount": "{n} medidas",
+  "vaultPhotoCountOne": "{n} foto",
+  "vaultPhotoCount": "{n} fotos",
+  "vaultSince": "Desde el {date}"
 }

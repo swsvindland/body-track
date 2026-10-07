@@ -99,7 +99,7 @@
   "healthConnect": "Health Connect",
   "trendHelp": "일일 평균을 반감기 7일로 평활화합니다. 초기 추세는 잠정적입니다.",
   "bodyHelp": "체지방률 추정에 사용됩니다. 성인용 추정치입니다. 남성: 목과 배꼽 높이 복부. 여성: 목, 자연 허리, 엉덩이. 줄자를 조이지 마세요.",
-  "localPhotos": "사진은 이 기기에 비공개로 저장됩니다. 앱 삭제 시 사라질 수 있습니다.",
+  "localPhotos": "사진은 이 기기에 비공개로 저장되며 데이터를 내보낼 때 포함됩니다.",
   "dateHint": "YYYY-MM-DD",
   "measurements": "신체 치수",
   "asOfDate": "{date} 기준",
@@ -146,5 +146,12 @@
   "bmiMethod": "BMI = 체중 (kg) ÷ 키 (m)². 앱은 추세 체중을 사용합니다. CDC 구간은 20세 이상에 적용됩니다: 18.5 미만, 18.5 이상 25 미만, 25 이상 30 미만, 30 이상.",
   "bodyFatMethod": "기록된 체지방률을 우선 사용합니다. 없으면 인치 단위 측정값으로 Navy 추정식을 사용합니다. 공식 출처: AR 600–9 (2019), 부록 B, 표 B–5. 앱은 ACE의 피트니스 및 평균 구간을 “일반”으로 통합합니다. 개인 목표가 아닌 일반적인 비교입니다.",
   "ffmiMethod": "FFMI = BMI × (1 − 체지방률 ÷ 100), 추세 체중 사용. Schutz 외 (2002)는 18–98세 백인 성인을 연구했습니다. 앱의 간략화된 비교 구간(남성 17–20, 여성 14–17)은 연령별 임상 기준이나 권장 목표가 아닙니다.",
-  "ratioMethod": "어깨둘레 ÷ 허리둘레. 목표 1.62는 앱에서 선택한 체형 비교이며 의학적으로 검증된 건강 목표가 아닙니다."
+  "ratioMethod": "어깨둘레 ÷ 허리둘레. 목표 1.62는 앱에서 선택한 체형 비교이며 의학적으로 검증된 건강 목표가 아닙니다.",
+  "vaultWeightCountOne": "체중 {n}개",
+  "vaultWeightCount": "체중 {n}개",
+  "vaultMeasurementCountOne": "측정 {n}개",
+  "vaultMeasurementCount": "측정 {n}개",
+  "vaultPhotoCountOne": "사진 {n}장",
+  "vaultPhotoCount": "사진 {n}장",
+  "vaultSince": "{date} 이후"
 }

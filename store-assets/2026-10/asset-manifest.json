@@ -1,0 +1,106 @@
+[
+  {
+    "file": "apple/iphone-6.9/01-weight-trends.png",
+    "width": 1320,
+    "height": 2868,
+    "mode": "RGB",
+    "bytes": 1162550,
+    "sha256": "a31a34277984cb14adc5b3aad6af1fb090fd7ae434bfd934e917790631303314"
+  },
+  {
+    "file": "apple/iphone-6.9/02-measurements.png",
+    "width": 1320,
+    "height": 2868,
+    "mode": "RGB",
+    "bytes": 1158737,
+    "sha256": "f86312714b67a7731c8643f1ab95053cdb1503732cd1c034734ccb49c55ba3f5"
+  },
+  {
+    "file": "apple/iphone-6.9/03-progress-photos.png",
+    "width": 1320,
+    "height": 2868,
+    "mode": "RGB",
+    "bytes": 2333641,
+    "sha256": "14085c78034e68c87be309a2956c00d8a57dcffbdfb33854d89b4a5e11bef380"
+  },
+  {
+    "file": "apple/iphone-6.9/04-height.png",
+    "width": 1320,
+    "height": 2868,
+    "mode": "RGB",
+    "bytes": 999606,
+    "sha256": "4c4510393433d0fb28540d6bb9a2424b1a596785d99ad9a720def44400e801f9"
+  },
+  {
+    "file": "apple/iphone-6.9/05-your-preferences.png",
+    "width": 1320,
+    "height": 2868,
+    "mode": "RGB",
+    "bytes": 1275047,
+    "sha256": "60771f5040cb293c46ac56afd3e5dd9af7718be22420e79a0a925d393e0617e2"
+  },
+  {
+    "file": "google-play/phone/01-weight-trends.png",
+    "width": 1080,
+    "height": 1920,
+    "mode": "RGB",
+    "bytes": 846534,
+    "sha256": "8f497f9853ed661e8074a5310c1acd55543dd9ba2b7a6a48be4b81e4e8226486"
+  },
+  {
+    "file": "google-play/phone/02-measurements.png",
+    "width": 1080,
+    "height": 1920,
+    "mode": "RGB",
+    "bytes": 877149,
+    "sha256": "7175becdadd7d7db90d9590f6808210898a9b455283470102b5fa5f6bcc4cbdb"
+  },
+  {
+    "file": "google-play/phone/03-progress-photos.png",
+    "width": 1080,
+    "height": 1920,
+    "mode": "RGB",
+    "bytes": 1210734,
+    "sha256": "3235f11beb8baedc285e3d79618af03611ded5ce21735882d2f08b0b77fc309f"
+  },
+  {
+    "file": "google-play/phone/04-height.png",
+    "width": 1080,
+    "height": 1920,
+    "mode": "RGB",
+    "bytes": 797833,
+    "sha256": "6f951963fc599715f38592ff09b01c5237b72947ed3b9d76730590e2ac15af20"
+  },
+  {
+    "file": "google-play/phone/05-your-preferences.png",
+    "width": 1080,
+    "height": 1920,
+    "mode": "RGB",
+    "bytes": 888143,
+    "sha256": "23a2aafc4c268b7261a231464e2979fb55410560bac05ecc229c878f48c89b23"
+  },
+  {
+    "file": "apple/icon-1024.png",
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGB",
+    "bytes": 24334,
+    "sha256": "04c04b91fcfa4d0b4aa86721146551473057cfb468c56c82e93b39459cb5e2a5"
+  },
+  {
+    "file": "google-play/icon-512.png",
+    "width": 512,
+    "height": 512,
+    "mode": "RGB",
+    "bytes": 11323,
+    "sha256": "b00d3ce3949f84dd9ef7c5ddfccf1ba0c0c84fc0abf2f9fd149d16436f8ff729"
+  },
+  {
+    "file": "google-play/feature-graphic.png",
+    "width": 1024,
+    "height": 500,
+    "mode": "RGB",
+    "bytes": 42992,
+    "sha256": "245658c8043e03743e0848ae1f5b1552764126530d6ce3da71289e66bdf6ba87"
+  }
+]

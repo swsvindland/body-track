@@ -99,7 +99,7 @@
   "healthConnect": "Health Connect",
   "trendHelp": "Media giornaliera smussata con emivita di 7 giorni. Le prime tendenze sono provvisorie.",
   "bodyHelp": "Usato per stimare il grasso corporeo. Stime per adulti. Uomo: collo e addome all’ombelico. Donna: collo, vita naturale e fianchi. Non stringere il metro.",
-  "localPhotos": "Foto private su questo dispositivo. Disinstallare l’app può eliminarle.",
+  "localPhotos": "Le foto restano private su questo dispositivo e sono incluse quando esporti i tuoi dati.",
   "dateHint": "AAAA-MM-GG",
   "measurements": "Misure",
   "asOfDate": "Al {date}",
@@ -146,5 +146,12 @@
   "bmiMethod": "IMC = peso (kg) ÷ altezza (m)². L’app usa il peso di tendenza. Le categorie CDC valgono dai 20 anni: sotto 18,5; 18,5–<25; 25–<30; 30 o più.",
   "bodyFatMethod": "La percentuale di grasso registrata ha la precedenza. Altrimenti, la stima Navy usa misure in pollici. Equazioni: AR 600–9 (2019), appendice B, tabella B–5. L’app riunisce le categorie fitness e media ACE come «Tipico»: confronti generali, non obiettivi personali.",
   "ffmiMethod": "FFMI = IMC × (1 − grasso corporeo % ÷ 100), con peso di tendenza. Schutz et al. (2002) hanno studiato adulti bianchi di 18–98 anni. Gli intervalli semplificati dell’app (uomini 17–20; donne 14–17) non sono soglie cliniche per età né obiettivi consigliati.",
-  "ratioMethod": "Circonferenza spalle ÷ circonferenza vita. L’obiettivo 1,62 è un confronto fisico scelto dall’app, non un obiettivo di salute validato clinicamente."
+  "ratioMethod": "Circonferenza spalle ÷ circonferenza vita. L’obiettivo 1,62 è un confronto fisico scelto dall’app, non un obiettivo di salute validato clinicamente.",
+  "vaultWeightCountOne": "{n} peso",
+  "vaultWeightCount": "{n} pesi",
+  "vaultMeasurementCountOne": "{n} misura",
+  "vaultMeasurementCount": "{n} misure",
+  "vaultPhotoCountOne": "{n} foto",
+  "vaultPhotoCount": "{n} foto",
+  "vaultSince": "Dal {date}"
 }

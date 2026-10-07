@@ -99,7 +99,7 @@
   "healthConnect": "Health Connect",
   "trendHelp": "Média diária suavizada com semivida de 7 dias. As primeiras tendências são provisórias.",
   "bodyHelp": "Usado para estimar a gordura corporal. Estimativas para adultos. Homem: pescoço e abdómen ao umbigo. Mulher: pescoço, cintura natural e ancas. Não aperte a fita.",
-  "localPhotos": "Fotos privadas neste dispositivo. Desinstalar a app pode apagá-las.",
+  "localPhotos": "As fotos ficam privadas neste dispositivo e são incluídas quando exporta os seus dados.",
   "dateHint": "AAAA-MM-DD",
   "measurements": "Medidas",
   "asOfDate": "Em {date}",
@@ -146,5 +146,12 @@
   "bmiMethod": "IMC = peso (kg) ÷ altura (m)². O app usa o peso de tendência. As categorias do CDC valem a partir dos 20 anos: abaixo de 18,5; 18,5–<25; 25–<30; 30 ou mais.",
   "bodyFatMethod": "O percentual de gordura registrado tem prioridade. Caso contrário, a estimativa Navy usa medidas em polegadas. Equações: AR 600–9 (2019), apêndice B, tabela B–5. O app reúne as categorias fitness e média da ACE como “Típico”: comparações gerais, não metas pessoais.",
   "ffmiMethod": "FFMI = IMC × (1 − gordura corporal % ÷ 100), com peso de tendência. Schutz et al. (2002) estudaram adultos brancos de 18–98 anos. As faixas simplificadas do app (homens 17–20; mulheres 14–17) não são limites clínicos por idade nem metas recomendadas.",
-  "ratioMethod": "Circunferência dos ombros ÷ circunferência da cintura. A meta 1,62 é uma comparação física escolhida pelo app, não uma meta de saúde validada clinicamente."
+  "ratioMethod": "Circunferência dos ombros ÷ circunferência da cintura. A meta 1,62 é uma comparação física escolhida pelo app, não uma meta de saúde validada clinicamente.",
+  "vaultWeightCountOne": "{n} peso",
+  "vaultWeightCount": "{n} pesos",
+  "vaultMeasurementCountOne": "{n} medida",
+  "vaultMeasurementCount": "{n} medidas",
+  "vaultPhotoCountOne": "{n} foto",
+  "vaultPhotoCount": "{n} fotos",
+  "vaultSince": "Desde {date}"
 }

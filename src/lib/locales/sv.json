@@ -99,7 +99,7 @@
   "healthConnect": "Health Connect",
   "trendHelp": "Utjämnat dagsmedel med 7 dagars halveringstid. Tidiga trender är preliminära.",
   "bodyHelp": "Används för att uppskatta kroppsfett. Uppskattningar för vuxna. Man: hals och buk vid naveln. Kvinna: hals, naturlig midja och höfter. Spänn inte måttbandet.",
-  "localPhotos": "Foton lagras privat på enheten. Avinstallation kan radera dem.",
+  "localPhotos": "Foton lagras privat på enheten och ingår när du exporterar dina data.",
   "dateHint": "ÅÅÅÅ-MM-DD",
   "measurements": "Kroppsmått",
   "asOfDate": "Per {date}",
@@ -146,5 +146,12 @@
   "bmiMethod": "BMI = vikt (kg) ÷ längd (m)². Appen använder trendvikt. CDC-kategorier gäller från 20 år: under 18,5; 18,5–<25; 25–<30; 30 eller högre.",
   "bodyFatMethod": "En registrerad fettprocent prioriteras. Annars använder Navy-uppskattningen mått i tum. Formler: AR 600–9 (2019), bilaga B, tabell B–5. Appen slår ihop ACE-kategorierna fitness och genomsnitt som ”Typisk”: allmänna jämförelser, inte personliga mål.",
   "ffmiMethod": "FFMI = BMI × (1 − kroppsfett % ÷ 100), med trendvikt. Schutz et al. (2002) studerade vita vuxna i åldern 18–98 år. Appens förenklade intervall (män 17–20; kvinnor 14–17) är inte åldersspecifika kliniska gränser eller rekommenderade mål.",
-  "ratioMethod": "Axelomkrets ÷ midjeomkrets. Målet 1,62 är en kroppsjämförelse vald av appen, inte ett medicinskt validerat hälsomål."
+  "ratioMethod": "Axelomkrets ÷ midjeomkrets. Målet 1,62 är en kroppsjämförelse vald av appen, inte ett medicinskt validerat hälsomål.",
+  "vaultWeightCountOne": "{n} vikt",
+  "vaultWeightCount": "{n} vikter",
+  "vaultMeasurementCountOne": "{n} mätning",
+  "vaultMeasurementCount": "{n} mätningar",
+  "vaultPhotoCountOne": "{n} foto",
+  "vaultPhotoCount": "{n} foton",
+  "vaultSince": "Sedan {date}"
 }

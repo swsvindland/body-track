@@ -99,7 +99,7 @@
   "healthConnect": "Health Connect",
   "trendHelp": "Geglätteter Tagesmittelwert mit 7 Tagen Halbwertszeit. Frühe Trends sind vorläufig.",
   "bodyHelp": "Wird zur Schätzung des Körperfettanteils verwendet. Schätzungen für Erwachsene. Männer: Hals und Bauch am Nabel. Frauen: Hals, natürliche Taille und Hüfte. Maßband locker anlegen.",
-  "localPhotos": "Fotos bleiben privat auf diesem Gerät. Deinstallieren kann sie löschen.",
+  "localPhotos": "Fotos bleiben privat auf diesem Gerät und sind enthalten, wenn du deine Daten exportierst.",
   "dateHint": "JJJJ-MM-TT",
   "measurements": "Körpermaße",
   "asOfDate": "Stand: {date}",
@@ -146,5 +146,12 @@
   "bmiMethod": "BMI = Gewicht (kg) ÷ Größe (m)². Die App nutzt das Trendgewicht. CDC-Kategorien gelten ab 20 Jahren: unter 18,5; 18,5–<25; 25–<30; ab 30.",
   "bodyFatMethod": "Ein gespeicherter Körperfettanteil hat Vorrang. Sonst nutzt die Navy-Schätzung Maße in Zoll. Formeln: AR 600–9 (2019), Anhang B, Tabelle B–5. Die App fasst die ACE-Kategorien Fitness und Durchschnitt als „Typisch“ zusammen: allgemeine Vergleiche, keine persönlichen Ziele.",
   "ffmiMethod": "FFMI = BMI × (1 − Körperfett % ÷ 100), mit Trendgewicht. Schutz et al. (2002) untersuchten weiße Erwachsene von 18–98 Jahren. Die vereinfachten App-Bereiche (Männer 17–20; Frauen 14–17) sind keine altersspezifischen klinischen Grenzwerte oder empfohlenen Ziele.",
-  "ratioMethod": "Schulterumfang ÷ Taillenumfang. Das Ziel 1,62 ist ein von der App gewählter Körperbauvergleich, kein medizinisch validiertes Gesundheitsziel."
+  "ratioMethod": "Schulterumfang ÷ Taillenumfang. Das Ziel 1,62 ist ein von der App gewählter Körperbauvergleich, kein medizinisch validiertes Gesundheitsziel.",
+  "vaultWeightCountOne": "{n} Gewicht",
+  "vaultWeightCount": "{n} Gewichte",
+  "vaultMeasurementCountOne": "{n} Messung",
+  "vaultMeasurementCount": "{n} Messungen",
+  "vaultPhotoCountOne": "{n} Foto",
+  "vaultPhotoCount": "{n} Fotos",
+  "vaultSince": "Seit {date}"
 }

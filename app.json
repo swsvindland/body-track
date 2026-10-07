@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "VECTOR BODY",
+    "name": "Pendum Body",
     "slug": "vector-body",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "bodytrack",
@@ -60,8 +60,8 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Choose progress photos to save privately in VECTOR BODY.",
-          "cameraPermission": "Take progress photos to save privately in VECTOR BODY.",
+          "photosPermission": "Choose progress photos to save privately in Pendum Body.",
+          "cameraPermission": "Take progress photos to save privately in Pendum Body.",
           "microphonePermission": false
         }
       ],
@@ -87,8 +87,8 @@
         "@kingstinct/react-native-healthkit",
         {
           "background": false,
-          "NSHealthShareUsageDescription": "Import your weight and height into VECTOR BODY when you choose to sync.",
-          "NSHealthUpdateUsageDescription": "Save your VECTOR BODY weight, height, waist circumference and recorded body fat to Apple Health when you choose to sync."
+          "NSHealthShareUsageDescription": "Import your weight and height into Pendum Body when you choose to sync.",
+          "NSHealthUpdateUsageDescription": "Save your Pendum Body weight, height, waist circumference and recorded body fat to Apple Health when you choose to sync."
         }
       ],
       "react-native-health-connect",
@@ -98,10 +98,24 @@
         {
           "android": {
             "minSdkVersion": 26
+          },
+          "ios": {
+            "enableSceneSupport": true
           }
         }
       ],
-      "expo-background-task"
+      "expo-background-task",
+      [
+        "./plugins/with-vector-vault",
+        {
+          "app": "body",
+          "icloud": false,
+          "google": {
+            "iosClientId": null,
+            "android": false
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

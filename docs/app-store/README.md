@@ -1,3 +1,5 @@
+> Current Pendum iOS and Android listing package: [October 2026 store information](../../store-assets/2026-10/store-information.md). The screenshots below are historical Vector assets.
+
 # VECTOR BODY — App Store kit
 
 English (US), version 1.0.0. Prepared September 11, 2026.

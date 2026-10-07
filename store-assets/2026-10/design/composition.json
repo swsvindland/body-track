@@ -1,0 +1,62 @@
+[
+  {
+    "file": "apple/iphone-6.9/01-weight-trends.png",
+    "source": "raw/ios/01-weight-trends.png",
+    "source_sha256": "8640ee0d635806219333434474e2cfd20e8b2b438ea3584b166819992d976504",
+    "treatment": "Native capture, proportional scaling and rounded frame. No app UI redrawn."
+  },
+  {
+    "file": "apple/iphone-6.9/02-measurements.png",
+    "source": "raw/ios/02-measurements.png",
+    "source_sha256": "eb394ead66c9853783d159d5444539db1b8fb5ad2d3d9824b95c3c08e2f8fa91",
+    "treatment": "Native capture, proportional scaling and rounded frame. No app UI redrawn."
+  },
+  {
+    "file": "apple/iphone-6.9/03-progress-photos.png",
+    "source": "raw/ios/03-progress-photos.png",
+    "source_sha256": "455c11f4db27fe166361df7bad02c8f71f2ce7608dca1ea586e3e9237a166eae",
+    "treatment": "Native capture, proportional scaling and rounded frame. No app UI redrawn."
+  },
+  {
+    "file": "apple/iphone-6.9/04-height.png",
+    "source": "raw/ios/04-height.png",
+    "source_sha256": "48cb7f6c4492ef9c3f978f423198fa5c45c9f58c69dda603104443d0ca8a9858",
+    "treatment": "Native capture, proportional scaling and rounded frame. No app UI redrawn."
+  },
+  {
+    "file": "apple/iphone-6.9/05-your-preferences.png",
+    "source": "raw/ios/05-your-preferences.png",
+    "source_sha256": "275dc2bfdc8bb9569dd87773389042902da47d53b4f7e521c770ad19290b7e11",
+    "treatment": "Native capture, proportional scaling and rounded frame. No app UI redrawn."
+  },
+  {
+    "file": "google-play/phone/01-weight-trends.png",
+    "source": "raw/android/01-weight-trends.png",
+    "source_sha256": "9d0710af01b6ca8b88409dbf0097e74ac0585110c0fccbf1f9a6887ebc0f268b",
+    "treatment": "Native capture, proportional scaling and rounded frame. No app UI redrawn."
+  },
+  {
+    "file": "google-play/phone/02-measurements.png",
+    "source": "raw/android/02-measurements.png",
+    "source_sha256": "ff7e351060c0ea458d2f01fb6b7fa0451be9b88b9bb994511f82fe7d0a98f226",
+    "treatment": "Native capture, proportional scaling and rounded frame. No app UI redrawn."
+  },
+  {
+    "file": "google-play/phone/03-progress-photos.png",
+    "source": "raw/android/03-progress-photos.png",
+    "source_sha256": "5d4b83480cf059c3b58a193ed3970107a18f28ae434f1341cef54e78a0a694ea",
+    "treatment": "Native capture, proportional scaling and rounded frame. No app UI redrawn."
+  },
+  {
+    "file": "google-play/phone/04-height.png",
+    "source": "raw/android/04-height.png",
+    "source_sha256": "7223a4491070721f4ba9b963586c71629691173cfbaf97e78dbdb4e5e481b892",
+    "treatment": "Native capture, proportional scaling and rounded frame. No app UI redrawn."
+  },
+  {
+    "file": "google-play/phone/05-your-preferences.png",
+    "source": "raw/android/05-your-preferences.png",
+    "source_sha256": "8f2b3d69306b266cdc80483ff2efbb269856f2f49a3248c8881ee2300319190a",
+    "treatment": "Native capture, proportional scaling and rounded frame. No app UI redrawn."
+  }
+]

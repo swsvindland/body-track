@@ -99,7 +99,7 @@
   "healthConnect": "Health Connect",
   "trendHelp": "Moyenne quotidienne lissée avec une demi-vie de 7 jours. Les premières tendances sont provisoires.",
   "bodyHelp": "Utilisé pour estimer la masse grasse. Estimations pour adultes. Homme : cou et abdomen au nombril. Femme : cou, taille naturelle et hanches. Ne serrez pas le ruban.",
-  "localPhotos": "Photos privées sur cet appareil. Désinstaller l’app peut les effacer.",
+  "localPhotos": "Les photos sont stockées en privé sur cet appareil et incluses lorsque vous exportez vos données.",
   "dateHint": "AAAA-MM-JJ",
   "measurements": "Mensurations",
   "asOfDate": "Au {date}",
@@ -146,5 +146,12 @@
   "bmiMethod": "IMC = poids (kg) ÷ taille (m)². L’app utilise le poids tendanciel. Les catégories CDC concernent les adultes dès 20 ans : moins de 18,5 ; 18,5–<25 ; 25–<30 ; 30 ou plus.",
   "bodyFatMethod": "Le pourcentage de graisse enregistré est prioritaire. Sinon, l’estimation Navy utilise des mesures en pouces. Équations : AR 600–9 (2019), annexe B, tableau B–5. L’app regroupe les catégories fitness et moyenne d’ACE sous « Typique » : des comparaisons générales, pas des objectifs personnels.",
   "ffmiMethod": "FFMI = IMC × (1 − graisse corporelle % ÷ 100), avec le poids tendanciel. Schutz et al. (2002) ont étudié des adultes blancs de 18 à 98 ans. Les plages simplifiées de l’app (hommes 17–20 ; femmes 14–17) ne sont ni des seuils cliniques selon l’âge ni des objectifs recommandés.",
-  "ratioMethod": "Tour d’épaules ÷ tour de taille. L’objectif de 1,62 est une comparaison physique choisie par l’app, sans validation comme objectif médical."
+  "ratioMethod": "Tour d’épaules ÷ tour de taille. L’objectif de 1,62 est une comparaison physique choisie par l’app, sans validation comme objectif médical.",
+  "vaultWeightCountOne": "{n} poids",
+  "vaultWeightCount": "{n} poids",
+  "vaultMeasurementCountOne": "{n} mesure",
+  "vaultMeasurementCount": "{n} mesures",
+  "vaultPhotoCountOne": "{n} photo",
+  "vaultPhotoCount": "{n} photos",
+  "vaultSince": "Depuis le {date}"
 }

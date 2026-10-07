@@ -99,7 +99,7 @@
   "healthConnect": "Health Connect",
   "trendHelp": "Afgevlakt daggemiddelde met een halveringstijd van 7 dagen. Vroege trends zijn voorlopig.",
   "bodyHelp": "Gebruikt om het vetpercentage te schatten. Schattingen voor volwassenen. Man: nek en buik bij de navel. Vrouw: nek, natuurlijke taille en heupen. Trek het meetlint niet strak.",
-  "localPhotos": "Foto’s blijven privé op dit apparaat. Verwijderen van de app kan ze wissen.",
+  "localPhotos": "Foto’s blijven privé op dit apparaat en worden meegenomen als je je gegevens exporteert.",
   "dateHint": "JJJJ-MM-DD",
   "measurements": "Lichaamsmaten",
   "asOfDate": "Per {date}",
@@ -146,5 +146,12 @@
   "bmiMethod": "BMI = gewicht (kg) ÷ lengte (m)². De app gebruikt het trendgewicht. CDC-categorieën gelden vanaf 20 jaar: onder 18,5; 18,5–<25; 25–<30; 30 of hoger.",
   "bodyFatMethod": "Een opgeslagen vetpercentage krijgt voorrang. Anders gebruikt de Navy-schatting metingen in inches. Formules: AR 600–9 (2019), bijlage B, tabel B–5. De app combineert de ACE-categorieën fitness en gemiddeld als “Typisch”: algemene vergelijkingen, geen persoonlijke doelen.",
   "ffmiMethod": "FFMI = BMI × (1 − vetpercentage ÷ 100), met trendgewicht. Schutz et al. (2002) onderzochten witte volwassenen van 18–98 jaar. De vereenvoudigde app-bereiken (mannen 17–20; vrouwen 14–17) zijn geen leeftijdsspecifieke klinische grenzen of aanbevolen doelen.",
-  "ratioMethod": "Schouderomtrek ÷ tailleomtrek. Het doel 1,62 is een door de app gekozen lichaamsbouwvergelijking, geen medisch gevalideerd gezondheidsdoel."
+  "ratioMethod": "Schouderomtrek ÷ tailleomtrek. Het doel 1,62 is een door de app gekozen lichaamsbouwvergelijking, geen medisch gevalideerd gezondheidsdoel.",
+  "vaultWeightCountOne": "{n} gewicht",
+  "vaultWeightCount": "{n} gewichten",
+  "vaultMeasurementCountOne": "{n} meting",
+  "vaultMeasurementCount": "{n} metingen",
+  "vaultPhotoCountOne": "{n} foto",
+  "vaultPhotoCount": "{n} foto’s",
+  "vaultSince": "Sinds {date}"
 }

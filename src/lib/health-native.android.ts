@@ -6,6 +6,11 @@ export async function getHealthAdapter(): Promise<HealthAdapter> {
     !(await hc.initialize())
   )
     throw new Error("healthUnavailable");
+  // Deleting a record that is no longer in Health Connect counts as done.
+  const gone = (error: unknown) =>
+    /not found|does not exist|no such/i.test(
+      String((error as { message?: unknown } | null)?.message ?? error)
+    );
   return {
     bodyWriteKinds: ["bodyFat"],
     async authorize(interactive = true) {
@@ -101,13 +106,19 @@ export async function getHealthAdapter(): Promise<HealthAdapter> {
       if (!ids[0]) throw new Error("syncFailed");
       return ids[0];
     },
-    async remove(kind, id) {
+    async remove(kind, id, clientId) {
       if (kind === "waist") throw new Error("healthUnavailable");
-      await hc.deleteRecordsByUuids(
-        kind === "weight" ? "Weight" : kind === "bodyFat" ? "BodyFat" : "Height",
-        [id],
-        []
-      );
+      // A restore from the other platform clears the record id: delete by the client record id instead.
+      if (!id && !clientId) return;
+      await hc
+        .deleteRecordsByUuids(
+          kind === "weight" ? "Weight" : kind === "bodyFat" ? "BodyFat" : "Height",
+          id ? [id] : [],
+          id || !clientId ? [] : [clientId]
+        )
+        .catch((error: unknown) => {
+          if (!gone(error)) throw error;
+        });
     },
   };
 }

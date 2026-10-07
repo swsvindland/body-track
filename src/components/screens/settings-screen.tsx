@@ -16,6 +16,7 @@ import { useStore } from "@/lib/store";
 import { languages, type LanguagePreference, type Message } from "@/lib/translations";
 import { enableHealthSync, disableHealthSync } from "@/lib/health-schedule";
 import { lengthUnits, useReadings, weightUnits } from "@/components/measurements/readout";
+import { VaultSection } from "@/vault";
 
 /**
  * The SettingsSection anatomy (eyebrow, content, footnote) for groups the row panel does not fit: a control that
@@ -158,6 +159,7 @@ export function SettingsScreen() {
         {message ? <Callout tone="success">{t(message)}</Callout> : null}
         <ErrorText message={failure ? t(failure) : ""} />
       </View>
+      <VaultSection />
     </Screen>
   );
 }

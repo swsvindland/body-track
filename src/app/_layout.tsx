@@ -14,6 +14,7 @@ import { StoreProvider } from "@/lib/store";
 import { interpolate, resolveLanguage, translate } from "@/lib/translations";
 import { NavigationTheme, SystemState, VectorProvider, vectorHeroConfig } from "@/vector";
 import { VectorAdapter } from "@/vector-adapter";
+import { VaultRoot } from "@/vault";
 import { db } from "@/db";
 
 import "../global.css";
@@ -73,6 +74,8 @@ export default function RootLayout(): JSX.Element | null {
                   <Stack.Screen name="(tabs)" />
                 </Stack>
               </NavigationTheme>
+              {/* After migrations, inside the store the vault's refresh hook reads. */}
+              <VaultRoot />
               <StatusBar style="auto" />
             </HeroUINativeProvider>
           </VectorAdapter>

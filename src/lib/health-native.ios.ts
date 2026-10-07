@@ -13,6 +13,20 @@ export async function getHealthAdapter(): Promise<HealthAdapter> {
   const readTypes = [identifier("weight"), identifier("height")];
   const types = Object.values(identifiers);
   if (!hk.isHealthDataAvailable()) throw new Error("healthUnavailable");
+  // Every sample this app writes carries its client id as HKSyncIdentifier.
+  const bySyncId = (value: string) => ({
+    metadata: {
+      withMetadataKey: "HKSyncIdentifier",
+      operatorType: hk.ComparisonPredicateOperator.equalTo,
+      value,
+    },
+  });
+  // HealthKit rejects a delete that matched nothing ("No data available for the specified predicate", code 11): the
+  // sample is already gone (removed in the Health app, or never in this store after a restore from another device).
+  const gone = (error: unknown) => {
+    const { code, message } = (error ?? {}) as { code?: unknown; message?: unknown };
+    return /no data|errorNoData|code[ =]?11\b/i.test(`code=${code ?? ""} ${message ?? ""}`);
+  };
   return {
     bodyWriteKinds: ["waist", "bodyFat"],
     async authorize(interactive = true) {
@@ -68,8 +82,13 @@ export async function getHealthAdapter(): Promise<HealthAdapter> {
       if (!result) throw new Error("syncFailed");
       return result.uuid;
     },
-    async remove(kind, id) {
-      await hk.deleteObjects(identifier(kind), { uuid: id });
+    async remove(kind, id, clientId) {
+      // A restore from the other platform clears the sample id: find the sample by its client id instead.
+      const filter = id ? { uuid: id } : clientId ? bySyncId(clientId) : undefined;
+      if (!filter) return;
+      await hk.deleteObjects(identifier(kind), filter).catch((error: unknown) => {
+        if (!gone(error)) throw error;
+      });
     },
   };
 }
